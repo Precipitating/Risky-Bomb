@@ -45,10 +45,13 @@ function ChairRemote:Handle()
 			:FindFirstChildOfClass("TextLabel", true)
 
 		local currentJoined = playerCountText:GetAttribute("JoinedCount")
+		print(currentJoined)
 		local newCurrentJoined = sat and math.clamp(currentJoined + 1, 0, 2) or math.clamp(currentJoined - 1, 0, 2)
 
 		playerCountText:SetAttribute("JoinedCount", newCurrentJoined)
 		playerCountText.Text = `<b>Players Joined: {newCurrentJoined}/2</b>`
+
+		print(playerCountText:GetAttribute("JoinedCount"))
 
 		if newCurrentJoined == 2 then
 			StartCountDown(countdownText)

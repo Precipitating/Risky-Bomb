@@ -35,7 +35,8 @@ local function PromptVisibilityConnection(prompt: ProximityPrompt, seat: Seat, g
 		return
 	end
 
-	if not CollectionService:HasTag(prompt.Parent, "Set") then
+	if not CollectionService:HasTag(prompt, "Set") then
+		print("Seat connected!")
 		seat:GetPropertyChangedSignal("Occupant"):Connect(function()
 			local seatHumanoid = seat.Occupant
 			if seatHumanoid then
@@ -45,8 +46,8 @@ local function PromptVisibilityConnection(prompt: ProximityPrompt, seat: Seat, g
 				prompt.Enabled = true
 				Remotes.ChairSat:FireServer(gameTable, false)
 			end
-			prompt:AddTag("Set")
 		end)
+		prompt:AddTag("Set")
 	end
 end
 
