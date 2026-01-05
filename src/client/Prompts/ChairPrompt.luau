@@ -29,34 +29,37 @@ local function CanSitOn(seat: Seat)
 	return true
 end
 
-local function CanBeSatOn(seat: Seat)
-	-- success
-	seat:Sit(Humanoid)
-	Remotes.ChairSat:FireServer()
-end
+local function PromptVisibilityConnection(prompt: ProximityPrompt, seat: Seat, gameTable: Model?)
+	if not gameTable then
+		print("GameTable ref not found")
+		return
+	end
 
-local function PromptVisibilityConnection(prompt: ProximityPrompt, seat: Seat)
 	if not CollectionService:HasTag(prompt.Parent, "Set") then
 		seat:GetPropertyChangedSignal("Occupant"):Connect(function()
 			local seatHumanoid = seat.Occupant
 			if seatHumanoid then
 				prompt.Enabled = false
+				Remotes.ChairSat:FireServer(gameTable, true)
 			else
 				prompt.Enabled = true
+				Remotes.ChairSat:FireServer(gameTable, false)
 			end
 			prompt:AddTag("Set")
 		end)
 	end
 end
+
 function ChairPrompt.Handle(prompt: ProximityPrompt)
 	if not CollectionService:HasTag(prompt, "Chair") then
 		return
 	end
 	-- get seat & return if unsittable
 	local seat = GetSeat(prompt)
-
+	local chairModel = prompt:FindFirstAncestorOfClass("Model")
+	local gameTable = chairModel:FindFirstAncestorOfClass("Model")
 	-- enable/disable prompt visibility if sat/unsat
-	PromptVisibilityConnection(prompt, seat)
+	PromptVisibilityConnection(prompt, seat, gameTable)
 
 	-- handle edge cases
 	if not CanSitOn(seat) then
@@ -64,7 +67,7 @@ function ChairPrompt.Handle(prompt: ProximityPrompt)
 	end
 
 	-- success
-	CanBeSatOn(seat)
+	seat:Sit(Humanoid)
 end
 
 return ChairPrompt
