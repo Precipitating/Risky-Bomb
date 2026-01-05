@@ -1,0 +1,70 @@
+local CollectionService = game:GetService("CollectionService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local Player = game.Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+local Remotes = ReplicatedStorage.Remotes
+
+local ChairPrompt = {}
+
+local function GetSeat(prompt)
+	local seat: Seat? = prompt:FindFirstAncestorOfClass("Seat")
+	if not seat then
+		return nil
+	end
+
+	return seat
+end
+
+local function CanSitOn(seat: Seat)
+	if not seat then
+		print("Seat not found!")
+		return false
+	end
+	if seat.Occupant then
+		print("Already occupied!")
+		return false
+	end
+
+	return true
+end
+
+local function CanBeSatOn(seat: Seat)
+	-- success
+	seat:Sit(Humanoid)
+	Remotes.ChairSat:FireServer()
+end
+
+local function PromptVisibilityConnection(prompt: ProximityPrompt, seat: Seat)
+	if not CollectionService:HasTag(prompt.Parent, "Set") then
+		seat:GetPropertyChangedSignal("Occupant"):Connect(function()
+			local seatHumanoid = seat.Occupant
+			if seatHumanoid then
+				prompt.Enabled = false
+			else
+				prompt.Enabled = true
+			end
+			prompt:AddTag("Set")
+		end)
+	end
+end
+function ChairPrompt.Handle(prompt: ProximityPrompt)
+	if not CollectionService:HasTag(prompt, "Chair") then
+		return
+	end
+	-- get seat & return if unsittable
+	local seat = GetSeat(prompt)
+
+	-- enable/disable prompt visibility if sat/unsat
+	PromptVisibilityConnection(prompt, seat)
+
+	-- handle edge cases
+	if not CanSitOn(seat) then
+		return
+	end
+
+	-- success
+	CanBeSatOn(seat)
+end
+
+return ChairPrompt
