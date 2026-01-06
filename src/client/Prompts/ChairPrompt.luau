@@ -1,8 +1,7 @@
 local CollectionService = game:GetService("CollectionService")
+local StarterPlayer = game:GetService("StarterPlayer")
+local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
-local Player = game.Players.LocalPlayer
-local Character = Player.Character or Player.CharacterAdded:Wait()
-local Humanoid = Character:FindFirstChildOfClass("Humanoid")
 local Remotes = ReplicatedStorage.Remotes
 
 local ChairPrompt = {}
@@ -68,7 +67,7 @@ function ChairPrompt.Handle(prompt: ProximityPrompt)
 	end
 
 	-- success
-	seat:Sit(Humanoid)
+	seat:Sit(PlayerContext.Humanoid)
 end
 
 return ChairPrompt

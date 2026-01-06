@@ -1,3 +1,5 @@
+local ServerScriptService = game:GetService("ServerScriptService")
+local GameModule = require(ServerScriptService.Server.BombGame.GameModule)
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local Remotes = ReplicatedStorage.Remotes
 local CountdownTime: number = 3
@@ -9,7 +11,7 @@ local function StopCountDown(countdownText: TextLabel)
 	countdownText.Text = tostring(CountdownTime)
 end
 
-local function StartCountDown(countdownText: TextLabel)
+local function StartCountDown(playerCountText: TextLabel, countdownText: TextLabel, gameTable: Model)
 	if countdownText:GetAttribute("Active") then
 		return
 	end
@@ -23,17 +25,23 @@ local function StartCountDown(countdownText: TextLabel)
 				StopCountDown(countdownText)
 				return
 			end
-
 			countdownText.Text = tostring(math.clamp(i, 0, CountdownTime))
 			task.wait(1)
 		end
 
+		-- succesfully counted down without players leaving
+		countdownText.Visible = false
+		playerCountText.Visible = false
+
 		print("Start game!")
+
+		gameTable:SetAttribute("GameActive", true)
+		GameModule.BeginGame(gameTable)
 	end)
 end
 
 function ChairRemote:Handle()
-	Remotes.ChairSat.OnServerEvent:Connect(function(_, gameTable, sat: boolean)
+	Remotes.ChairSat.OnServerEvent:Connect(function(player: Player, gameTable, sat: boolean)
 		local playerCountText: TextLabel = gameTable
 			:FindFirstChild("Bomb")
 			:FindFirstChild("PlayersJoinedBillboard")
@@ -44,22 +52,31 @@ function ChairRemote:Handle()
 			:FindFirstChild("CountdownBillboard")
 			:FindFirstChildOfClass("TextLabel", true)
 
+		-- get players joined count
 		local currentJoined = playerCountText:GetAttribute("JoinedCount")
 		print(currentJoined)
 		local newCurrentJoined = sat and math.clamp(currentJoined + 1, 0, 2) or math.clamp(currentJoined - 1, 0, 2)
-
 		playerCountText:SetAttribute("JoinedCount", newCurrentJoined)
 		playerCountText.Text = `<b>Players Joined: {newCurrentJoined}/2</b>`
 
-		print(playerCountText:GetAttribute("JoinedCount"))
-
-		if newCurrentJoined == 2 then
-			StartCountDown(countdownText)
+		-- add player reference to table's ID dictionary (on server)
+		if sat then
+			GameModule.AssignPlayerToTable(gameTable:GetAttribute("ID"), player)
+		else
+			GameModule.UnAssignPlayerToTable(gameTable:GetAttribute("ID"), player)
 		end
 
-		-- stop countdown if left
+		print(playerCountText:GetAttribute("JoinedCount"))
+
+		-- start countdown if 2 players sat down
+		if newCurrentJoined == 2 then
+			StartCountDown(playerCountText, countdownText, gameTable)
+		end
+
+		-- stop countdown if one left
 		if not sat and countdownText:GetAttribute("Active") then
 			countdownText:SetAttribute("Active", false)
+			gameTable:SetAttribute("GameActive", false)
 		end
 	end)
 end

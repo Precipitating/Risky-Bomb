@@ -1,8 +1,12 @@
-local RemoteHandler = require(script.RemoteHandler)
-local UniqueIdAssigner = require(script.Utility.UniqueIdAssigner)
+local OnPlayerSpawned = require(script.PlayerEvents)
+local ServerBindableEventsHandler = require(script.ServerBindableEventsHandler)
+local ServerRemotesHandler = require(script.ServerRemotesHandler)
+local UniqueIdAssigner = require(script.UniqueIdAssigner)
 
 local function ServerInit()
-	RemoteHandler.HandleRemotes()
+	OnPlayerSpawned.Handle()
+	ServerRemotesHandler.HandleRemotes()
+	ServerBindableEventsHandler.HandleEvents()
 	UniqueIdAssigner.AssignAll()
 end
 
