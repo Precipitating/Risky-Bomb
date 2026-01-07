@@ -29,13 +29,17 @@ local function StartCountDown(playerCountText: TextLabel, countdownText: TextLab
 			task.wait(1)
 		end
 
+		-- one last check
+		if not countdownText:GetAttribute("Active") then
+			StopCountDown(countdownText)
+			return
+		end
+
 		-- succesfully counted down without players leaving
 		countdownText.Visible = false
 		playerCountText.Visible = false
 
 		print("Start game!")
-
-		gameTable:SetAttribute("GameActive", true)
 		GameModule.BeginGame(gameTable)
 	end)
 end
@@ -63,7 +67,7 @@ function ChairRemote:Handle()
 		if sat then
 			GameModule.AssignPlayerToTable(gameTable:GetAttribute("ID"), player)
 		else
-			GameModule.UnAssignPlayerToTable(gameTable:GetAttribute("ID"), player)
+			GameModule.UnAssignPlayerFromTable(gameTable:GetAttribute("ID"), player)
 		end
 
 		print(playerCountText:GetAttribute("JoinedCount"))

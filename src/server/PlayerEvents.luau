@@ -10,7 +10,7 @@ function PlayerEvents.Handle()
 				local tableID = character:GetAttribute("AssignedTable")
 				if tableID then
 					print("Unassign!")
-					GameModule.UnAssignPlayerToTable(tableID, player)
+					GameModule.UnAssignPlayerFromTable(tableID, player)
 				end
 			end)
 		end)

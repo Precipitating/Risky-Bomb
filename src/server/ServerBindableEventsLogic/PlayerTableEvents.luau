@@ -10,11 +10,6 @@ end
 local function OnListDecreased()
 	BindableEvents.PlayerRemovedFromTable.Event:Connect(function(tableID, _)
 		print("List decreased!")
-		local table = GameModule.GetGameTable(tableID)
-		if table:GetAttribute("GameActive") then
-			print("Player died! FINISH GAME!")
-			GameModule.FinishGame(tableID)
-		end
 	end)
 end
 function PlayerTableEvents.Handle()

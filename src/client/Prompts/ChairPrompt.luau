@@ -54,6 +54,10 @@ function ChairPrompt.Handle(prompt: ProximityPrompt)
 	if not CollectionService:HasTag(prompt, "Chair") then
 		return
 	end
+	if PlayerContext.Character.Humanoid.Health <= 0 then
+		print(`Can't sit, player's dead!`)
+		return
+	end
 	-- get seat & return if unsittable
 	local seat = GetSeat(prompt)
 	local chairModel = prompt:FindFirstAncestorOfClass("Model")
