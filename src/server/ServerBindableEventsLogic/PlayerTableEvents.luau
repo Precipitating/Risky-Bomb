@@ -1,5 +1,4 @@
 local ServerScriptService = game:GetService("ServerScriptService").Server
-local GameModule = require(ServerScriptService.BombGame.GameModule)
 local BindableEvents = ServerScriptService.BindableEvents
 local PlayerTableEvents = {}
 

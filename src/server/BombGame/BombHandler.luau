@@ -84,7 +84,7 @@ end
 -- returns true if bomb time is <= 0
 function BombHandler.ReduceBombTime(bombRef: MeshPart, reductionTime: number)
 	if not bombRef:GetAttribute("Active") then
-		return
+		return nil
 	end
 	local currentTime = bombRef:GetAttribute("Time")
 	local result = currentTime - reductionTime

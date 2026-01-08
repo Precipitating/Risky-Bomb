@@ -1,5 +1,6 @@
 local ServerScriptService = game:GetService("ServerScriptService").Server
 local GameModule = require(ServerScriptService.BombGame.GameModule)
+local BombGameStorage = require(ServerScriptService.BombGame.BombGameStorage)
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local Remotes = ReplicatedStorage.Remotes
 local CountdownTime: number = 3
@@ -65,9 +66,9 @@ function ChairRemote:Handle()
 
 		-- add player reference to table's ID dictionary (on server)
 		if sat then
-			GameModule.AssignPlayerToTable(gameTable:GetAttribute("ID"), player)
+			BombGameStorage.AssignPlayerToTable(gameTable:GetAttribute("ID"), player)
 		else
-			GameModule.UnAssignPlayerFromTable(gameTable:GetAttribute("ID"), player)
+			BombGameStorage.UnAssignSinglePlayerFromTable(gameTable:GetAttribute("ID"), player)
 		end
 
 		print(playerCountText:GetAttribute("JoinedCount"))

@@ -1,5 +1,5 @@
-local ServerScriptService = game:GetService("ServerScriptService")
-local GameModule = require(ServerScriptService.Server.BombGame.GameModule)
+local ServerScriptService = game:GetService("ServerScriptService").Server
+local BombGameStorage = require(ServerScriptService.BombGame.BombGameStorage)
 local PlayerEvents = {}
 
 function PlayerEvents.Handle()
@@ -9,8 +9,8 @@ function PlayerEvents.Handle()
 				-- if died on table, unassign
 				local tableID = character:GetAttribute("AssignedTable")
 				if tableID then
-					print("Unassign!")
-					GameModule.UnAssignPlayerFromTable(tableID, player)
+					print("Unassigned dead player from table")
+					Remotes.DisconnectGUI:FireClient(player, playerInTable.BombGUI)
 				end
 			end)
 		end)

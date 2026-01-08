@@ -1,53 +1,14 @@
 local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
-local ServerScriptService = game:GetService("ServerScriptService").Server
 local BombGameStorage = require(script.Parent.BombGameStorage)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local BombHandler = require(script.Parent.BombHandler)
 local Remotes = ReplicatedStorage.Remotes
-local BindableEvents = ServerScriptService.BindableEvents
 local BombGUI = ReplicatedStorage.BombGUI
 local GameTablesList = BombGameStorage.GetGameTablesList()
 local PlayersPlayingList = BombGameStorage.GetPlayerList()
 local COUNTDOWN_TIME = 5
 local GameModule = {}
-
-function GameModule.AddGameTableToList(tableID: string, tableRef: Model?)
-	GameTablesList[tableID] = tableRef
-	print(GameTablesList)
-end
-
-function GameModule.RemoveGameTableFromList(tableID: string)
-	GameTablesList[tableID] = nil
-	print(`{tableID} removed from game table list!`)
-end
-function GameModule.GetGameTable(tableID: string)
-	return GameTablesList[tableID]
-end
-
-function GameModule.AssignPlayerToTable(tableID: string, playerRef: Player)
-	local playerModel = playerRef.Character
-	playerModel:SetAttribute("AssignedTable", tableID)
-	PlayersPlayingList[tableID] = PlayersPlayingList[tableID] or {}
-	PlayersPlayingList[tableID][playerRef] = {}
-	PlayersPlayingList[tableID][playerRef].YourTurn = false
-	BindableEvents.PlayerAddedToTable:Fire(tableID, playerRef)
-
-	print(`{playerRef.DisplayName} added to player's table!`)
-end
-
-function GameModule.UnAssignPlayerFromTable(tableID: string, playerRef: Player)
-	local playerModel = playerRef.Character
-	local playerInTable = PlayersPlayingList[tableID][playerRef]
-
-	playerModel:SetAttribute("AssignedTable", nil)
-	if playerInTable.BombGUI then
-		Remotes.DisconnectGUI:FireClient(playerRef, playerInTable.BombGUI)
-	end
-	playerInTable = nil
-	BindableEvents.PlayerRemovedFromTable:Fire(tableID, playerRef)
-	print(`Unassigned player from table {tableID}, {PlayersPlayingList[tableID]} `)
-end
 
 local function DisablePlayerControlsOnTable(tableID)
 	print("disable controls called")
@@ -97,36 +58,60 @@ function GameModule.RespawnTable(tableID: string)
 	oldTable:Destroy()
 
 	local newTable = ServerStorage.Models.GameTable:Clone()
-	GameModule.AddGameTableToList(tableID, newTable)
+	BombGameStorage.AddGameTableToList(tableID, newTable)
+
 	newTable:SetAttribute("ID", tableID)
 	newTable.Parent = workspace
 	newTable:PivotTo(oldTablePos)
+	print("Table respawned!")
+end
+
+local function HandleLoser(loser)
+	if not loser then
+		print("Loser player ref is nil!")
+	end
+	local humanoid = loser.Character.Humanoid
+	humanoid.Health = 0
+end
+
+local function HandleWinner(winner: Player)
+	if not winner then
+		print("Winner player ref is nil!")
+	end
+	print(`Winner: {winner.DisplayName}`)
 end
 
 function GameModule.FinishGame(tableID: string)
+	local loser: Player = nil
+	local winner: Player = nil
+	BombGameStorage.GetGameTable(tableID):SetAttribute("GameActive", false)
 	PlayAudioForTablePlayers(tableID, SoundManager.GetRandomMainSound(), false)
 	for player in pairs(PlayersPlayingList[tableID]) do
 		local playerInTable = PlayersPlayingList[tableID][player]
 
-		if playerInTable.YourTurn then
-			-- death event should disconnect the GUI, and remove from list
-			player.Character.Humanoid.Health = 0
-			continue
-		end
-
-		print(`Winner: {player.DisplayName}`)
 		Remotes.EnableFirstPerson:FireClient(player, false)
 		Remotes.DisableControls:FireClient(player, false)
-		GameModule.UnAssignPlayerFromTable(tableID, player)
+
+		if playerInTable.YourTurn then
+			loser = player
+			continue
+		end
+		winner = player
 	end
+	BombGameStorage.ClearTable(tableID)
+	HandleLoser(loser)
+	HandleWinner(winner)
 	GameModule.RespawnTable(tableID)
 end
 
-function ExceededCountdown(tableID: string)
+function ExceededCountdown(tableID: string, player: Player)
 	-- countdown finished
-	local bombRef = BombGameStorage.GetGameTablesList()[tableID]:FindFirstChild("Bomb")
-	local newTime = BombHandler.ReduceBombTime(bombRef, 10)
-	if newTime > 0 then
+	local bombRef = BombGameStorage.GetGameTable(tableID):FindFirstChild("Bomb")
+	local playerInputOnExceed = Remotes.GetBombInput:InvokeClient(player)
+	local resultingTime = BombHandler.ReduceBombTime(bombRef, playerInputOnExceed)
+
+	-- if newTime is nil, it means bomb isn't active anymore.
+	if resultingTime and resultingTime > 0 then
 		GameModule.NextTurn(tableID)
 	end
 end
@@ -134,19 +119,28 @@ end
 function GameModule.StartCountdown(tableID: string, playerInTable, player: Player)
 	task.spawn(function()
 		for timeLeft = COUNTDOWN_TIME, 0, -1 do
+			if not GameTablesList[tableID]:GetAttribute("GameActive") then
+				print("Game not active, don't count down any more")
+				return
+			end
+			if not playerInTable.BombGUI then
+				return
+			end
 			if not playerInTable.YourTurn then
 				Remotes.UpdateCountdownBar:FireClient(player, playerInTable.BombGUI, nil)
 				return
 			end
+
 			Remotes.UpdateCountdownBar:FireClient(player, playerInTable.BombGUI, timeLeft / COUNTDOWN_TIME)
 			task.wait(1)
 		end
+
 		-- one more check (if they input at 0, it still assumes its your turn)
 		if not playerInTable.YourTurn then
 			Remotes.UpdateCountdownBar:FireClient(player, playerInTable.BombGUI, nil)
 			return
 		end
-		ExceededCountdown(tableID)
+		ExceededCountdown(tableID, player)
 	end)
 end
 function GameModule.NextTurn(tableID: string)
