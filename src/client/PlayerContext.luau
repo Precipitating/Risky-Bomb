@@ -7,11 +7,13 @@ local Player: Player = Players.LocalPlayer
 PlayerContext.Player = Player
 PlayerContext.Character = nil
 PlayerContext.Humanoid = nil
+PlayerContext.Camera = workspace.CurrentCamera
 
 local function onCharacterAdded(character)
 	PlayerContext.Character = character
 	PlayerContext.Humanoid = character:WaitForChild("Humanoid")
-	PlayerContext.Player.CameraMode = Enum.CameraMode.Classic
+	PlayerContext.Camera.CameraType = Enum.CameraType.Custom
+	PlayerContext.Camera.CameraSubject = character.Humanoid
 	local PlayerModule = PlayerContext.Player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule")
 	local controls = require(PlayerModule):GetControls()
 	controls:Enable()

@@ -2,7 +2,7 @@
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
-	<Item class="ScreenGui" referent="RBX55F31F153C864EBB8127C0E3A7102874">
+	<Item class="ScreenGui" referent="RBX2497EDFA266744E38F79173819ED46D4">
 		<Properties>
 			<bool name="ClipToDeviceSafeArea">true</bool>
 			<int name="DisplayOrder">0</int>
@@ -25,7 +25,7 @@
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="Frame" referent="RBXB3DCA84266654AB184535E16A0D15561">
+		<Item class="Frame" referent="RBXE614FB9DE3B34445ABFA6158CC6714F7">
 			<Properties>
 				<token name="Style">0</token>
 				<bool name="Active">false</bool>
@@ -88,7 +88,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="TextLabel" referent="RBXF6073BCDC922485DA0E850DCD5340D1F">
+			<Item class="TextLabel" referent="RBXCC26AB564EA2476090BA619859F84A13">
 				<Properties>
 					<Font name="FontFace">
 						<Family><url>rbxasset://fonts/families/SourceSansPro.json</url></Family>
@@ -182,7 +182,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UIStroke" referent="RBX5B6D20A5420F405796E0CCEFD6420C5E">
+			<Item class="UIStroke" referent="RBX3D7A84078C0B48569DFE49AB80E5781C">
 				<Properties>
 					<token name="ApplyStrokeMode">0</token>
 					<UDim name="BorderOffset">
@@ -209,7 +209,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UICorner" referent="RBX1159D281C9624B0D9DAD786F960973AD">
+			<Item class="UICorner" referent="RBX08FE8DB53BDF4777B0689803E22AD8FA">
 				<Properties>
 					<UDim name="CornerRadius">
 						<S>0</S>
@@ -224,7 +224,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="Frame" referent="RBX63B0A4B649E14BC8A54CB0E9A59AAA40">
+		<Item class="Frame" referent="RBX78846E1980A44D67A02C90DA77D470A3">
 			<Properties>
 				<token name="Style">0</token>
 				<bool name="Active">false</bool>
@@ -287,7 +287,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="UIStroke" referent="RBXE327EFFC61E94970B3A4616BC4100637">
+			<Item class="UIStroke" referent="RBX6CCFFD24326B48DBA173540428AA4FD6">
 				<Properties>
 					<token name="ApplyStrokeMode">0</token>
 					<UDim name="BorderOffset">
@@ -314,7 +314,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="TextButton" referent="RBX1691156D1AF24F068C223E0902FE52F0">
+			<Item class="TextButton" referent="RBXF4134263CD054D91A3CFC2D92D065344">
 				<Properties>
 					<Font name="FontFace">
 						<Family><url>rbxasset://fonts/families/SourceSansPro.json</url></Family>
@@ -414,7 +414,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UICorner" referent="RBX4155866699754A9AA38A6AB0938C1772">
+			<Item class="UICorner" referent="RBX0D0BF0F985D14063BE1F479875198EC4">
 				<Properties>
 					<UDim name="CornerRadius">
 						<S>0</S>
@@ -429,7 +429,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="Frame" referent="RBXD69CFB97E3664E9994B6725D54546C22">
+		<Item class="Frame" referent="RBX13711B75DAF54DD1AB1E03ED6836D4EE">
 			<Properties>
 				<token name="Style">0</token>
 				<bool name="Active">false</bool>
@@ -492,7 +492,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="UIStroke" referent="RBX0B855CFF7DD349308AF56392244AB145">
+			<Item class="UIStroke" referent="RBX89364AF2CD39412299A8020E42324A10">
 				<Properties>
 					<token name="ApplyStrokeMode">0</token>
 					<UDim name="BorderOffset">
@@ -519,7 +519,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UICorner" referent="RBXC1626428BE0F40D09E84C8E29ACFFD2A">
+			<Item class="UICorner" referent="RBX3B19A49A412C48FCB6F03B18D5CC450C">
 				<Properties>
 					<UDim name="CornerRadius">
 						<S>0</S>
@@ -533,7 +533,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="TextLabel" referent="RBX2AE091BBF4A64003917B3D7818ECC3DB">
+			<Item class="TextLabel" referent="RBXED6ADA5CBBF540CF8C6351BA2677BF82">
 				<Properties>
 					<Font name="FontFace">
 						<Family><url>rbxasset://fonts/families/AmaticSC.json</url></Family>
@@ -628,7 +628,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="Frame" referent="RBX682284B5E2F247E38BB04AFEF732C127">
+		<Item class="Frame" referent="RBXCB74F2AD5F2D4195A9031EC777F183BD">
 			<Properties>
 				<token name="Style">0</token>
 				<bool name="Active">false</bool>
@@ -691,7 +691,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="UICorner" referent="RBXAB8113C842824EA9A7F8357B49FF390B">
+			<Item class="UICorner" referent="RBXBE739451FDEE4E299C534EEE64211E3C">
 				<Properties>
 					<UDim name="CornerRadius">
 						<S>0</S>
@@ -705,7 +705,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="TextButton" referent="RBXF3F20BA0FB1E43888C607E9A0CF5D91A">
+			<Item class="TextButton" referent="RBX89EAF9180C6A475A826C0583076F36FF">
 				<Properties>
 					<Font name="FontFace">
 						<Family><url>rbxasset://fonts/families/SourceSansPro.json</url></Family>
@@ -805,7 +805,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UIStroke" referent="RBX758768EE51C54BBE964D365137916A31">
+			<Item class="UIStroke" referent="RBX300FA4FD04FD4471BA04DC6E2C57F023">
 				<Properties>
 					<token name="ApplyStrokeMode">0</token>
 					<UDim name="BorderOffset">
@@ -833,7 +833,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="Frame" referent="RBXFF31EACA64304BC6AD335CFB000C4F09">
+		<Item class="Frame" referent="RBXD1A4D1C3D5EA4963B579D24872FB6CF7">
 			<Properties>
 				<token name="Style">0</token>
 				<bool name="Active">false</bool>
@@ -896,7 +896,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="TextButton" referent="RBX77BADDB2E18441A6AA988B9BCBE6B024">
+			<Item class="TextButton" referent="RBXF6B73FB4871640578029AC7AF8ECDDF4">
 				<Properties>
 					<Font name="FontFace">
 						<Family><url>rbxasset://fonts/families/SourceSansPro.json</url></Family>
@@ -996,7 +996,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UIStroke" referent="RBX318DFE51F7AE4D849FED6993F82EA650">
+			<Item class="UIStroke" referent="RBX23C45271593C402F8424834A06E0CC62">
 				<Properties>
 					<token name="ApplyStrokeMode">0</token>
 					<UDim name="BorderOffset">
@@ -1023,7 +1023,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UICorner" referent="RBX767DB33D7E3246FAA6335E6F08D91426">
+			<Item class="UICorner" referent="RBXE2F3DDC211A34BFE8EB55E068BEB179A">
 				<Properties>
 					<UDim name="CornerRadius">
 						<S>0</S>
@@ -1038,7 +1038,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="Frame" referent="RBX4F325C61E9A94CEA9E3BA5EE087F9521">
+		<Item class="Frame" referent="RBX8DD0C8AC14CA45D48375F05A015CA6F6">
 			<Properties>
 				<token name="Style">0</token>
 				<bool name="Active">false</bool>
@@ -1101,7 +1101,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="UIStroke" referent="RBX98653BB0101D4182A82E6ECBD0BEB801">
+			<Item class="UIStroke" referent="RBXFBB0CB07AC9145B89C370E51F68DDEB7">
 				<Properties>
 					<token name="ApplyStrokeMode">0</token>
 					<UDim name="BorderOffset">
@@ -1128,7 +1128,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UICorner" referent="RBX5E12E71F03E34899BF768C29A1B3274C">
+			<Item class="UICorner" referent="RBX80B9AE5FC8E342C6877EB8A7406B10BC">
 				<Properties>
 					<UDim name="CornerRadius">
 						<S>0</S>
@@ -1142,7 +1142,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="TextButton" referent="RBXF60F884098BF48479FA6590BF325E308">
+			<Item class="TextButton" referent="RBX50CA3053E52942C1962A382E342738C4">
 				<Properties>
 					<Font name="FontFace">
 						<Family><url>rbxasset://fonts/families/SourceSansPro.json</url></Family>
@@ -1243,7 +1243,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="Frame" referent="RBX683FBEA6440544378AD62C436A4372CB">
+		<Item class="Frame" referent="RBXF986FC84B16948A3A7898F5EF2ED28CB">
 			<Properties>
 				<token name="Style">0</token>
 				<bool name="Active">false</bool>
@@ -1306,7 +1306,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="TextButton" referent="RBX96615AA178DA4856BBAE07BA73F10712">
+			<Item class="TextButton" referent="RBXAE05386A4EA8463BAC20F7B68A818C0C">
 				<Properties>
 					<Font name="FontFace">
 						<Family><url>rbxasset://fonts/families/SourceSansPro.json</url></Family>
@@ -1406,7 +1406,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UIStroke" referent="RBX8DFDA8B023314D0F86B462723710560A">
+			<Item class="UIStroke" referent="RBX3B6AF494595B4F98A4649D2CC0AA732A">
 				<Properties>
 					<token name="ApplyStrokeMode">0</token>
 					<UDim name="BorderOffset">
@@ -1433,7 +1433,85 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UICorner" referent="RBX57B89A794EC842B8A06B210362A4826D">
+			<Item class="UICorner" referent="RBXAB5EA0A1DE8D4B12BDE8EDBC22709BE6">
+				<Properties>
+					<UDim name="CornerRadius">
+						<S>0</S>
+						<O>8</O>
+					</UDim>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">UICorner</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+			</Item>
+		</Item>
+		<Item class="Frame" referent="RBX5AD3A38992E340C0BB193F2EE78E1F14">
+			<Properties>
+				<token name="Style">0</token>
+				<bool name="Active">false</bool>
+				<Vector2 name="AnchorPoint">
+					<X>0</X>
+					<Y>0.5</Y>
+				</Vector2>
+				<token name="AutomaticSize">0</token>
+				<Color3 name="BackgroundColor3">
+					<R>1</R>
+					<G>0</G>
+					<B>0</B>
+				</Color3>
+				<float name="BackgroundTransparency">0</float>
+				<Color3 name="BorderColor3">
+					<R>0</R>
+					<G>0</G>
+					<B>0</B>
+				</Color3>
+				<token name="BorderMode">0</token>
+				<int name="BorderSizePixel">0</int>
+				<bool name="ClipsDescendants">false</bool>
+				<bool name="Draggable">false</bool>
+				<bool name="Interactable">true</bool>
+				<int name="LayoutOrder">0</int>
+				<Ref name="NextSelectionDown">null</Ref>
+				<Ref name="NextSelectionLeft">null</Ref>
+				<Ref name="NextSelectionRight">null</Ref>
+				<Ref name="NextSelectionUp">null</Ref>
+				<UDim2 name="Position">
+					<XS>0.381338269</XS>
+					<XO>0</XO>
+					<YS>0.837721109</YS>
+					<YO>0</YO>
+				</UDim2>
+				<float name="Rotation">0</float>
+				<bool name="Selectable">false</bool>
+				<Ref name="SelectionImageObject">null</Ref>
+				<int name="SelectionOrder">0</int>
+				<UDim2 name="Size">
+					<XS>0.237936214</XS>
+					<XO>0</XO>
+					<YS>0.00798360165</YS>
+					<YO>0</YO>
+				</UDim2>
+				<token name="SizeConstraint">0</token>
+				<bool name="Visible">true</bool>
+				<int name="ZIndex">1</int>
+				<bool name="AutoLocalize">true</bool>
+				<Ref name="RootLocalizationTable">null</Ref>
+				<token name="SelectionBehaviorDown">0</token>
+				<token name="SelectionBehaviorLeft">0</token>
+				<token name="SelectionBehaviorRight">0</token>
+				<token name="SelectionBehaviorUp">0</token>
+				<bool name="SelectionGroup">false</bool>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<string name="Name">Countdown</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+			<Item class="UICorner" referent="RBX6DCA06A2145643C2800882A708053611">
 				<Properties>
 					<UDim name="CornerRadius">
 						<S>0</S>

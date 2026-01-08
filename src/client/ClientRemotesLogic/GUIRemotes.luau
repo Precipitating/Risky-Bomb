@@ -1,5 +1,7 @@
+local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local Remotes = ReplicatedStorage.Remotes
+local CountdownBarXSize = nil
 local Connections = {}
 local GUIRemotes = {}
 
@@ -68,10 +70,30 @@ local function BombGUIConnect()
 		GUIRemotes.StoreConnection(bombGUI, decrementInput.Activated, function()
 			Process(input, -1)
 		end)
+
 		GUIRemotes.StoreConnection(bombGUI, submitInput.Activated, function()
 			Remotes.SubmitBombReduction:FireServer(tableRef, tonumber(input.Text))
 			input.Text = "1"
 		end)
+	end)
+
+	Remotes.UpdateCountdownBar.OnClientEvent:Connect(function(bombGUI: ScreenGui, timeLeft: number | nil)
+		local countDownBar: Frame = bombGUI:WaitForChild("Countdown") :: Frame
+		if CountdownBarXSize == nil then
+			CountdownBarXSize = countDownBar.Size.X.Scale
+		end
+		-- means reset the bar
+		if timeLeft == nil then
+			countDownBar.Size = UDim2.fromScale(CountdownBarXSize, countDownBar.Size.Y.Scale)
+			return
+		end
+
+		local newXSize = timeLeft * CountdownBarXSize
+		local tweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+		local goal = { Size = UDim2.fromScale(newXSize, countDownBar.Size.Y.Scale) }
+		local tween = TweenService:Create(countDownBar, tweenInfo, goal)
+		tween:Play()
+		--countDownBar.Size = UDim2.fromScale(newXSize, countDownBar.Size.Y.Scale)
 	end)
 end
 

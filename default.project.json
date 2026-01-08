@@ -19,8 +19,14 @@
       "StarterPlayerScripts": {
         "Client": {
           "$path": "src/client"
-        }
+        } 
       }
+    },
+     "SoundService": {
+       "$path": "src/soundservice"
+    },
+    "ServerStorage": {
+       "$path": "src/serverstorage"
     }
   }
 }

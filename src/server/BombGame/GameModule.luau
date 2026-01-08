@@ -1,11 +1,15 @@
-local ServerScriptService = game:GetService("ServerScriptService").Server
-local BombHandler = require(script.Parent.BombHandler)
+local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local ServerScriptService = game:GetService("ServerScriptService").Server
+local BombGameStorage = require(script.Parent.BombGameStorage)
+local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
+local BombHandler = require(script.Parent.BombHandler)
 local Remotes = ReplicatedStorage.Remotes
 local BindableEvents = ServerScriptService.BindableEvents
 local BombGUI = ReplicatedStorage.BombGUI
-local PlayersPlayingList = {}
-local GameTablesList = {}
+local GameTablesList = BombGameStorage.GetGameTablesList()
+local PlayersPlayingList = BombGameStorage.GetPlayerList()
+local COUNTDOWN_TIME = 5
 local GameModule = {}
 
 function GameModule.AddGameTableToList(tableID: string, tableRef: Model?)
@@ -15,7 +19,7 @@ end
 
 function GameModule.RemoveGameTableFromList(tableID: string)
 	GameTablesList[tableID] = nil
-	print(GameTablesList)
+	print(`{tableID} removed from game table list!`)
 end
 function GameModule.GetGameTable(tableID: string)
 	return GameTablesList[tableID]
@@ -28,6 +32,8 @@ function GameModule.AssignPlayerToTable(tableID: string, playerRef: Player)
 	PlayersPlayingList[tableID][playerRef] = {}
 	PlayersPlayingList[tableID][playerRef].YourTurn = false
 	BindableEvents.PlayerAddedToTable:Fire(tableID, playerRef)
+
+	print(`{playerRef.DisplayName} added to player's table!`)
 end
 
 function GameModule.UnAssignPlayerFromTable(tableID: string, playerRef: Player)
@@ -52,6 +58,15 @@ local function DisablePlayerControlsOnTable(tableID)
 	end
 end
 
+local function PlayAudioForTablePlayers(tableID: string, audioID: string, oneShot: boolean)
+	for player, _ in pairs(PlayersPlayingList[tableID]) do
+		if oneShot then
+			Remotes.PlaySoundOnClient:FireClient(player, audioID, nil, false, nil)
+		else
+			Remotes.PlaySoundOnClient:FireClient(player, audioID, nil, true, nil)
+		end
+	end
+end
 local function AddBombGUI(gameTable: Model, tableID: string)
 	local firstPlayerTurn = nil
 	for player, _ in pairs(PlayersPlayingList[tableID]) do
@@ -81,7 +96,7 @@ function GameModule.RespawnTable(tableID: string)
 	local oldTablePos = oldTable:GetPivot()
 	oldTable:Destroy()
 
-	local newTable = ReplicatedStorage.Models.GameTable:Clone()
+	local newTable = ServerStorage.Models.GameTable:Clone()
 	GameModule.AddGameTableToList(tableID, newTable)
 	newTable:SetAttribute("ID", tableID)
 	newTable.Parent = workspace
@@ -89,6 +104,7 @@ function GameModule.RespawnTable(tableID: string)
 end
 
 function GameModule.FinishGame(tableID: string)
+	PlayAudioForTablePlayers(tableID, SoundManager.GetRandomMainSound(), false)
 	for player in pairs(PlayersPlayingList[tableID]) do
 		local playerInTable = PlayersPlayingList[tableID][player]
 
@@ -106,6 +122,33 @@ function GameModule.FinishGame(tableID: string)
 	GameModule.RespawnTable(tableID)
 end
 
+function ExceededCountdown(tableID: string)
+	-- countdown finished
+	local bombRef = BombGameStorage.GetGameTablesList()[tableID]:FindFirstChild("Bomb")
+	local newTime = BombHandler.ReduceBombTime(bombRef, 10)
+	if newTime > 0 then
+		GameModule.NextTurn(tableID)
+	end
+end
+
+function GameModule.StartCountdown(tableID: string, playerInTable, player: Player)
+	task.spawn(function()
+		for timeLeft = COUNTDOWN_TIME, 0, -1 do
+			if not playerInTable.YourTurn then
+				Remotes.UpdateCountdownBar:FireClient(player, playerInTable.BombGUI, nil)
+				return
+			end
+			Remotes.UpdateCountdownBar:FireClient(player, playerInTable.BombGUI, timeLeft / COUNTDOWN_TIME)
+			task.wait(1)
+		end
+		-- one more check (if they input at 0, it still assumes its your turn)
+		if not playerInTable.YourTurn then
+			Remotes.UpdateCountdownBar:FireClient(player, playerInTable.BombGUI, nil)
+			return
+		end
+		ExceededCountdown(tableID)
+	end)
+end
 function GameModule.NextTurn(tableID: string)
 	for player in pairs(PlayersPlayingList[tableID]) do
 		local playerInTable = PlayersPlayingList[tableID][player]
@@ -117,6 +160,7 @@ function GameModule.NextTurn(tableID: string)
 		else
 			playerInTable.YourTurn = true
 			playerInTable.BombGUI.Enabled = true
+			GameModule.StartCountdown(tableID, playerInTable, player)
 			print("GUI should enable.")
 		end
 	end
@@ -126,9 +170,13 @@ function GameModule.BeginGame(gameTable: Model)
 	local bomb = gameTable:FindFirstChild("Bomb")
 	local tableID = gameTable:GetAttribute("ID")
 	gameTable:SetAttribute("GameActive", true)
+
+	PlayAudioForTablePlayers(tableID, SoundManager.GetRandomBombThemeSound(), false)
 	DisablePlayerControlsOnTable(tableID)
+
 	BombHandler.InitializeBomb(bomb, gameTable)
 	AddBombGUI(gameTable, tableID)
+
 	GameModule.NextTurn(tableID)
 end
 

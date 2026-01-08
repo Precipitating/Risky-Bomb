@@ -1,5 +1,5 @@
-local ServerScriptService = game:GetService("ServerScriptService")
-local GameModule = require(ServerScriptService.Server.BombGame.GameModule)
+local ServerScriptService = game:GetService("ServerScriptService").Server
+local GameModule = require(ServerScriptService.BombGame.GameModule)
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local Remotes = ReplicatedStorage.Remotes
 local CountdownTime: number = 3

@@ -8,9 +8,12 @@ local InputRemotes = {}
 
 local function EnableFirstPerson(enable: boolean)
 	if enable then
-		PlayerContext.Player.CameraMode = Enum.CameraMode.LockFirstPerson
+		local hrp: BasePart = PlayerContext.Player.Character.HumanoidRootPart
+		local firstPersonPosition = hrp:GetPivot() + (hrp.CFrame.lookVector * 1.5) + Vector3.new(0, 1, 0)
+		workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
+		workspace.CurrentCamera:PivotTo(firstPersonPosition)
 	else
-		PlayerContext.Player.CameraMode = Enum.CameraMode.Classic
+		workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
 	end
 end
 

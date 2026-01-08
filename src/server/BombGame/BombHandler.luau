@@ -1,18 +1,32 @@
 local ServerScriptService = game:GetService("ServerScriptService").Server
+local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local TweenService = game:GetService("TweenService")
+local BombGameStorage = require(script.Parent.BombGameStorage)
+local Remotes = ReplicatedStorage.Remotes
 local BindableEvents = ServerScriptService.BindableEvents
+
 local MAX_BOMB_TIME: number = 600
 local MIN_BOMB_TIME: number = 30
+-- below this, and we won't hear the tick sound anymore
+local MINIMUM_TWEEN_DURATION = 0.05
 local ORIGINAL_BOMB_SCALE: vector = vector.create(0.827, 1.062, 0.827)
 local BOMB_SCALED_UP: vector =
 	vector.create(ORIGINAL_BOMB_SCALE.x * 2, ORIGINAL_BOMB_SCALE.y * 2, ORIGINAL_BOMB_SCALE.z * 2)
 
+local PlayersPlayingList = BombGameStorage.GetPlayerList()
+
 local BombHandler = {}
-local function BombTween(bombRef: MeshPart, startTime: number)
+
+local function PlayTickSound(bombRef: MeshPart, gameTable)
+	for player in pairs(PlayersPlayingList[gameTable:GetAttribute("ID")]) do
+		Remotes.PlayTickSound:FireClient(player, bombRef)
+	end
+end
+
+local function BombTween(bombRef: MeshPart, startTime: number, gameTable: Model)
 	while bombRef:GetAttribute("Active") do
 		local currTime = bombRef:GetAttribute("Time")
-		local duration = currTime / startTime
-
+		local duration = math.max(MINIMUM_TWEEN_DURATION, currTime / startTime)
 		local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out, 0, true)
 
 		local tween = TweenService:Create(bombRef, tweenInfo, {
@@ -20,6 +34,7 @@ local function BombTween(bombRef: MeshPart, startTime: number)
 		})
 
 		tween:Play()
+		PlayTickSound(bombRef, gameTable)
 		tween.Completed:Wait()
 	end
 end
@@ -60,9 +75,9 @@ local function StartTicking(bombRef: MeshPart, gameTable: Model)
 	end)
 end
 
-local function StartScaleLerping(bombRef: MeshPart, startTime: number)
+local function StartScaleLerping(bombRef: MeshPart, startTime: number, gameTable)
 	task.spawn(function()
-		BombTween(bombRef, startTime)
+		BombTween(bombRef, startTime, gameTable)
 	end)
 end
 
@@ -81,7 +96,7 @@ end
 local function StartBomb(bombRef: MeshPart, startTime: number, gameTable: Model)
 	bombRef:SetAttribute("Active", true)
 	StartTicking(bombRef, gameTable)
-	StartScaleLerping(bombRef, startTime)
+	StartScaleLerping(bombRef, startTime, gameTable)
 end
 
 function BombHandler.InitializeBomb(bombRef: MeshPart, gameTable: Model)
