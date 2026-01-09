@@ -1,7 +1,11 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local StarterPlayer = game:GetService("StarterPlayer")
 local TweenService = game:GetService("TweenService")
+local JumpscareUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.JumpscareUI)
+local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
+local UtilityModule = require(ReplicatedStorage.UtilityModule)
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
-local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+
 local Remotes = ReplicatedStorage.Remotes
 local CountdownBarXSize = nil
 local Connections = {}
@@ -130,10 +134,23 @@ local function GetBombGUIInput()
 	end
 end
 
+local function JumpscarePlayer()
+	Remotes.JumpscarePlayer.OnClientEvent:Connect(function()
+		local jumpscareUI = UtilityModule.Get(PlayerContext.PlayerGui, "JumpscareImage")
+		local jumpscarePicture = UtilityModule.Get(jumpscareUI, "Picture")
+		jumpscarePicture.Image = JumpscareUI.GetRandomJumpscareImage()
+		jumpscareUI.Enabled = true
+		local sound: Sound = SoundManager.PlayGlobal(JumpscareUI.GetRandomJumpscareSound())
+		sound.Ended:Wait()
+		jumpscareUI.Enabled = false
+	end)
+end
+
 function GUIRemotes.Handle()
 	BombGUIConnect()
 	BombGUIDisconnect()
 	GetBombGUIInput()
+	JumpscarePlayer()
 end
 
 return GUIRemotes

@@ -12,6 +12,7 @@ PlayerContext.Camera = workspace.CurrentCamera
 local function onCharacterAdded(character)
 	PlayerContext.Character = character
 	PlayerContext.Humanoid = character:WaitForChild("Humanoid")
+	PlayerContext.PlayerGui = Player.PlayerGui
 	PlayerContext.Camera.CameraType = Enum.CameraType.Custom
 	PlayerContext.Camera.CameraSubject = character.Humanoid
 	local PlayerModule = PlayerContext.Player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule")
