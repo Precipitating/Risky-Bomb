@@ -4,7 +4,7 @@ local BombGameStorage = require(script.Parent.BombGameStorage)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local BombHandler = require(script.Parent.BombHandler)
 local Remotes = ReplicatedStorage.Remotes
-local BombGUI = ReplicatedStorage.BombGUI
+local GUI = ReplicatedStorage.GUI
 local GameTablesList = BombGameStorage.GetGameTablesList()
 local PlayersPlayingList = BombGameStorage.GetPlayerList()
 local COUNTDOWN_TIME = 5
@@ -31,7 +31,7 @@ end
 local function AddBombGUI(gameTable: Model, tableID: string)
 	local firstPlayerTurn = nil
 	for player, _ in pairs(PlayersPlayingList[tableID]) do
-		local gui = BombGUI.BombGUI:Clone()
+		local gui = GUI.BombGUI:Clone()
 		gui.Parent = player:FindFirstChild("PlayerGui")
 
 		-- initialize turn, one should be true and one should be false

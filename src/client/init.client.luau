@@ -2,7 +2,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterGui = game:GetService("StarterGui")
 local SoundManager = require(ReplicatedStorage.Shared.Sound.SoundManager)
 local ClientRemotesHandler = require(script.ClientRemotesHandler)
-local JumpscareUI = require(script.ClientUI.JumpscareUI)
+--local JumpscareUI = require(script.ClientUI.JumpscareUI)
+local MountUI = require(script.ClientUI.MountUI)
 local ProximityPromptHandler = require(script.ProximityPromptHandler)
 
 local function DisableRespawn()
@@ -16,10 +17,11 @@ end
 
 local function ClientInit()
 	DisableRespawn()
-	JumpscareUI.Initialize()
+	--JumpscareUI.Initialize()
 	ProximityPromptHandler.ClientProximityPrompts()
 	ClientRemotesHandler.Handle()
 	SoundManager.PlayTheme(SoundManager.GetRandomMainSound())
+	MountUI()
 end
 
 ClientInit()
