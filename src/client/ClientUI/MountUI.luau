@@ -1,21 +1,28 @@
 local Players = game:GetService("Players")
+local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local BombInputScreenGUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.BombInputUI.BombInputScreenGUI)
+local JumpscareScreenGUI = require(script.Parent.JumpscareGUI.JumpscareScreenGUI)
 
-local RootUI = require(script.Parent.RootUI)
-local React = require(ReplicatedStorage.Packages.react)
-local ReactRoblox = require(ReplicatedStorage.Packages["react-roblox"])
+local React = require(ReplicatedStorage.Packages.React)
+local ReactRoblox = require(ReplicatedStorage.Packages["ReactRoblox"])
 
-return function()
+local function CreateScreenGUI(name: string, uiRoot)
 	local player = Players.LocalPlayer
 	local playerGUI = player:WaitForChild("PlayerGui")
 	local container = Instance.new("ScreenGui")
-	container.Name = "React"
+	container.Name = name
 	container.IgnoreGuiInset = true
 	container.ResetOnSpawn = false
 	container.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 	container.ClipToDeviceSafeArea = false
 	container.Parent = playerGUI
 	local root = ReactRoblox.createRoot(container)
-	local app = React.createElement(RootUI)
+	local app = React.createElement(uiRoot)
 	root:render(app)
+end
+
+return function()
+	CreateScreenGUI("JumpscareGUI", JumpscareScreenGUI)
+	CreateScreenGUI("BombInputGUI", BombInputScreenGUI)
 end

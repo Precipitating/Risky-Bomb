@@ -78,7 +78,7 @@ function ChairRemote:Handle()
 			StartCountDown(playerCountText, countdownText, gameTable)
 		end
 
-		-- stop countdown if one left
+		-- stop countdown if 1 player
 		if not sat and countdownText:GetAttribute("Active") then
 			countdownText:SetAttribute("Active", false)
 			gameTable:SetAttribute("GameActive", false)

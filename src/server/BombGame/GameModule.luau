@@ -1,13 +1,12 @@
 local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local BombConfig = require(ReplicatedStorage.Config.BombConfig)
 local BombGameStorage = require(script.Parent.BombGameStorage)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local BombHandler = require(script.Parent.BombHandler)
 local Remotes = ReplicatedStorage.Remotes
-local GUI = ReplicatedStorage.GUI
 local GameTablesList = BombGameStorage.GetGameTablesList()
 local PlayersPlayingList = BombGameStorage.GetPlayerList()
-local COUNTDOWN_TIME = 5
 local GameModule = {}
 
 local function DisablePlayerControlsOnTable(tableID)
@@ -28,27 +27,26 @@ local function PlayAudioForTablePlayers(tableID: string, audioID: string, oneSho
 		end
 	end
 end
-local function AddBombGUI(gameTable: Model, tableID: string)
+local function SetInitialTurn(tableID: string)
 	local firstPlayerTurn = nil
-	for player, _ in pairs(PlayersPlayingList[tableID]) do
-		local gui = GUI.BombGUI:Clone()
-		gui.Parent = player:FindFirstChild("PlayerGui")
-
+	print(PlayersPlayingList)
+	for player in pairs(PlayersPlayingList[tableID]) do
 		-- initialize turn, one should be true and one should be false
 		if firstPlayerTurn == nil then
 			local randTurn = math.random() < 0.5
 			PlayersPlayingList[tableID][player].YourTurn = randTurn
 			firstPlayerTurn = randTurn
+
 			print(`First player turn set to {firstPlayerTurn}`)
-			gui.Enabled = randTurn
+			Remotes.SyncTurn:FireClient(player, randTurn)
 		else
 			PlayersPlayingList[tableID][player].YourTurn = not firstPlayerTurn
-			gui.Enabled = not firstPlayerTurn
+			Remotes.SyncTurn:FireClient(player, not firstPlayerTurn)
 			print(`Second player turn set to {not firstPlayerTurn}`)
 		end
 
-		PlayersPlayingList[tableID][player].BombGUI = gui
-		Remotes.ConnectGUI:FireClient(player, gameTable, gui)
+		--PlayersPlayingList[tableID][player].BombGUI = gui
+		--Remotes.ConnectGUI:FireClient(player, gameTable, gui)
 	end
 end
 
@@ -118,26 +116,22 @@ end
 
 function GameModule.StartCountdown(tableID: string, playerInTable, player: Player)
 	task.spawn(function()
-		for timeLeft = COUNTDOWN_TIME, 0, -1 do
+		for timeLeft = BombConfig.MAX_TURN_TIME, 0, -1 do
 			if not GameTablesList[tableID]:GetAttribute("GameActive") then
 				print("Game not active, don't count down any more")
 				return
 			end
-			if not playerInTable.BombGUI then
-				return
-			end
+
 			if not playerInTable.YourTurn then
-				Remotes.UpdateCountdownBar:FireClient(player, playerInTable.BombGUI, nil)
 				return
 			end
 
-			Remotes.UpdateCountdownBar:FireClient(player, playerInTable.BombGUI, timeLeft / COUNTDOWN_TIME)
+			Remotes.UpdateCountdownBar:FireClient(player, timeLeft)
 			task.wait(1)
 		end
 
 		-- one more check (if they input at 0, it still assumes its your turn)
 		if not playerInTable.YourTurn then
-			Remotes.UpdateCountdownBar:FireClient(player, playerInTable.BombGUI, nil)
 			return
 		end
 		ExceededCountdown(tableID, player)
@@ -149,11 +143,11 @@ function GameModule.NextTurn(tableID: string)
 		print("Next turn should occur.")
 		if playerInTable.YourTurn then
 			playerInTable.YourTurn = false
-			playerInTable.BombGUI.Enabled = false
+			Remotes.SyncTurn:FireClient(player, false)
 			print("GUI should disable.")
 		else
 			playerInTable.YourTurn = true
-			playerInTable.BombGUI.Enabled = true
+			Remotes.SyncTurn:FireClient(player, true)
 			GameModule.StartCountdown(tableID, playerInTable, player)
 			print("GUI should enable.")
 		end
@@ -169,7 +163,7 @@ function GameModule.BeginGame(gameTable: Model)
 	DisablePlayerControlsOnTable(tableID)
 
 	BombHandler.InitializeBomb(bomb, gameTable)
-	AddBombGUI(gameTable, tableID)
+	SetInitialTurn(tableID)
 
 	GameModule.NextTurn(tableID)
 end

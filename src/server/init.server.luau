@@ -10,6 +10,8 @@ local function ServerInit()
 	ServerBindableEventsHandler.HandleEvents()
 	UniqueIdAssigner.AssignAll()
 	PurchaseHandler.Initialize()
+
+	task.wait(5)
 end
 
 ServerInit()

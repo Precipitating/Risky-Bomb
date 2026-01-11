@@ -9,8 +9,8 @@ function PlayerEvents.Handle()
 				-- if died on table, unassign
 				local tableID = character:GetAttribute("AssignedTable")
 				if tableID then
-					print("Unassigned dead player from table")
-					Remotes.DisconnectGUI:FireClient(player, playerInTable.BombGUI)
+					print("Unassigned dead player from")
+					BombGameStorage.UnAssignSinglePlayerFromTable(tableID, player)
 				end
 			end)
 		end)

@@ -41,15 +41,12 @@ function BombGameStorage.AssignPlayerToTable(tableID: string, playerRef: Player)
 end
 
 function BombGameStorage.ClearTable(tableID: string)
-	BombGameStorage.GetGameTable(tableID):SetAttribute("GameActive", false)
 	for player in pairs(PlayersPlayingList[tableID]) do
 		local playerInTable = PlayersPlayingList[tableID][player]
 		local playerModel = player.Character
 		if playerInTable then
 			playerModel:SetAttribute("AssignedTable", nil)
-			if playerInTable.BombGUI then
-				Remotes.DisconnectGUI:FireClient(player, playerInTable.BombGUI)
-			end
+			Remotes.DisconnectGUI:FireClient(player)
 			playerInTable = nil
 			BindableEvents.PlayerRemovedFromTable:Fire(tableID, player)
 			print(`(ClearTable) Unassigned player from table {tableID}, {PlayersPlayingList[tableID]} `)
@@ -74,9 +71,7 @@ function BombGameStorage.UnAssignSinglePlayerFromTable(tableID: string, player: 
 	local playerModel = player.Character
 	if playerInTable then
 		playerModel:SetAttribute("AssignedTable", nil)
-		if playerInTable.BombGUI then
-			Remotes.DisconnectGUI:FireClient(player, playerInTable.BombGUI)
-		end
+		Remotes.DisconnectGUI:FireClient(player, playerInTable.BombGUI)
 		playerInTable = nil
 		BindableEvents.PlayerRemovedFromTable:Fire(tableID, player)
 		print(`(Unassigned player from table {tableID}, {PlayersPlayingList} `)
