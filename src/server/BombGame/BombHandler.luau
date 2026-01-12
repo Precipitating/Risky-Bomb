@@ -1,9 +1,9 @@
 local ServerScriptService = game:GetService("ServerScriptService").Server
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local TweenService = game:GetService("TweenService")
+local ServerSignals = require(ServerScriptService.ServerSignals.Signals)
 local BombGameStorage = require(script.Parent.BombGameStorage)
 local Remotes = ReplicatedStorage.Remotes
-local BindableEvents = ServerScriptService.BindableEvents
 
 local MAX_BOMB_TIME: number = 600
 local MIN_BOMB_TIME: number = 30
@@ -55,7 +55,7 @@ local function DetonateBomb(bombRef: MeshPart, gameTable: Model)
 	StopBomb(bombRef)
 	SpawnExplosionEffect(bombRef)
 	bombRef.Transparency = 1
-	BindableEvents.GameFinished:Fire(gameTable)
+	ServerSignals.GameFinished:Fire(gameTable)
 end
 
 local function StartTicking(bombRef: MeshPart, gameTable: Model)

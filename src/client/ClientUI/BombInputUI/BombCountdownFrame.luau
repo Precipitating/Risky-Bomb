@@ -1,5 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local React = require(ReplicatedStorage.Packages.React)
+local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local e = React.createElement
 
 type BombCountdownFrameProps = {
@@ -19,6 +20,9 @@ local function BombCountdownFrame(props: BombCountdownFrameProps)
 		Visible = props.Visible,
 		Active = false,
 		Interactable = false,
+		[React.Change.Size] = function(_)
+			SoundManager.PlayExistingSound(SoundManager.UISounds.Tick)
+		end,
 	}, {
 		UICorner = e("UICorner", {
 			CornerRadius = UDim.new(0.5, 0),

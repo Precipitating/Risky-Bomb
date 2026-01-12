@@ -1,13 +1,13 @@
 local ServerScriptService = game:GetService("ServerScriptService").Server
-local BindableEvents = ServerScriptService.BindableEvents
+local ServerSignals = require(ServerScriptService.ServerSignals.Signals)
 local PlayerTableEvents = {}
 
 local function OnListIncreased()
-	BindableEvents.PlayerAddedToTable.Event:Connect(function(tableID, playerRef) end)
+	ServerSignals.PlayerAddedToTable:Connect(function(tableID, playerRef) end)
 end
 
 local function OnListDecreased()
-	BindableEvents.PlayerRemovedFromTable.Event:Connect(function(tableID, _)
+	ServerSignals.PlayerRemovedFromTable:Connect(function(tableID, _)
 		print("List decreased!")
 	end)
 end

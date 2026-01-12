@@ -1,9 +1,10 @@
 local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
-local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
-local Remotes = ReplicatedStorage.Remotes
+local StarterPlayer = game:GetService("StarterPlayer")
+local JumpscareUIFunctions = require(script.Parent.JumpscareUIFunctions)
 local React = require(ReplicatedStorage.Packages.React)
+local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local e = React.createElement
 
@@ -23,9 +24,11 @@ local function JumpscareListButtonUI(props: JumpscareListButtonProp)
 		[React.Event.Activated] = function()
 			if not Players:GetPlayerByUserId(props.UserID) then
 				warn("Player left the game, cannot jumpscare")
+				SoundManager.PlayAt(SoundManager.UISounds.Error)
 				return
 			end
-			Remotes.PendingJumpscarePlayer:FireServer(props.UserID)
+			SoundManager.PlayExistingSound(SoundManager.UISounds.ButtonClick)
+			JumpscareUIFunctions.networker:fire("AddPendingJumpscare", props.UserID)
 			MarketplaceService:PromptProductPurchase(PlayerContext.Player, 3507139396)
 		end,
 	}, {

@@ -1,10 +1,13 @@
 local CollectionService = game:GetService("CollectionService")
-local StarterPlayer = game:GetService("StarterPlayer")
-local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
-local Remotes = ReplicatedStorage.Remotes
+local StarterPlayer = game:GetService("StarterPlayer")
+local Networker = require(ReplicatedStorage.Packages.Networker).client
+local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
+local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
+--local Remotes = ReplicatedStorage.Remotes
 
 local ChairPrompt = {}
+ChairPrompt.networker = Networker.new("ChairRemotes", ChairPrompt)
 
 local function GetSeat(prompt)
 	local seat: Seat? = prompt:FindFirstAncestorOfClass("Seat")
@@ -40,10 +43,12 @@ local function PromptVisibilityConnection(prompt: ProximityPrompt, seat: Seat, g
 			local seatHumanoid = seat.Occupant
 			if seatHumanoid then
 				prompt.Enabled = false
-				Remotes.ChairSat:FireServer(gameTable, true)
+				SoundManager.PlayExistingSound(SoundManager.PromptSounds.ChairSit)
+				ChairPrompt.networker:fire("ChairSat", gameTable, true)
 			else
 				prompt.Enabled = true
-				Remotes.ChairSat:FireServer(gameTable, false)
+				SoundManager.PlayExistingSound(SoundManager.PromptSounds.ChairLeave)
+				ChairPrompt.networker:fire("ChairSat", gameTable, false)
 			end
 		end)
 		prompt:AddTag("Set")

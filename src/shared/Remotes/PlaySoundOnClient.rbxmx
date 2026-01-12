@@ -2,7 +2,7 @@
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
-	<Item class="RemoteEvent" referent="RBX67336175F3FA4D9581A2DB64CBE09127">
+	<Item class="UnreliableRemoteEvent" referent="RBX67336175F3FA4D9581A2DB64CBE09127">
 		<Properties>
 			<BinaryString name="AttributesSerialize"></BinaryString>
 			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>

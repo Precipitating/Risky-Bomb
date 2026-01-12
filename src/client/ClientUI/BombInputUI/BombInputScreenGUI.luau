@@ -9,6 +9,7 @@ local Remotes = ReplicatedStorage.Remotes
 local BombGameCharms = require(ReplicatedStorage.Charms.BombGameCharms)
 local ReactCharm = require(ReplicatedStorage.Packages.ReactCharm)
 local BombConfig = require(ReplicatedStorage.Config.BombConfig)
+local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 
 local e = React.createElement
 
@@ -78,6 +79,7 @@ local function BombInputScreenGUI()
 			AspectRatio = 1.5,
 			AnchorPoint = Vector2.new(1, 0.5),
 			ButtonClickedFunc = function()
+				SoundManager.PlayExistingSound(SoundManager.UISounds.ButtonClick)
 				SetCurrentInput(currentInput - 1)
 			end,
 		}),
@@ -93,6 +95,7 @@ local function BombInputScreenGUI()
 			AspectRatio = 1.5,
 			AnchorPoint = Vector2.new(1, 0.5),
 			ButtonClickedFunc = function()
+				SoundManager.PlayExistingSound(SoundManager.UISounds.ButtonClick)
 				SetCurrentInput(currentInput - 5)
 			end,
 		}),
@@ -108,6 +111,7 @@ local function BombInputScreenGUI()
 			AspectRatio = 1.5,
 			AnchorPoint = Vector2.new(0, 0.5),
 			ButtonClickedFunc = function()
+				SoundManager.PlayExistingSound(SoundManager.UISounds.ButtonClick)
 				SetCurrentInput(currentInput + 1)
 			end,
 		}),
@@ -123,6 +127,7 @@ local function BombInputScreenGUI()
 			AspectRatio = 1.5,
 			AnchorPoint = Vector2.new(0, 0.5),
 			ButtonClickedFunc = function()
+				SoundManager.PlayExistingSound(SoundManager.UISounds.ButtonClick)
 				SetCurrentInput(currentInput + 5)
 			end,
 		}),
@@ -148,6 +153,7 @@ local function BombInputScreenGUI()
 			AspectRatio = 3,
 			AnchorPoint = Vector2.new(0.5, 0.5),
 			ButtonClickedFunc = function()
+				SoundManager.PlayExistingSound(SoundManager.UISounds.Submit)
 				Remotes.SubmitBombReduction:FireServer(
 					PlayerContext.Character:GetAttribute("AssignedTable"),
 					currentInput

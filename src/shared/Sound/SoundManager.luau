@@ -14,7 +14,52 @@ local BombGameThemes = {
 	"rbxassetid://72995265072887",
 }
 
-local SoundManager = {}
+local SoundManager = {
+	UISounds = {
+		ButtonClick = "rbxassetid://452267918",
+		Error = "rbxassetid://3779045779",
+		Submit = "rbxassetid://9118819937",
+		Tick = "rbxassetid://4621722813",
+	},
+	PromptSounds = {
+		ChairSit = "rbxassetid://12222152",
+		ChairLeave = "rbxassetid://12221967",
+	},
+	GameSounds = {
+		Win = "rbxassetid://12222253",
+		Lose = "rbxassetid://190705984",
+	},
+}
+
+local function LoadSoundsFromTable(parent: Instance, folderName: string, tableToModify: {})
+	local folder = Instance.new("Folder")
+	folder.Parent = parent
+	folder.Name = folderName
+	for key, uiSoundID in pairs(tableToModify) do
+		local sound = Instance.new("Sound")
+		sound.Parent = folder
+		sound.Name = key
+		sound.SoundId = uiSoundID
+		tableToModify[key] = sound
+	end
+end
+
+function SoundManager.PlayExistingSound(sound: Sound)
+	if sound.IsPlaying then
+		sound.TimePosition = 0
+		return
+	end
+	sound:Play()
+end
+
+function SoundManager.Initialize()
+	-- spawn sound instances that will be used heavily
+	local soundService = game.SoundService
+	LoadSoundsFromTable(soundService, "UISounds", SoundManager.UISounds)
+	LoadSoundsFromTable(soundService, "PromptSounds", SoundManager.PromptSounds)
+
+	SoundManager.PlayTheme(SoundManager.GetRandomMainSound())
+end
 
 function SoundManager.GetRandomMainSound()
 	return MainSounds[math.random(1, #MainSounds)]
@@ -52,6 +97,7 @@ function SoundManager.PlayGlobal(soundId, config)
 	return sound
 end
 
+-- one shots
 function SoundManager.PlayAt(soundId: string, parent, config)
 	local existingSound = SoundService:FindFirstChild(soundId)
 	if existingSound then
@@ -77,7 +123,7 @@ function SoundManager.PlayAt(soundId: string, parent, config)
 	end
 
 	sound:Play()
-	Debris:AddItem(sound, sound.TimeLength)
+	Debris:AddItem(sound, sound.TimeLength + 0.5)
 end
 
 return SoundManager

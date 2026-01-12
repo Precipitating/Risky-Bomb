@@ -1,23 +1,26 @@
-local StarterPlayer = game:GetService("StarterPlayer")
-local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local StarterPlayer = game:GetService("StarterPlayer")
+local Networker = require(ReplicatedStorage.Packages.Networker).client
+local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local PlayerModule = PlayerContext.Player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule")
-local Remotes = ReplicatedStorage.Remotes
 
 local InputRemotes = {}
 
-local function EnableFirstPerson(enable: boolean)
+function InputRemotes:EnableFirstPerson(enable: boolean)
 	if enable then
+		print("Enable first person")
 		local hrp: BasePart = PlayerContext.Player.Character.HumanoidRootPart
 		local firstPersonPosition = hrp:GetPivot() + (hrp.CFrame.lookVector * 1.5) + Vector3.new(0, 1, 0)
 		workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
 		workspace.CurrentCamera:PivotTo(firstPersonPosition)
 	else
+		print("Disable first person")
 		workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
 	end
 end
 
-local function DisableControls(enable: boolean)
+function InputRemotes:DisableControls(enable: boolean)
+	print("Disable controls")
 	local controls = require(PlayerModule):GetControls()
 	if enable then
 		controls:Disable()
@@ -26,15 +29,8 @@ local function DisableControls(enable: boolean)
 	end
 end
 
-function InputRemotes.Handle()
-	Remotes.DisableControls.OnClientEvent:Connect(function(enable: boolean)
-		print("Disable controls")
-		DisableControls(enable)
-	end)
-
-	Remotes.EnableFirstPerson.OnClientEvent:Connect(function(enable: boolean)
-		EnableFirstPerson(enable)
-	end)
+function InputRemotes:Initialize()
+	self.networking = Networker.new("InputRemotes", self)
 end
 
 return InputRemotes

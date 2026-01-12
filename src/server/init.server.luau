@@ -1,17 +1,17 @@
+local GameModule = require(script.BombGame.GameModule)
 local PurchaseHandler = require(script.HandlePurchases.PurchaseHandler)
 local ServerPlayerEvents = require(script.ServerPlayerEvents)
-local ServerBindableEventsHandler = require(script.ServerBindableEventsHandler)
+local ServerSignalsInitializer = require(script.ServerSignalsInitializer)
 local ServerRemotesHandler = require(script.ServerRemotesHandler)
 local UniqueIdAssigner = require(script.UniqueIdAssigner)
 
 local function ServerInit()
 	ServerPlayerEvents.Handle()
 	ServerRemotesHandler.HandleRemotes()
-	ServerBindableEventsHandler.HandleEvents()
+	ServerSignalsInitializer.HandleEvents()
 	UniqueIdAssigner.AssignAll()
 	PurchaseHandler.Initialize()
-
-	task.wait(5)
+	GameModule:Initialize()
 end
 
 ServerInit()

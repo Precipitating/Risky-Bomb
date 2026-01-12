@@ -3,6 +3,7 @@ local JumpscareListUI = require(script.Parent.JumpscareListUI)
 local JumpscareButtonUI = require(script.Parent.JumpscareButtonUI)
 local JumpscareImageUI = require(script.Parent.JumpscareImageUI)
 local React = require(ReplicatedStorage.Packages.React)
+local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local e = React.createElement
 
 local JumpscareUITheme = {
@@ -19,6 +20,7 @@ local function JumpscareScreenGUI()
 			Text = "JUMPSCARE PLAYER",
 			StrokeColor = JumpscareUITheme.StrokeColor,
 			OnToggle = function()
+				SoundManager.PlayExistingSound(SoundManager.UISounds.ButtonClick)
 				setisJumpscareOpen(not isJumpscareOpen)
 			end,
 		}),

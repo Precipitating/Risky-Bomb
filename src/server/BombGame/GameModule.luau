@@ -1,24 +1,30 @@
-local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local ServerStorage = game:GetService("ServerStorage")
 local BombConfig = require(ReplicatedStorage.Config.BombConfig)
+local Networker = require(ReplicatedStorage.Packages.Networker).server
 local BombGameStorage = require(script.Parent.BombGameStorage)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local BombHandler = require(script.Parent.BombHandler)
 local Remotes = ReplicatedStorage.Remotes
 local GameTablesList = BombGameStorage.GetGameTablesList()
 local PlayersPlayingList = BombGameStorage.GetPlayerList()
+local GUINetwork = BombGameStorage:GetNetworker()
 local GameModule = {}
 
-local function DisablePlayerControlsOnTable(tableID)
+function GameModule:Initialize()
+	self.inputNetworker = Networker.new("InputRemotes", self, {})
+end
+
+function GameModule:DisablePlayerControlsOnTable(tableID)
 	print("disable controls called")
 	print(PlayersPlayingList[tableID])
 	for player, _ in pairs(PlayersPlayingList[tableID]) do
-		Remotes.DisableControls:FireClient(player, true)
-		Remotes.EnableFirstPerson:FireClient(player, true)
+		self.inputNetworker:fire(player, "DisableControls", true)
+		self.inputNetworker:fire(player, "EnableFirstPerson", true)
 	end
 end
 
-local function PlayAudioForTablePlayers(tableID: string, audioID: string, oneShot: boolean)
+function GameModule:PlayAudioForTablePlayers(tableID: string, audioID: string, oneShot: boolean)
 	for player, _ in pairs(PlayersPlayingList[tableID]) do
 		if oneShot then
 			Remotes.PlaySoundOnClient:FireClient(player, audioID, nil, false, nil)
@@ -38,15 +44,12 @@ local function SetInitialTurn(tableID: string)
 			firstPlayerTurn = randTurn
 
 			print(`First player turn set to {firstPlayerTurn}`)
-			Remotes.SyncTurn:FireClient(player, randTurn)
+			GUINetwork:fire(player, "SyncTurn", randTurn)
 		else
 			PlayersPlayingList[tableID][player].YourTurn = not firstPlayerTurn
-			Remotes.SyncTurn:FireClient(player, not firstPlayerTurn)
+			GUINetwork:fire(player, "SyncTurn", not firstPlayerTurn)
 			print(`Second player turn set to {not firstPlayerTurn}`)
 		end
-
-		--PlayersPlayingList[tableID][player].BombGUI = gui
-		--Remotes.ConnectGUI:FireClient(player, gameTable, gui)
 	end
 end
 
@@ -68,6 +71,7 @@ local function HandleLoser(loser)
 	if not loser then
 		print("Loser player ref is nil!")
 	end
+	Remotes.PlaySoundOnClient:FireClient(loser, SoundManager.GameSounds.Lose)
 	local humanoid = loser.Character.Humanoid
 	humanoid.Health = 0
 end
@@ -76,19 +80,20 @@ local function HandleWinner(winner: Player)
 	if not winner then
 		print("Winner player ref is nil!")
 	end
+	Remotes.PlaySoundOnClient:FireClient(winner, SoundManager.GameSounds.Win)
 	print(`Winner: {winner.DisplayName}`)
 end
 
-function GameModule.FinishGame(tableID: string)
+function GameModule:FinishGame(tableID: string)
 	local loser: Player = nil
 	local winner: Player = nil
 	BombGameStorage.GetGameTable(tableID):SetAttribute("GameActive", false)
-	PlayAudioForTablePlayers(tableID, SoundManager.GetRandomMainSound(), false)
+	GameModule:PlayAudioForTablePlayers(tableID, SoundManager.GetRandomMainSound(), false)
 	for player in pairs(PlayersPlayingList[tableID]) do
 		local playerInTable = PlayersPlayingList[tableID][player]
 
-		Remotes.EnableFirstPerson:FireClient(player, false)
-		Remotes.DisableControls:FireClient(player, false)
+		self.inputNetworker:fire(player, "DisableControls", false)
+		self.inputNetworker:fire(player, "EnableFirstPerson", false)
 
 		if playerInTable.YourTurn then
 			loser = player
@@ -106,6 +111,8 @@ function ExceededCountdown(tableID: string, player: Player)
 	-- countdown finished
 	local bombRef = BombGameStorage.GetGameTable(tableID):FindFirstChild("Bomb")
 	local playerInputOnExceed = Remotes.GetBombInput:InvokeClient(player)
+	-- clamp for anti input exploitation
+	playerInputOnExceed = math.clamp(playerInputOnExceed, 1, 600)
 	local resultingTime = BombHandler.ReduceBombTime(bombRef, playerInputOnExceed)
 
 	-- if newTime is nil, it means bomb isn't active anymore.
@@ -126,7 +133,7 @@ function GameModule.StartCountdown(tableID: string, playerInTable, player: Playe
 				return
 			end
 
-			Remotes.UpdateCountdownBar:FireClient(player, timeLeft)
+			GUINetwork:fire(player, "UpdateCountdownBar", timeLeft)
 			task.wait(1)
 		end
 
@@ -143,11 +150,11 @@ function GameModule.NextTurn(tableID: string)
 		print("Next turn should occur.")
 		if playerInTable.YourTurn then
 			playerInTable.YourTurn = false
-			Remotes.SyncTurn:FireClient(player, false)
+			GUINetwork:fire(player, "SyncTurn", false)
 			print("GUI should disable.")
 		else
 			playerInTable.YourTurn = true
-			Remotes.SyncTurn:FireClient(player, true)
+			GUINetwork:fire(player, "SyncTurn", true)
 			GameModule.StartCountdown(tableID, playerInTable, player)
 			print("GUI should enable.")
 		end
@@ -159,8 +166,8 @@ function GameModule.BeginGame(gameTable: Model)
 	local tableID = gameTable:GetAttribute("ID")
 	gameTable:SetAttribute("GameActive", true)
 
-	PlayAudioForTablePlayers(tableID, SoundManager.GetRandomBombThemeSound(), false)
-	DisablePlayerControlsOnTable(tableID)
+	GameModule:PlayAudioForTablePlayers(tableID, SoundManager.GetRandomBombThemeSound(), false)
+	GameModule:DisablePlayerControlsOnTable(tableID)
 
 	BombHandler.InitializeBomb(bomb, gameTable)
 	SetInitialTurn(tableID)

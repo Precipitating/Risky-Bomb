@@ -5,9 +5,9 @@ local GameRemotes = require(ServerScriptService.Server.ServerRemotesLogic.GameRe
 local ServerRemotesHandler = {}
 
 function ServerRemotesHandler.HandleRemotes()
-	ChairRemote.Handle()
+	ChairRemote:Initialize()
 	GameRemotes.Handle()
-	DevProductRemotes.Handle()
+	DevProductRemotes:Initialize()
 end
 
 return ServerRemotesHandler

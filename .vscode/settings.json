@@ -1,3 +1,12 @@
 {
-    "folder-color.pathColors": []
+    "folder-color.pathColors": [
+        {
+            "folderPath": "Risky Bomb\\src\\server\\",
+            "color": "foldercolorizer.color_00ccff"
+        },
+        {
+            "folderPath": "Risky Bomb\\src\\shared\\",
+            "color": "foldercolorizer.color_ff00ff"
+        }
+    ]
 }
