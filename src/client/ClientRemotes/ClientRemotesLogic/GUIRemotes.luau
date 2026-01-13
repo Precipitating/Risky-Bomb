@@ -1,6 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local BombGameCharms = require(ReplicatedStorage.Charms.BombGameCharms)
-local BombConfig = require(ReplicatedStorage.Config.BombConfig)
+local BombConfig = require(ReplicatedStorage.Config.BombSharedConfig)
 local Networker = require(ReplicatedStorage.Packages.Networker).client
 
 local Remotes = ReplicatedStorage.Remotes

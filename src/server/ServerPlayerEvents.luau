@@ -1,3 +1,4 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService").Server
 local BombGameStorage = require(ServerScriptService.BombGame.BombGameStorage)
 local PlayerEvents = {}

@@ -1,6 +1,7 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local StarterGui = game:GetService("StarterGui")
-local SoundManager = require(ReplicatedStorage.Shared.Sound.SoundManager)
+local ClientDataHandler = require(script.ClientData.ClientDataHandler)
+local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local ClientRemotesHandler = require(script.ClientRemotes.ClientRemotesHandler)
 local MountUI = require(script.ClientUI.MountUI)
 local ProximityPromptHandler = require(script.Prompts.ProximityPromptHandler)
@@ -15,6 +16,7 @@ local function DisableRespawn()
 end
 
 local function ClientInit()
+	ClientDataHandler.Initialize()
 	DisableRespawn()
 	ProximityPromptHandler.ClientProximityPrompts()
 	ClientRemotesHandler.Handle()

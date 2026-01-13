@@ -44,11 +44,6 @@ local function StartCountDown(playerCountText: TextLabel, countdownText: TextLab
 	end)
 end
 
-function ChairRemote:Initialize()
-	self.networker = Networker.new("ChairRemotes", self, {
-		ChairRemote.ChairSat,
-	})
-end
 function ChairRemote:ChairSat(player: Player, gameTable, sat: boolean)
 	local playerCountText: TextLabel = gameTable
 		:FindFirstChild("Bomb")
@@ -85,5 +80,9 @@ function ChairRemote:ChairSat(player: Player, gameTable, sat: boolean)
 		gameTable:SetAttribute("GameActive", false)
 	end
 end
+
+ChairRemote.networker = Networker.new("ChairRemotes", ChairRemote, {
+	ChairRemote.ChairSat,
+})
 
 return ChairRemote

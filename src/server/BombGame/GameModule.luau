@@ -1,19 +1,21 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
-local BombConfig = require(ReplicatedStorage.Config.BombConfig)
+local SoundToClient = require(ServerScriptService.Server.ServerRemotesLogic.SoundToClient)
+local BombConfig = require(ReplicatedStorage.Config.BombSharedConfig)
+local DataService = require(ReplicatedStorage.Packages.DataService).server
+local UtilityModule = require(ReplicatedStorage.UtilityModule)
 local Networker = require(ReplicatedStorage.Packages.Networker).server
 local BombGameStorage = require(script.Parent.BombGameStorage)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local BombHandler = require(script.Parent.BombHandler)
+local BombServerConfig = require(script.Parent.BombServerConfig)
 local Remotes = ReplicatedStorage.Remotes
 local GameTablesList = BombGameStorage.GetGameTablesList()
 local PlayersPlayingList = BombGameStorage.GetPlayerList()
 local GUINetwork = BombGameStorage:GetNetworker()
-local GameModule = {}
 
-function GameModule:Initialize()
-	self.inputNetworker = Networker.new("InputRemotes", self, {})
-end
+local GameModule = {}
 
 function GameModule:DisablePlayerControlsOnTable(tableID)
 	print("disable controls called")
@@ -27,9 +29,9 @@ end
 function GameModule:PlayAudioForTablePlayers(tableID: string, audioID: string, oneShot: boolean)
 	for player, _ in pairs(PlayersPlayingList[tableID]) do
 		if oneShot then
-			Remotes.PlaySoundOnClient:FireClient(player, audioID, nil, false, nil)
+			SoundToClient:PlaySoundOnClient(player, audioID, nil, false, nil)
 		else
-			Remotes.PlaySoundOnClient:FireClient(player, audioID, nil, true, nil)
+			SoundToClient:PlaySoundOnClient(player, audioID, nil, true, nil)
 		end
 	end
 end
@@ -71,7 +73,7 @@ local function HandleLoser(loser)
 	if not loser then
 		print("Loser player ref is nil!")
 	end
-	Remotes.PlaySoundOnClient:FireClient(loser, SoundManager.GameSounds.Lose)
+	SoundToClient:PlaySoundOnClient(loser, SoundManager.GameSounds.Lose, nil, false, nil)
 	local humanoid = loser.Character.Humanoid
 	humanoid.Health = 0
 end
@@ -80,7 +82,12 @@ local function HandleWinner(winner: Player)
 	if not winner then
 		print("Winner player ref is nil!")
 	end
-	Remotes.PlaySoundOnClient:FireClient(winner, SoundManager.GameSounds.Win)
+	SoundToClient:PlaySoundOnClient(winner, SoundManager.GameSounds.Win, nil, false, nil)
+	-- update to store
+	DataService:update(winner, { "currency" }, function(currentCash)
+		return currentCash + 100
+	end)
+
 	print(`Winner: {winner.DisplayName}`)
 end
 
@@ -161,6 +168,17 @@ function GameModule.NextTurn(tableID: string)
 	end
 end
 
+function GameModule:SubmitBombTime(_: Player, tableID: string, timeToReduce: number)
+	local tableRef = BombGameStorage.GetGameTable(tableID)
+	local bombRef = UtilityModule.Get(tableRef, "Bomb")
+	timeToReduce = math.clamp(timeToReduce, 1, BombServerConfig.MAX_BOMB_TIME)
+	local newTime = BombHandler.ReduceBombTime(bombRef, timeToReduce)
+
+	if newTime > 0 then
+		GameModule.NextTurn(tableID)
+	end
+end
+
 function GameModule.BeginGame(gameTable: Model)
 	local bomb = gameTable:FindFirstChild("Bomb")
 	local tableID = gameTable:GetAttribute("ID")
@@ -174,5 +192,7 @@ function GameModule.BeginGame(gameTable: Model)
 
 	GameModule.NextTurn(tableID)
 end
+
+GameModule.inputNetworker = Networker.new("InputRemotes", GameModule, { GameModule.SubmitBombTime })
 
 return GameModule

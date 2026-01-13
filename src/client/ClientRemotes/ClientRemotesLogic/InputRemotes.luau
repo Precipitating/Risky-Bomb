@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local StarterPlayer = game:GetService("StarterPlayer")
 local Networker = require(ReplicatedStorage.Packages.Networker).client
+local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local PlayerModule = PlayerContext.Player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule")
 
@@ -27,6 +28,12 @@ function InputRemotes:DisableControls(enable: boolean)
 	else
 		controls:Enable()
 	end
+end
+
+function InputRemotes:SubmitBombTime(currentInput: number)
+	SoundManager.PlayExistingSound(SoundManager.UISounds.Submit)
+	self.networking:fire("SubmitBombTime", PlayerContext.Character:GetAttribute("AssignedTable"), currentInput)
+	--Remotes.SubmitBombReduction:FireServer(PlayerContext.Character:GetAttribute("AssignedTable"), currentInput)
 end
 
 function InputRemotes:Initialize()

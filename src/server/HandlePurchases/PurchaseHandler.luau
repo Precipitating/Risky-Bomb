@@ -58,8 +58,5 @@ local function ProcessReceipt(receiptInfo)
 	end
 end
 
-function PurchaseHandler.Initialize()
-	MarketplaceService.ProcessReceipt = ProcessReceipt
-end
-
+MarketplaceService.ProcessReceipt = ProcessReceipt
 return PurchaseHandler

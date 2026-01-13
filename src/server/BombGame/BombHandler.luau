@@ -1,17 +1,9 @@
 local ServerScriptService = game:GetService("ServerScriptService").Server
-local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local TweenService = game:GetService("TweenService")
+local SoundToClient = require(ServerScriptService.ServerRemotesLogic.SoundToClient)
 local ServerSignals = require(ServerScriptService.ServerSignals.Signals)
 local BombGameStorage = require(script.Parent.BombGameStorage)
-local Remotes = ReplicatedStorage.Remotes
-
-local MAX_BOMB_TIME: number = 600
-local MIN_BOMB_TIME: number = 30
--- below this, and we won't hear the tick sound anymore
-local MINIMUM_TWEEN_DURATION = 0.05
-local ORIGINAL_BOMB_SCALE: vector = vector.create(0.827, 1.062, 0.827)
-local BOMB_SCALED_UP: vector =
-	vector.create(ORIGINAL_BOMB_SCALE.x * 2, ORIGINAL_BOMB_SCALE.y * 2, ORIGINAL_BOMB_SCALE.z * 2)
+local BombServerConfig = require(script.Parent.BombServerConfig)
 
 local PlayersPlayingList = BombGameStorage.GetPlayerList()
 
@@ -19,18 +11,18 @@ local BombHandler = {}
 
 local function PlayTickSound(bombRef: MeshPart, gameTable)
 	for player in pairs(PlayersPlayingList[gameTable:GetAttribute("ID")]) do
-		Remotes.PlayTickSound:FireClient(player, bombRef)
+		SoundToClient:PlayBombTickOnClient(player, bombRef)
 	end
 end
 
 local function BombTween(bombRef: MeshPart, startTime: number, gameTable: Model)
 	while bombRef:GetAttribute("Active") do
 		local currTime = bombRef:GetAttribute("Time")
-		local duration = math.max(MINIMUM_TWEEN_DURATION, currTime / startTime)
+		local duration = math.max(BombServerConfig.MINIMUM_TWEEN_DURATION, currTime / startTime)
 		local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out, 0, true)
 
 		local tween = TweenService:Create(bombRef, tweenInfo, {
-			Size = BOMB_SCALED_UP,
+			Size = BombServerConfig.BOMB_SCALED_UP,
 		})
 
 		tween:Play()
@@ -100,7 +92,7 @@ local function StartBomb(bombRef: MeshPart, startTime: number, gameTable: Model)
 end
 
 function BombHandler.InitializeBomb(bombRef: MeshPart, gameTable: Model)
-	local startTime = math.random(MIN_BOMB_TIME, MAX_BOMB_TIME)
+	local startTime = math.random(BombServerConfig.MIN_BOMB_TIME, BombServerConfig.MAX_BOMB_TIME)
 	bombRef:SetAttribute("Time", startTime)
 	StartBomb(bombRef, startTime, gameTable)
 end

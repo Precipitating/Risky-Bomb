@@ -20,6 +20,7 @@ local SoundManager = {
 		Error = "rbxassetid://3779045779",
 		Submit = "rbxassetid://9118819937",
 		Tick = "rbxassetid://4621722813",
+		Cash = "rbxassetid://14621507602",
 	},
 	PromptSounds = {
 		ChairSit = "rbxassetid://12222152",

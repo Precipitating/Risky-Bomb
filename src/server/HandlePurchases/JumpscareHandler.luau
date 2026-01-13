@@ -8,11 +8,7 @@ function JumpscareHandler:AddPendingJumpscare(player: Player, targetUserID: stri
 	self.PendingJumpscares[player.UserId].Target = targetUserID
 end
 
-function JumpscareHandler:Initialize()
-	self.networker = Networker.new("JumpscareRemotes", self, {
-		JumpscareHandler.AddPendingJumpscare,
-	})
-end
+function JumpscareHandler:Initialize() end
 
 function JumpscareHandler:RemovePendingJumpscare(player: Player)
 	self.PendingJumpscares[player.UserId].Target = nil
@@ -26,4 +22,9 @@ function JumpscareHandler:JumpscarePurchased(player: Player)
 
 	return true
 end
+
+JumpscareHandler.networker = Networker.new("JumpscareRemotes", JumpscareHandler, {
+	JumpscareHandler.AddPendingJumpscare,
+})
+
 return JumpscareHandler

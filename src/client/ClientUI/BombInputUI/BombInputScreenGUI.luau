@@ -1,22 +1,18 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
-local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
+local InputRemotes = require(StarterPlayer.StarterPlayerScripts.Client.ClientRemotes.ClientRemotesLogic.InputRemotes)
 local BombCountdownFrame = require(script.Parent.BombCountdownFrame)
 local BombTextButton = require(script.Parent.BombTextButton)
 local BombTextFrame = require(script.Parent.BombTextFrame)
 local React = require(ReplicatedStorage.Packages.React)
-local Remotes = ReplicatedStorage.Remotes
 local BombGameCharms = require(ReplicatedStorage.Charms.BombGameCharms)
 local ReactCharm = require(ReplicatedStorage.Packages.ReactCharm)
-local BombConfig = require(ReplicatedStorage.Config.BombConfig)
+local BombConfig = require(ReplicatedStorage.Config.BombSharedConfig)
+local UIConfig = require(ReplicatedStorage.Config.UIConfig)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 
 local e = React.createElement
 
-local BombInputUITheme = {
-	BackgroundColor = Color3.fromRGB(0, 0, 0),
-	StrokeColor = Color3.fromRGB(255, 255, 255),
-}
 local function IsYourTurn()
 	return ReactCharm.useAtom(BombGameCharms.BombInputVisible)
 end
@@ -45,8 +41,8 @@ local function BombInputScreenGUI()
 		Title = e(BombTextFrame, {
 			Position = UDim2.fromScale(0.5, 0.7),
 			Size = UDim2.fromScale(0.3, 0.076),
-			BackgroundColor = BombInputUITheme.BackgroundColor,
-			StrokeColor = BombInputUITheme.StrokeColor,
+			BackgroundColor = UIConfig.BombInputUITheme.BackgroundColor,
+			StrokeColor = UIConfig.BombInputUITheme.StrokeColor,
 			Visible = isVisible,
 			Text = "SHAVE OFF BOMB TIME (s)",
 			Font = Enum.Font.AmaticSC,
@@ -57,8 +53,8 @@ local function BombInputScreenGUI()
 		InputFrame = e(BombTextFrame, {
 			Position = UDim2.fromScale(0.5, 0.76),
 			Size = UDim2.fromScale(0.1, 0.144),
-			BackgroundColor = BombInputUITheme.BackgroundColor,
-			StrokeColor = BombInputUITheme.StrokeColor,
+			BackgroundColor = UIConfig.BombInputUITheme.BackgroundColor,
+			StrokeColor = UIConfig.BombInputUITheme.StrokeColor,
 			Visible = isVisible,
 			Text = tostring(currentInput),
 			Font = Enum.Font.SourceSansBold,
@@ -70,8 +66,8 @@ local function BombInputScreenGUI()
 		DecrementOneFrame = e(BombTextButton, {
 			Position = UDim2.fromScale(0.43, 0.83),
 			Size = UDim2.fromScale(0.065, 0.144),
-			BackgroundColor = BombInputUITheme.BackgroundColor,
-			StrokeColor = BombInputUITheme.StrokeColor,
+			BackgroundColor = UIConfig.BombInputUITheme.BackgroundColor,
+			StrokeColor = UIConfig.BombInputUITheme.StrokeColor,
 			Visible = isVisible,
 			Text = "-1",
 			Font = Enum.Font.SourceSansBold,
@@ -86,8 +82,8 @@ local function BombInputScreenGUI()
 		DecrementFiveFrame = e(BombTextButton, {
 			Position = UDim2.fromScale(0.35, 0.83),
 			Size = UDim2.fromScale(0.065, 0.144),
-			BackgroundColor = BombInputUITheme.BackgroundColor,
-			StrokeColor = BombInputUITheme.StrokeColor,
+			BackgroundColor = UIConfig.BombInputUITheme.BackgroundColor,
+			StrokeColor = UIConfig.BombInputUITheme.StrokeColor,
 			Visible = isVisible,
 			Text = "-5",
 			Font = Enum.Font.SourceSansBold,
@@ -102,8 +98,8 @@ local function BombInputScreenGUI()
 		IncrementOneFrame = e(BombTextButton, {
 			Position = UDim2.fromScale(0.57, 0.83),
 			Size = UDim2.fromScale(0.065, 0.144),
-			BackgroundColor = BombInputUITheme.BackgroundColor,
-			StrokeColor = BombInputUITheme.StrokeColor,
+			BackgroundColor = UIConfig.BombInputUITheme.BackgroundColor,
+			StrokeColor = UIConfig.BombInputUITheme.StrokeColor,
 			Visible = isVisible,
 			Text = "+1",
 			Font = Enum.Font.SourceSansBold,
@@ -118,8 +114,8 @@ local function BombInputScreenGUI()
 		IncrementFiveFrame = e(BombTextButton, {
 			Position = UDim2.fromScale(0.65, 0.83),
 			Size = UDim2.fromScale(0.065, 0.144),
-			BackgroundColor = BombInputUITheme.BackgroundColor,
-			StrokeColor = BombInputUITheme.StrokeColor,
+			BackgroundColor = UIConfig.BombInputUITheme.BackgroundColor,
+			StrokeColor = UIConfig.BombInputUITheme.StrokeColor,
 			Visible = isVisible,
 			Text = "+5",
 			Font = Enum.Font.SourceSansBold,
@@ -144,8 +140,8 @@ local function BombInputScreenGUI()
 		SubmitButton = e(BombTextButton, {
 			Position = UDim2.fromScale(0.5, 0.955),
 			Size = UDim2.fromScale(0.1, 0.144),
-			BackgroundColor = BombInputUITheme.BackgroundColor,
-			StrokeColor = BombInputUITheme.StrokeColor,
+			BackgroundColor = UIConfig.BombInputUITheme.BackgroundColor,
+			StrokeColor = UIConfig.BombInputUITheme.StrokeColor,
 			Visible = isVisible,
 			Text = "SUBMIT",
 			Font = Enum.Font.SourceSansBold,
@@ -153,11 +149,7 @@ local function BombInputScreenGUI()
 			AspectRatio = 3,
 			AnchorPoint = Vector2.new(0.5, 0.5),
 			ButtonClickedFunc = function()
-				SoundManager.PlayExistingSound(SoundManager.UISounds.Submit)
-				Remotes.SubmitBombReduction:FireServer(
-					PlayerContext.Character:GetAttribute("AssignedTable"),
-					currentInput
-				)
+				InputRemotes:SubmitBombTime(currentInput)
 				SetCurrentInput(1)
 			end,
 		}),

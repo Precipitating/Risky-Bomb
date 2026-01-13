@@ -1,5 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
-local BombConfig = require(ReplicatedStorage.Config.BombConfig)
+local BombConfig = require(ReplicatedStorage.Config.BombSharedConfig)
 local Charm = require(ReplicatedStorage.Packages.Charm)
 
 return {
@@ -8,4 +8,5 @@ return {
 	CurrentBombInput = Charm.atom(1),
 	JumpscareActivated = Charm.atom(false),
 	JumpscareImage = Charm.atom(""),
+	CurrentCashValue = Charm.atom(0),
 }
