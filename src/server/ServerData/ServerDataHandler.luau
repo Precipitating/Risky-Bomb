@@ -14,6 +14,8 @@ function DataService:onPlayerInit(player: Player, data): ()
 	if data.firstJoin == true then
 		data.firstJoin = false
 		data.currency = 0
+		data.chairEquipped = "default"
+		data.bombEquipped = "default"
 	end
 	data.sessionJoinTime = os.time()
 end

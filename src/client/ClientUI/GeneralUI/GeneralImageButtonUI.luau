@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local React = require(ReplicatedStorage.Packages.React)
 local ReactRipple = require(ReplicatedStorage.Packages.ReactRipple)
+local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local e = React.createElement
 
 type GeneralImageButtonUIProps = {
@@ -25,6 +26,7 @@ local function GeneralImageButtonUI(props: GeneralImageButtonUIProps)
 			if rbx.GuiState == Enum.GuiState.Hover then
 				spring:setGoal(1.1)
 			elseif rbx.GuiState == Enum.GuiState.Press then
+				--SoundManager.PlayExistingSound(SoundManager.UISounds.ButtonClick)
 				spring:setGoal(0.5, { impulse = -10 })
 				props.OnClick()
 			else

@@ -21,7 +21,7 @@ local function JumpscareImageUI()
 		Active = false,
 		Visible = jumpscareActive,
 		Image = jumpscareImage,
-		ZIndex = 2,
+		ZIndex = 100,
 	})
 end
 

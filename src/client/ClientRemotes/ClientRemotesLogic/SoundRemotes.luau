@@ -5,7 +5,7 @@ local SoundRemotes = {}
 
 SoundRemotes.networker = Networker.new("SoundRemotes", SoundRemotes)
 
-function SoundRemotes:PlaySoundOnClient(audioID: string, parent: Instance, isTheme: boolean, config)
+function SoundRemotes:PlaySoundOnClient(audioID: string, parent: Instance | nil, isTheme: boolean, config)
 	print(`audio id that should be on client {audioID}`)
 	if isTheme then
 		SoundManager.PlayTheme(audioID, config)

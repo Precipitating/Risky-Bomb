@@ -33,7 +33,6 @@ end
 function InputRemotes:SubmitBombTime(currentInput: number)
 	SoundManager.PlayExistingSound(SoundManager.UISounds.Submit)
 	self.networking:fire("SubmitBombTime", PlayerContext.Character:GetAttribute("AssignedTable"), currentInput)
-	--Remotes.SubmitBombReduction:FireServer(PlayerContext.Character:GetAttribute("AssignedTable"), currentInput)
 end
 
 function InputRemotes:Initialize()

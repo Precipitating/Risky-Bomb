@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local GeneralCashUI = require(script.Parent.GeneralCashUI)
 local GeneralImageButtonUI = require(script.Parent.GeneralImageButtonUI)
+local ShopFrameUI = require(script.Parent.Shop.ShopFrameUI)
 local React = require(ReplicatedStorage.Packages.React)
 local BombGameCharms = require(ReplicatedStorage.Charms.BombGameCharms)
 local ReactCharm = require(ReplicatedStorage.Packages.ReactCharm)
@@ -8,6 +9,7 @@ local ReactCharm = require(ReplicatedStorage.Packages.ReactCharm)
 local e = React.createElement
 
 local function BombInputScreenGUI()
+	local shopOpen, setShopOpen = React.useState(false)
 	return e(React.Fragment, nil, {
 		ShopButton = GeneralImageButtonUI({
 			Position = UDim2.fromScale(0, 0.5),
@@ -15,7 +17,9 @@ local function BombInputScreenGUI()
 			AspectRatio = 1,
 			ImageID = "rbxassetid://124449779482452",
 			AnchorPoint = Vector2.new(0, 0.5),
-			OnClick = function() end,
+			OnClick = function()
+				setShopOpen(not shopOpen)
+			end,
 		}),
 		Inventory = GeneralImageButtonUI({
 			Position = UDim2.fromScale(0, 0.7),
@@ -31,6 +35,15 @@ local function BombInputScreenGUI()
 			AnchorPoint = Vector2.new(0, 0.5),
 			ImageID = "rbxassetid://129785989512283",
 			AspectRatio = 1,
+		}),
+		Shop = ShopFrameUI({
+			Position = UDim2.fromScale(0.3, 0.55),
+			Size = UDim2.fromScale(0.8, 0.8),
+			AnchorPoint = Vector2.new(0, 0.5),
+			StrokeColor = Color3.fromRGB(0, 0, 0),
+			AspectRatio = 1,
+			IsOpen = shopOpen,
+			SetIsOpen = setShopOpen,
 		}),
 	})
 end

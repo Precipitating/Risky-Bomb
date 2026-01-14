@@ -74,6 +74,9 @@ local function HandleLoser(loser)
 		print("Loser player ref is nil!")
 	end
 	SoundToClient:PlaySoundOnClient(loser, SoundManager.GameSounds.Lose, nil, false, nil)
+	DataService:update(loser, { "currency" }, function(currentCash)
+		return currentCash + 10
+	end)
 	local humanoid = loser.Character.Humanoid
 	humanoid.Health = 0
 end
