@@ -21,7 +21,6 @@ local function ClientInit()
 	ProximityPromptHandler.ClientProximityPrompts()
 	ClientRemotesHandler.Handle()
 	SoundManager.Initialize()
-
 	MountUI()
 end
 

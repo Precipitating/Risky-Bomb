@@ -3,8 +3,10 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local DataService = require(ReplicatedStorage.Shared.Packages.DataService).server
+require(script.Parent.InGamePurchases)
 local JumpscareHandler = require(script.Parent.JumpscareHandler)
 local PurchaseHistory = DataStoreService:GetDataStore("PurchaseHistory")
+
 local ProductFunctions = {}
 
 local PurchaseHandler = {}

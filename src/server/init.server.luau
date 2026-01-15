@@ -1,6 +1,7 @@
 require(script.BombGame.GameModule)
 require(script.HandlePurchases.PurchaseHandler)
 require(script.ServerRemotesLogic.ChairRemote)
+require(script.HandlePurchases.InGamePurchases)
 local ServerDataHandler = require(script.ServerData.ServerDataHandler)
 local ServerPlayerEvents = require(script.ServerPlayerEvents)
 local ServerSignalsInitializer = require(script.ServerSignalsInitializer)

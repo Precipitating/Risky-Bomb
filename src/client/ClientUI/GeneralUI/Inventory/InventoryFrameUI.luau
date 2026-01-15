@@ -1,8 +1,5 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
-local ConfirmationUI = require(script.Parent.ConfirmationUI)
-local ShopChairs = require(script.Parent.ShopChairs)
-local ShopRobux = require(script.Parent.ShopRobux)
 local ModularImageLabel = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularImageLabelUI)
 local ModularTextButtonUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularTextButtonUI)
 local ModularTextLabel = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularTextLabelUI)
@@ -10,7 +7,7 @@ local React = require(ReplicatedStorage.Packages.React)
 local ReactRipple = require(ReplicatedStorage.Packages.ReactRipple)
 local e = React.createElement
 
-type ShopFrameUIProps = {
+type InventoryFrameUIProps = {
 	Position: UDim2,
 	Size: UDim2,
 	AspectRatio: number?,
@@ -19,17 +16,10 @@ type ShopFrameUIProps = {
 	IsOpen: boolean,
 	SetIsOpen: (boolean) -> (),
 }
-local function ShopFrameUI(props: ShopFrameUIProps)
+local function InventoryFrameUI(props: InventoryFrameUIProps)
 	local robuxPageOpened, setRobuxPageOpened = React.useState(false)
-	local chairPageOpened, setChairPageOpened = React.useState(true)
+	local chairPageOpened, setChairPageOpened = React.useState(false)
 	local bombPageOpened, setBombPageOpened = React.useState(false)
-
-	local confirmationOpened, setConfirmationOpened = React.useState(true)
-	local currentPackType, setCurrentPackType = React.useState(-1)
-	local packName, setPackName = React.useState("nil")
-	local packPrice, setPackPrice = React.useState("unset")
-	local lootTableOpen, setLootTableOpen = React.useState(true)
-
 	if not props.IsOpen then
 		return nil
 	end
@@ -52,9 +42,9 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 		}),
 		Gradient = e("UIGradient", {
 			Color = ColorSequence.new({
-				ColorSequenceKeypoint.new(0, Color3.fromRGB(26, 26, 26)),
-				ColorSequenceKeypoint.new(0.4, Color3.fromRGB(26, 26, 26)),
-				ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 0, 0)),
+				ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 195, 255)),
+				ColorSequenceKeypoint.new(0.4, Color3.fromRGB(0, 195, 255)),
+				ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 103, 134)),
 			}),
 			Rotation = 90,
 		}),
@@ -82,9 +72,9 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			AspectRatio = 1,
 		}),
 		ShopLabel = ModularTextLabel({
-			Text = "Store",
-			Position = UDim2.fromScale(0.406, -0.1),
-			Size = UDim2.fromScale(0.2, 0.2),
+			Text = "Inventory",
+			Position = UDim2.fromScale(0.36, -0.14),
+			Size = UDim2.fromScale(0.3, 0.3),
 			TextColor = Color3.fromRGB(252, 255, 255),
 			BackgroundTransparency = 1,
 			Font = Enum.Font.FredokaOne,
@@ -115,12 +105,8 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			CornerRadius = UDim.new(0.1, 0),
 			Font = Enum.Font.FredokaOne,
 			OnClick = function()
-				if bombPageOpened then
-					setBombPageOpened(false)
-				end
-				if robuxPageOpened then
-					setRobuxPageOpened(false)
-				end
+				setBombPageOpened(false)
+				setRobuxPageOpened(false)
 				setChairPageOpened(true)
 			end,
 		}),
@@ -136,68 +122,12 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			CornerRadius = UDim.new(0.1, 0),
 			Font = Enum.Font.FredokaOne,
 			OnClick = function()
-				if chairPageOpened then
-					setChairPageOpened(false)
-				end
-				if robuxPageOpened then
-					setRobuxPageOpened(false)
-				end
+				setChairPageOpened(false)
+				setRobuxPageOpened(false)
 				setBombPageOpened(true)
 			end,
-		}),
-		BuyCurrencyCategory = ModularTextButtonUI({
-			Text = "Cash",
-			Position = UDim2.fromScale(0.05, 0.5),
-			Size = UDim2.fromScale(0.15, 0.15),
-			TextColor = Color3.fromRGB(255, 255, 255),
-			AspectRatio = 3,
-			TextXAlignment = Enum.TextXAlignment.Left,
-			BackgroundTransparency = 1,
-			StrokeThickness = 0,
-			CornerRadius = UDim.new(0.1, 0),
-			Font = Enum.Font.FredokaOne,
-			OnClick = function()
-				if bombPageOpened then
-					setBombPageOpened(false)
-				end
-
-				if chairPageOpened then
-					setChairPageOpened(false)
-				end
-
-				setRobuxPageOpened(true)
-			end,
-		}),
-		-- category pages
-		RobuxPage = ShopRobux({
-			Position = UDim2.fromScale(0.22, 0.25),
-			Size = UDim2.fromScale(0.7, 0.4),
-			IsOpen = robuxPageOpened,
-		}),
-		ChairPage = ShopChairs({
-			Position = UDim2.fromScale(0.21, 0.25),
-			Size = UDim2.fromScale(0.7, 0.4),
-			IsOpen = chairPageOpened,
-			ConfirmationSetOpen = setConfirmationOpened,
-			PackSetName = setPackName,
-			PackSetType = setCurrentPackType,
-			PackSetPrice = setPackPrice,
-		}),
-		ConfirmationPrompt = ConfirmationUI({
-			Position = UDim2.fromScale(0.55, 0.3),
-			StrokeColor = Color3.fromRGB(255, 255, 255),
-			AnchorPoint = Vector2.new(0.5),
-			Size = UDim2.fromScale(0.6, 0.6),
-			AspectRatio = 2,
-			IsOpen = confirmationOpened,
-			SetIsOpen = setConfirmationOpened,
-			CostText = tostring(packPrice),
-			PackType = currentPackType,
-			PackName = packName,
-			LootTableOpen = lootTableOpen,
-			SetLootTableOpen = setLootTableOpen,
 		}),
 	})
 end
 
-return ShopFrameUI
+return InventoryFrameUI
