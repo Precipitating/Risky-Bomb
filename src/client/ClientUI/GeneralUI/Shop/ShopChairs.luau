@@ -26,6 +26,7 @@ local function ShopChairsUI(props: ShopChairsUIProps)
 	return e("ScrollingFrame", {
 		Position = props.Position,
 		Size = props.Size,
+		BorderSizePixel = 0,
 		CanvasSize = UDim2.fromScale(0, 1),
 		BackgroundTransparency = 1,
 		Visible = props.IsOpen,

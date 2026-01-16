@@ -6,14 +6,15 @@ local GeneralCashUI = require(script.Parent.GeneralCashUI)
 local GeneralImageButtonUI = require(script.Parent.GeneralImageButtonUI)
 local ShopFrameUI = require(script.Parent.Shop.ShopFrameUI)
 local React = require(ReplicatedStorage.Packages.React)
-local BombGameCharms = require(ReplicatedStorage.Charms.BombGameCharms)
 local ReactCharm = require(ReplicatedStorage.Packages.ReactCharm)
 
 local e = React.createElement
 
 local function BombInputScreenGUI()
-	local shopOpen, setShopOpen = React.useState(true)
+	local shopOpen, setShopOpen = React.useState(false)
 	local inventoryOpen, setInventoryOpen = React.useState(false)
+	local lootTableOpen, setLootTableOpen = React.useState(false)
+
 	return e(React.Fragment, nil, {
 		ShopButton = GeneralImageButtonUI({
 			Position = UDim2.fromScale(0, 0.5),
@@ -24,6 +25,9 @@ local function BombInputScreenGUI()
 			OnClick = function()
 				if inventoryOpen then
 					setInventoryOpen(false)
+				end
+				if lootTableOpen then
+					setLootTableOpen(false)
 				end
 				setShopOpen(not shopOpen)
 			end,
@@ -37,6 +41,9 @@ local function BombInputScreenGUI()
 			OnClick = function()
 				if shopOpen then
 					setShopOpen(false)
+				end
+				if lootTableOpen then
+					setLootTableOpen(false)
 				end
 				setInventoryOpen(not inventoryOpen)
 			end,
@@ -56,6 +63,8 @@ local function BombInputScreenGUI()
 			AspectRatio = 1,
 			IsOpen = shopOpen,
 			SetIsOpen = setShopOpen,
+			LootTableOpen = lootTableOpen,
+			SetLootTableOpen = setLootTableOpen,
 		}),
 		Inventory = InventoryFrameUI({
 			Position = UDim2.fromScale(0.3, 0.55),

@@ -4,7 +4,6 @@ local LootTableUI = require(script.Parent.LootTableUI)
 local ShopUIFunctions = require(script.Parent.ShopUIFunctions)
 local ModularTextButtonUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularTextButtonUI)
 local React = require(ReplicatedStorage.Packages.React)
-local ReactRipple = require(ReplicatedStorage.Packages.ReactRipple)
 local e = React.createElement
 
 type ConfirmationUIProps = {
@@ -31,7 +30,7 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 		Size = props.Size,
 		Visible = props.IsOpen,
 		AnchorPoint = props.AnchorPoint,
-		ZIndex = 2,
+		ZIndex = 5,
 	}, {
 		AspectRatioConstraint = e("UIAspectRatioConstraint", {
 			AspectRatio = props.AspectRatio,
@@ -52,6 +51,7 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 			}),
 			Rotation = 90,
 		}),
+
 		PriceTextLabel = e("TextLabel", {
 			Position = UDim2.fromScale(0.5, 0.1),
 			AnchorPoint = Vector2.new(0.5, 0),
@@ -85,7 +85,11 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 			TextScaled = true,
 			TextColor3 = Color3.fromRGB(255, 255, 255),
 			OnClick = function()
-				ShopUIFunctions.AttemptPurchase(props.PackType, props.PackName)
+				local result = ShopUIFunctions.AttemptPurchase(props.PackType, props.PackName)
+				if result then
+					props.SetIsOpen(false)
+					props.SetLootTableOpen(false)
+				end
 			end,
 		}),
 		NoButton = ModularTextButtonUI({
@@ -102,6 +106,7 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 			TextColor3 = Color3.fromRGB(255, 255, 255),
 			OnClick = function()
 				props.SetIsOpen(false)
+				props.SetLootTableOpen(false)
 			end,
 		}),
 		ShowLootTable = ModularTextButtonUI({
@@ -120,19 +125,19 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 			OnClick = function()
 				local newState = not props.LootTableOpen
 				props.SetLootTableOpen(newState)
+
 				if newState then
-					ShopUIFunctions:RemoveOldViewports()
 					ShopUIFunctions.SpawnLootTable(props.PackType, props.PackName)
+				else
+					ShopUIFunctions:RemoveOldViewports()
 				end
 			end,
 		}),
 		LootTable = LootTableUI({
 			Position = UDim2.fromScale(0.5, 1.3),
-			StrokeColor = Color3.fromRGB(255, 255, 255),
 			AnchorPoint = Vector2.new(0.5),
 			Size = UDim2.fromScale(1, 1),
-			AspectRatio = 2,
-			IsOpen = props.LootTableOpen,
+			IsOpen = props.LootTableOpen and props.IsOpen,
 			SetIsOpen = props.SetLootTableOpen,
 			PackName = props.PackName,
 			PackType = props.PackType,

@@ -24,7 +24,7 @@ end
 local function IsAlreadyOwned(itemWon: string, player: Player, dataKey: string)
 	local inventory = DataService:get(player, { dataKey })
 	for _, ownedItemName in ipairs(inventory) do
-		if ownedItemName == itemWon then
+		if ownedItemName.Name == itemWon then
 			return true
 		end
 	end
@@ -49,7 +49,7 @@ function Roll(player: Player, dataKey: string, crateData)
 		if roll <= cumulative then
 			print(`{player.Name} won... {name}`)
 			if not IsAlreadyOwned(name, player, dataKey) then
-				DataService:arrayInsert(player, { dataKey }, name)
+				DataService:arrayInsert(player, { dataKey }, { Name = name, RarityChance = itemChance })
 			else
 				warn(`{player.Name} already owns this, refunding {crateData.AlreadyOwnedPayment}`)
 				DataService:update(player, { "currency" }, function(currentCash)

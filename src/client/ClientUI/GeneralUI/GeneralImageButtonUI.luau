@@ -26,7 +26,7 @@ local function GeneralImageButtonUI(props: GeneralImageButtonUIProps)
 			if rbx.GuiState == Enum.GuiState.Hover then
 				spring:setGoal(1.1)
 			elseif rbx.GuiState == Enum.GuiState.Press then
-				--SoundManager.PlayExistingSound(SoundManager.UISounds.ButtonClick)
+				SoundManager.PlayExistingSound(SoundManager.UISounds.ButtonClick)
 				spring:setGoal(0.5, { impulse = -10 })
 				props.OnClick()
 			else

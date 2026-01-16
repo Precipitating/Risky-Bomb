@@ -21,6 +21,7 @@ local SoundManager = {
 		Submit = "rbxassetid://9118819937",
 		Tick = "rbxassetid://4621722813",
 		Cash = "rbxassetid://14621507602",
+		Success = "rbxassetid://12221990",
 	},
 	PromptSounds = {
 		ChairSit = "rbxassetid://12222152",
@@ -41,6 +42,7 @@ local function LoadSoundsFromTable(parent: Instance, folderName: string, tableTo
 		sound.Parent = folder
 		sound.Name = key
 		sound.SoundId = uiSoundID
+		sound.Volume = 3
 		tableToModify[key] = sound
 	end
 end

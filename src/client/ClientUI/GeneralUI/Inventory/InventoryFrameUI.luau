@@ -1,5 +1,7 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local InventoryOwnedItemsUI = require(script.Parent.InventoryOwnedItemsUI)
+local InventoryUIFunctions = require(script.Parent.InventoryUIFunctions)
 local ModularImageLabel = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularImageLabelUI)
 local ModularTextButtonUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularTextButtonUI)
 local ModularTextLabel = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularTextLabelUI)
@@ -17,7 +19,6 @@ type InventoryFrameUIProps = {
 	SetIsOpen: (boolean) -> (),
 }
 local function InventoryFrameUI(props: InventoryFrameUIProps)
-	local robuxPageOpened, setRobuxPageOpened = React.useState(false)
 	local chairPageOpened, setChairPageOpened = React.useState(false)
 	local bombPageOpened, setBombPageOpened = React.useState(false)
 	if not props.IsOpen then
@@ -106,8 +107,8 @@ local function InventoryFrameUI(props: InventoryFrameUIProps)
 			Font = Enum.Font.FredokaOne,
 			OnClick = function()
 				setBombPageOpened(false)
-				setRobuxPageOpened(false)
 				setChairPageOpened(true)
+				InventoryUIFunctions.OpenInventoryOf("chairs")
 			end,
 		}),
 		BombCategory = ModularTextButtonUI({
@@ -123,9 +124,24 @@ local function InventoryFrameUI(props: InventoryFrameUIProps)
 			Font = Enum.Font.FredokaOne,
 			OnClick = function()
 				setChairPageOpened(false)
-				setRobuxPageOpened(false)
 				setBombPageOpened(true)
+				InventoryUIFunctions.OpenInventoryOf("bombs")
 			end,
+		}),
+
+		-- pages
+		ChairPage = InventoryOwnedItemsUI({
+			Position = UDim2.fromScale(0.23, 0.3),
+			Size = UDim2.fromScale(0.65, 0.5),
+			IsOpen = chairPageOpened,
+			SetIsOpen = setChairPageOpened,
+		}),
+
+		BombPage = InventoryOwnedItemsUI({
+			Position = UDim2.fromScale(0.23, 0.3),
+			Size = UDim2.fromScale(0.65, 0.5),
+			IsOpen = bombPageOpened,
+			SetIsOpen = setChairPageOpened,
 		}),
 	})
 end

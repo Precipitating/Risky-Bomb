@@ -18,17 +18,19 @@ type ShopFrameUIProps = {
 	AnchorPoint: Vector2?,
 	IsOpen: boolean,
 	SetIsOpen: (boolean) -> (),
+	LootTableOpen: boolean,
+	SetLootTableOpen: (boolean) -> (),
 }
+
 local function ShopFrameUI(props: ShopFrameUIProps)
 	local robuxPageOpened, setRobuxPageOpened = React.useState(false)
-	local chairPageOpened, setChairPageOpened = React.useState(true)
+	local chairPageOpened, setChairPageOpened = React.useState(false)
 	local bombPageOpened, setBombPageOpened = React.useState(false)
 
-	local confirmationOpened, setConfirmationOpened = React.useState(true)
+	local confirmationOpened, setConfirmationOpened = React.useState(false)
 	local currentPackType, setCurrentPackType = React.useState(-1)
 	local packName, setPackName = React.useState("nil")
 	local packPrice, setPackPrice = React.useState("unset")
-	local lootTableOpen, setLootTableOpen = React.useState(true)
 
 	if not props.IsOpen then
 		return nil
@@ -77,6 +79,13 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			TextColor = Color3.fromRGB(255, 255, 255),
 			OnClick = function()
 				props.SetIsOpen(false)
+				setRobuxPageOpened(false)
+				setBombPageOpened(false)
+				setConfirmationOpened(false)
+				setCurrentPackType(-1)
+				setPackName("nil")
+				setPackPrice("unset")
+				props.SetLootTableOpen(false)
 			end,
 			StrokeThickness = 0.08,
 			AspectRatio = 1,
@@ -121,6 +130,7 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 				if robuxPageOpened then
 					setRobuxPageOpened(false)
 				end
+
 				setChairPageOpened(true)
 			end,
 		}),
@@ -142,6 +152,7 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 				if robuxPageOpened then
 					setRobuxPageOpened(false)
 				end
+
 				setBombPageOpened(true)
 			end,
 		}),
@@ -194,8 +205,19 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			CostText = tostring(packPrice),
 			PackType = currentPackType,
 			PackName = packName,
-			LootTableOpen = lootTableOpen,
-			SetLootTableOpen = setLootTableOpen,
+			LootTableOpen = props.LootTableOpen,
+			SetLootTableOpen = props.SetLootTableOpen,
+		}),
+
+		BlockingFrame = e("TextButton", {
+			Position = UDim2.fromScale(0.5, 0.5),
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			ZIndex = 4,
+			Visible = confirmationOpened,
+			BackgroundColor3 = Color3.fromRGB(1, 1, 1),
+			BackgroundTransparency = 0.5,
+			Size = UDim2.fromOffset(9999, 9999),
+			AutoButtonColor = false,
 		}),
 	})
 end
