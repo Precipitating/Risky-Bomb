@@ -11,6 +11,7 @@ type ModularImageButtonProps = {
 	ImageID: string,
 	BackgroundTransparency: number?,
 	ZIndex: number?,
+	IsOpen: boolean,
 	CornerRadius: UDim?,
 	AspectRatio: number?,
 	Rotation: number?,
@@ -21,6 +22,7 @@ local function ModularImageButton(props: ModularImageButtonProps)
 	return e("ImageButton", {
 		Position = props.Position,
 		Size = props.Size,
+		Visible = props.IsOpen,
 		AnchorPoint = props.AnchorPoint,
 		ScaleType = Enum.ScaleType.Fit,
 		Rotation = props.Rotation,

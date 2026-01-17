@@ -44,11 +44,11 @@ local function PromptVisibilityConnection(prompt: ProximityPrompt, seat: Seat, g
 			if seatHumanoid then
 				prompt.Enabled = false
 				SoundManager.PlayExistingSound(SoundManager.PromptSounds.ChairSit)
-				ChairPrompt.networker:fire("ChairSat", gameTable, true)
+				ChairPrompt.networker:fire("ChairSat", gameTable, seat.Parent, true)
 			else
 				prompt.Enabled = true
 				SoundManager.PlayExistingSound(SoundManager.PromptSounds.ChairLeave)
-				ChairPrompt.networker:fire("ChairSat", gameTable, false)
+				ChairPrompt.networker:fire("ChairSat", gameTable, seat.Parent, false)
 			end
 		end)
 		prompt:AddTag("Set")
@@ -65,8 +65,8 @@ function ChairPrompt.Handle(prompt: ProximityPrompt)
 	end
 	-- get seat & return if unsittable
 	local seat = GetSeat(prompt)
-	local chairModel = prompt:FindFirstAncestorOfClass("Model")
-	local gameTable = chairModel:FindFirstAncestorOfClass("Model")
+	local chairMesh = prompt:FindFirstAncestorOfClass("MeshPart")
+	local gameTable = chairMesh:FindFirstAncestorOfClass("Model")
 	-- enable/disable prompt visibility if sat/unsat
 	PromptVisibilityConnection(prompt, seat, gameTable)
 

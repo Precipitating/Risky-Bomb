@@ -4,7 +4,13 @@ local Networker = require(ReplicatedStorage.Packages.Networker).server
 
 local InventoryEvents = {}
 
-function InventoryEvents:EquipItem(player: Player, itemType: string, itemName: string)
+function InventoryEvents:EquipItem(
+	player: Player,
+	itemType: string,
+	itemName: string,
+	itemMaterial: Enum.Material,
+	itemColor: BrickColor
+)
 	if itemType:lower():find("chair") then
 		itemType = "chairEquipped"
 	elseif itemType:lower():find("bomb") then
@@ -14,14 +20,11 @@ function InventoryEvents:EquipItem(player: Player, itemType: string, itemName: s
 	end
 
 	DataService:update(player, { itemType }, function(currentType)
-		if currentType ~= itemName then
-			return itemName
-		end
-		print(`{player.Name} Already equipped {itemName} ignoring.`)
-		return currentType
+		return { Name = itemName, Material = itemMaterial, Color = itemColor }
 	end)
 
-	print(`Inventory updated for {player} to {itemName}`)
+	print(`Inventory updated for {player} to {itemName}, with material of {itemMaterial} and color {itemColor}`)
+	print(DataService:get(player, itemType))
 	return true
 end
 

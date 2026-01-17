@@ -31,6 +31,8 @@ local function SpawnViewportButton(category: string, object, item)
 
 	objectClone.CFrame = CFrame.new(0, 0, -5)
 	objectClone.Parent = viewPort
+	objectClone.Material = item.Material
+	objectClone.BrickColor = item.Color
 
 	camera.CFrame = CFrame.new(Vector3.zero)
 	camera.Parent = viewPort
@@ -52,9 +54,9 @@ local function SpawnViewportButton(category: string, object, item)
 		conn:Disconnect()
 	end)
 
+	-- equip item
 	imageButton.Activated:Connect(function()
-		local result = InventoryUIFunctions.networker:fetch("EquipItem", category, item.Name)
-
+		local result = InventoryUIFunctions.networker:fetch("EquipItem", category, item.Name, item.Material, item.Color)
 		if not result then
 			warn("Failed to set inventory item")
 			SoundManager.PlayExistingSound(SoundManager.UISounds.Error)

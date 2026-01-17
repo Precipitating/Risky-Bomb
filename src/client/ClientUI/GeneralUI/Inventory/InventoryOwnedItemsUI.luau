@@ -43,7 +43,6 @@ local function InventoryOwnedItemsUI(props: InventoryOwnedItemsUIProps)
 		}),
 		UIPad = e("UIPadding", {
 			PaddingLeft = UDim.new(0.05, 0),
-			PaddingTop = UDim.new(0.03, 0),
 		}),
 	})
 end

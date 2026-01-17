@@ -5,6 +5,7 @@ local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerCo
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local RarityColor = require(ReplicatedStorage.Config.RarityColor)
 local ChairPacksData = require(ReplicatedStorage.Config.ChairPacksData)
+local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local Networker = require(ReplicatedStorage.Packages.Networker).client
@@ -32,11 +33,12 @@ local function SetViewportRarityColor(viewportFrame: ViewportFrame, packType: st
 	end
 end
 
-local function CreateViewportFrame(packType: string, packName: string, packChance: string, mesh: MeshPart)
+local function CreateViewportFrame(packType: string, packName: string, mesh: MeshPart)
 	local viewportFrame = Instance.new("ViewportFrame")
 	local cam = Instance.new("Camera")
 	local corner = Instance.new("UICorner")
 	local aspectRatio = Instance.new("UIAspectRatioConstraint")
+	local alive = true
 	aspectRatio.Parent = viewportFrame
 	aspectRatio.AspectType = Enum.AspectType.ScaleWithParentSize
 	aspectRatio.DominantAxis = Enum.DominantAxis.Height
@@ -51,16 +53,33 @@ local function CreateViewportFrame(packType: string, packName: string, packChanc
 	obj.CFrame = CFrame.new(0, 0, -5)
 	cam.CFrame = CFrame.new(Vector3.zero)
 	viewportFrame.Size = UDim2.fromScale(1, 0.9)
-	viewportFrame.Name = `{ChairPacksData[packName].ItemList[packChance] - 100}`
 
-	SetViewportRarityColor(viewportFrame, packType, packName, packChance)
+	local packTable = ChairPacksData[packName].ItemList
+	local itemRarity = packTable[obj.Name]
+	print(obj.Name)
+	print(itemRarity)
 
+	viewportFrame.Name = `{itemRarity - 100}`
+
+	SetViewportRarityColor(viewportFrame, packType, packName, mesh.Name)
+
+	-- spin
 	local conn = RunService.RenderStepped:Connect(function()
 		obj.CFrame *= CFrame.Angles(0, math.rad(1), 0)
 	end)
 
+	-- random color/material display
+	task.spawn(function()
+		while alive do
+			task.wait(1)
+			obj.BrickColor = BrickColor.random()
+			obj.Material = UtilityModule.GetRandomMaterial()
+		end
+	end)
+
 	viewportFrame.Destroying:Connect(function()
 		print("destroyed!")
+		alive = false
 		conn:Disconnect()
 	end)
 
@@ -82,16 +101,19 @@ function ShopUIFunctions.SpawnLootTable(packType: number, packName: string)
 		packTypeString = "Bombs"
 	end
 	-- ensure packName matches the table name
-	local folder = ReplicatedStorage:FindFirstChild(packTypeString):FindFirstChild(packName)
+	local folder = UtilityModule.Get(ReplicatedStorage, packTypeString, packName):GetChildren()
+
+	local lootTableFolder =
+		UtilityModule.Get(PlayerContext.PlayerGui, "GeneralGUI", "Shop", "ConfirmationPrompt", "LootTable")
+
 	if folder then
-		for _, mesh in ipairs(folder:GetChildren()) do
-			local viewport = CreateViewportFrame(packTypeString, packName, mesh.Name, mesh)
-			viewport.Parent = PlayerContext.PlayerGui
-				:FindFirstChild("GeneralGUI")
-				:FindFirstChild("Shop")
-				:FindFirstChild("ConfirmationPrompt")
-				:WaitForChild("LootTable")
+		for _, mesh in pairs(folder) do
+			print(mesh)
+			local viewport = CreateViewportFrame(packTypeString, packName, mesh)
+			viewport.Parent = lootTableFolder
 		end
+	else
+		error("Can't find pack name. Double check the name is correct.")
 	end
 end
 

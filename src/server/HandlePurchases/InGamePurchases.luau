@@ -1,6 +1,7 @@
 local PolicyService = game:GetService("PolicyService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local ChairPacksData = require(ReplicatedStorage.Config.ChairPacksData)
+local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local DataService = require(ReplicatedStorage.Packages.DataService).server
 local Networker = require(ReplicatedStorage.Packages.Networker).server
@@ -21,10 +22,20 @@ local function CanPlayerBuyCrates(player: Player)
 	return true
 end
 
-local function IsAlreadyOwned(itemWon: string, player: Player, dataKey: string)
+local function IsAlreadyOwned(
+	itemWon: string,
+	materialRolled: Enum.Material,
+	colorRolled: BrickColor,
+	player: Player,
+	dataKey: string
+)
 	local inventory = DataService:get(player, { dataKey })
 	for _, ownedItemName in ipairs(inventory) do
-		if ownedItemName.Name == itemWon then
+		if
+			ownedItemName.Name == itemWon
+			and ownedItemName.Material == materialRolled
+			and ownedItemName.Color == colorRolled
+		then
 			return true
 		end
 	end
@@ -47,9 +58,17 @@ function Roll(player: Player, dataKey: string, crateData)
 	for name, itemChance in pairs(crateData.ItemList) do
 		cumulative += itemChance
 		if roll <= cumulative then
-			print(`{player.Name} won... {name}`)
-			if not IsAlreadyOwned(name, player, dataKey) then
-				DataService:arrayInsert(player, { dataKey }, { Name = name, RarityChance = itemChance })
+			local material = UtilityModule.GetRandomMaterial()
+			local color = BrickColor.random()
+
+			if not IsAlreadyOwned(name, material, color, player, dataKey) then
+				print(`{player.Name} won... {name}`)
+				DataService:arrayInsert(player, { dataKey }, {
+					Name = name,
+					RarityChance = itemChance,
+					Material = material,
+					Color = color,
+				})
 			else
 				warn(`{player.Name} already owns this, refunding {crateData.AlreadyOwnedPayment}`)
 				DataService:update(player, { "currency" }, function(currentCash)

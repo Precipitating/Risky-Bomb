@@ -3,11 +3,14 @@ return {
 	NineToFivePack = {
 		Cost = 1000,
 		ItemList = {
-			BarStool = Rarity.Common,
+			FoldingChair = Rarity.Common,
 			PlasticStool = Rarity.Common,
 			Operator = Rarity.Rare,
+			BarStool = Rarity.Rare,
 			Executive = Rarity.Epic,
+			GardenChair = Rarity.Epic,
 			EvilChair = Rarity.Legendary,
+			Beanbag = Rarity.Legendary,
 		},
 		AlreadyOwnedPayment = 500,
 	},

@@ -21,6 +21,14 @@ type InventoryFrameUIProps = {
 local function InventoryFrameUI(props: InventoryFrameUIProps)
 	local chairPageOpened, setChairPageOpened = React.useState(false)
 	local bombPageOpened, setBombPageOpened = React.useState(false)
+
+	React.useEffect(function()
+		if props.IsOpen then
+			setChairPageOpened(false)
+			setBombPageOpened(false)
+		end
+	end, { props.IsOpen })
+
 	if not props.IsOpen then
 		return nil
 	end
@@ -62,6 +70,7 @@ local function InventoryFrameUI(props: InventoryFrameUIProps)
 			Size = UDim2.fromScale(0.08, 0.08),
 			BackgroundColor = Color3.fromRGB(255, 1, 1),
 			Text = "X",
+			isOpen = props.IsOpen,
 			TextXAlignment = Enum.TextXAlignment.Center,
 			TextYAlignment = Enum.TextYAlignment.Center,
 			Font = Enum.Font.FredokaOne,
@@ -100,12 +109,16 @@ local function InventoryFrameUI(props: InventoryFrameUIProps)
 			Size = UDim2.fromScale(0.15, 0.15),
 			TextColor = Color3.fromRGB(255, 255, 255),
 			AspectRatio = 3,
+			isOpen = props.IsOpen,
 			TextXAlignment = Enum.TextXAlignment.Left,
 			BackgroundTransparency = 1,
 			StrokeThickness = 0,
 			CornerRadius = UDim.new(0.1, 0),
 			Font = Enum.Font.FredokaOne,
 			OnClick = function()
+				if chairPageOpened then
+					return
+				end
 				setBombPageOpened(false)
 				setChairPageOpened(true)
 				InventoryUIFunctions.OpenInventoryOf("chairs")
@@ -117,12 +130,16 @@ local function InventoryFrameUI(props: InventoryFrameUIProps)
 			Size = UDim2.fromScale(0.15, 0.15),
 			TextColor = Color3.fromRGB(255, 255, 255),
 			AspectRatio = 3,
+			isOpen = props.IsOpen,
 			TextXAlignment = Enum.TextXAlignment.Left,
 			BackgroundTransparency = 1,
 			StrokeThickness = 0,
 			CornerRadius = UDim.new(0.1, 0),
 			Font = Enum.Font.FredokaOne,
 			OnClick = function()
+				if bombPageOpened then
+					return
+				end
 				setChairPageOpened(false)
 				setBombPageOpened(true)
 				InventoryUIFunctions.OpenInventoryOf("bombs")

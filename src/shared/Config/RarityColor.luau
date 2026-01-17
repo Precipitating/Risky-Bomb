@@ -1,4 +1,3 @@
-local Rarity = require(script.Parent.Rarity)
 return {
 	[60] = Color3.fromRGB(255, 255, 255),
 	[25] = Color3.fromRGB(41, 180, 209),

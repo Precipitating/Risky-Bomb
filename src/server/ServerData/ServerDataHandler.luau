@@ -13,9 +13,9 @@ function DataService:onPlayerInit(player: Player, data): ()
 	print(player.Name .. " has initialized with data:", data)
 	if data.firstJoin == true then
 		data.firstJoin = false
-		data.currency = 0
-		data.chairEquipped = "default"
-		data.bombEquipped = "default"
+		data.currency = 99999
+		data.chairEquipped = { Name = "Default", Material = Enum.Material.SmoothPlastic, Color = BrickColor.White() }
+		data.bombEquipped = { Name = "Default", Material = Enum.Material.SmoothPlastic, Color = BrickColor.White() }
 	end
 	data.sessionJoinTime = os.time()
 end

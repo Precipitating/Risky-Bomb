@@ -35,6 +35,7 @@ local function ShopRobuxUI(props: ShopRobuxUIProps)
 		}),
 		_1000Button = ModularImageButtonUI({
 			Position = UDim2.fromScale(0, 0),
+			IsOpen = props.IsOpen,
 			Size = UDim2.fromScale(1, 0.3),
 			BackgroundTransparency = 1,
 			ImageID = "rbxassetid://129002561266142",
@@ -45,6 +46,7 @@ local function ShopRobuxUI(props: ShopRobuxUIProps)
 		_2500Button = ModularImageButtonUI({
 			Position = UDim2.fromScale(0, 0),
 			Size = UDim2.fromScale(1, 0.3),
+			IsOpen = props.IsOpen,
 			BackgroundTransparency = 1,
 			ImageID = "rbxassetid://123110515723057",
 			OnClick = function()
@@ -54,6 +56,7 @@ local function ShopRobuxUI(props: ShopRobuxUIProps)
 		_5250Button = ModularImageButtonUI({
 			Position = UDim2.fromScale(0, 0),
 			Size = UDim2.fromScale(1, 0.3),
+			IsOpen = props.IsOpen,
 			BackgroundTransparency = 1,
 			ImageID = "rbxassetid://72380522066348",
 			OnClick = function()
@@ -63,6 +66,7 @@ local function ShopRobuxUI(props: ShopRobuxUIProps)
 		_5Button = ModularImageButtonUI({
 			Position = UDim2.fromScale(0, 0),
 			Size = UDim2.fromScale(1, 0.3),
+			IsOpen = props.IsOpen,
 			BackgroundTransparency = 1,
 			ImageID = "rbxassetid://102258412586491",
 			OnClick = function()
