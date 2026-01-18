@@ -42,8 +42,8 @@ local function SpawnViewportButton(category: string, object, item)
 
 	CommonUIFunctions.CameraLookAtObject(camera, objectClone)
 	objectClone.Parent = viewPort
-	objectClone.Material = item.Material
-	objectClone.BrickColor = item.Color
+	objectClone.Material = Enum.Material[item.Material]
+	objectClone.BrickColor = BrickColor.new(item.Color)
 
 	camera.Parent = viewPort
 

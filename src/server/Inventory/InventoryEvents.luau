@@ -63,9 +63,9 @@ function InventoryEvents.SetEquippedSkin(equipKey: string, objectType: string, p
 	end
 
 	-- update mesh's info to match equipped chair
-	object.BrickColor = objectEquipped.Color
+	object.BrickColor = BrickColor.new(objectEquipped.Color)
 	object.Size = skinMesh.Size
-	object.Material = objectEquipped.Material
+	object.Material = Enum.Material[objectEquipped.Material] :: Enum.Material
 
 	-- set the new skin's seat position - it may be different
 	if equipKey == "chairEquipped" then

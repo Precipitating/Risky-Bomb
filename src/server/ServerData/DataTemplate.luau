@@ -7,36 +7,41 @@ export type ItemData = {
 	Material: Enum.Material,
 	Color: BrickColor,
 }
+
 return {
 	firstJoin = true,
-	currency = 999999,
+	currency = 0,
 	sessionJoinTime = 0,
+
 	chairsOwned = {
 		[1] = {
 			Name = "Default",
 			RarityChance = Rarity.Common,
-			Material = Enum.Material.SmoothPlastic,
-			Color = BrickColor.White(),
+			Material = "SmoothPlastic", -- Enum.Material -> string
+			Color = "White", -- BrickColor -> string
 		},
 	},
+
 	bombsOwned = {
 		[1] = {
 			Name = "Default",
 			RarityChance = Rarity.Common,
-			Material = Enum.Material.SmoothPlastic,
-			Color = BrickColor.Black(),
+			Material = "SmoothPlastic",
+			Color = "Black",
 		},
 	},
+
 	chairEquipped = {
 		Name = "Default",
 		RarityChance = Rarity.Common,
-		Material = Enum.Material.SmoothPlastic,
-		Color = BrickColor.White(),
+		Material = "SmoothPlastic",
+		Color = "White",
 	},
+
 	bombEquipped = {
 		Name = "Default",
 		RarityChance = Rarity.Common,
-		Material = Enum.Material.SmoothPlastic,
-		Color = BrickColor.Black(),
+		Material = "SmoothPlastic",
+		Color = "Black",
 	},
 }

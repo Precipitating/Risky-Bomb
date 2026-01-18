@@ -67,8 +67,8 @@ function Roll(player: Player, dataKey: string, crateData)
 				DataService:arrayInsert(player, { dataKey }, {
 					Name = name,
 					RarityChance = itemChance,
-					Material = material,
-					Color = color,
+					Material = material.Name,
+					Color = color.Name,
 				})
 			else
 				warn(`{player.Name} already owns this, refunding {crateData.AlreadyOwnedPayment}`)
