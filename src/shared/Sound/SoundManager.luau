@@ -48,6 +48,10 @@ local function LoadSoundsFromTable(parent: Instance, folderName: string, tableTo
 end
 
 function SoundManager.PlayExistingSound(sound: Sound)
+	if typeof(sound) == "string" then
+		warn("Sound is a string, ignore if using UI Labs")
+		return
+	end
 	if sound.IsPlaying then
 		sound.TimePosition = 0
 		return

@@ -2,7 +2,7 @@
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
-	<Item class="MeshPart" referent="RBX5F21B9BE49FA4545A834BA0C43DF85C1">
+	<Item class="MeshPart" referent="RBXD230FA1E8FA9450F9A4D90704D7408F0">
 		<Properties>
 			<bool name="DoubleSided">false</bool>
 			<bool name="HasJointOffset">false</bool>
@@ -91,15 +91,15 @@
 			<string name="MaterialVariantSerialized"></string>
 			<CoordinateFrame name="PivotOffset">
 				<X>0</X>
-				<Y>0</Y>
+				<Y>-1</Y>
 				<Z>0</Z>
 				<R00>1</R00>
-				<R01>0</R01>
+				<R01>-0</R01>
 				<R02>0</R02>
 				<R10>0</R10>
 				<R11>1</R11>
 				<R12>0</R12>
-				<R20>0</R20>
+				<R20>-0</R20>
 				<R21>0</R21>
 				<R22>1</R22>
 			</CoordinateFrame>
@@ -136,7 +136,7 @@
 			<int64 name="SourceAssetId">13230056338</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="Seat" referent="RBX7E199104CC0D40ED9D3EF40F9FFFE59B">
+		<Item class="Seat" referent="RBX6C8E9775B8B844618379F7A2A0FA3EC5">
 			<Properties>
 				<bool name="Disabled">true</bool>
 				<token name="shape">1</token>
@@ -153,14 +153,14 @@
 				<token name="BottomSurfaceInput">0</token>
 				<CoordinateFrame name="CFrame">
 					<X>0</X>
-					<Y>0</Y>
+					<Y>-0.190599486</Y>
 					<Z>0</Z>
 					<R00>1</R00>
 					<R01>0</R01>
 					<R02>0</R02>
 					<R10>0</R10>
 					<R11>1</R11>
-					<R12>-0</R12>
+					<R12>0</R12>
 					<R20>0</R20>
 					<R21>0</R21>
 					<R22>1</R22>
@@ -190,15 +190,15 @@
 				<string name="MaterialVariantSerialized"></string>
 				<CoordinateFrame name="PivotOffset">
 					<X>0</X>
-					<Y>0</Y>
+					<Y>-1</Y>
 					<Z>0</Z>
 					<R00>1</R00>
-					<R01>0</R01>
+					<R01>-0</R01>
 					<R02>0</R02>
 					<R10>0</R10>
 					<R11>1</R11>
 					<R12>0</R12>
-					<R20>0</R20>
+					<R20>-0</R20>
 					<R21>0</R21>
 					<R22>1</R22>
 				</CoordinateFrame>
@@ -235,34 +235,6 @@ RGFya3N0dWRpbw==]]></BinaryString>
 				<string name="Name">Seat</string>
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
-			</Properties>
-		</Item>
-		<Item class="ProximityPrompt" referent="RBX65463146659B435CA8818BE9F966F09D">
-			<Properties>
-				<string name="ActionText">Join</string>
-				<bool name="AutoLocalize">true</bool>
-				<bool name="ClickablePrompt">true</bool>
-				<bool name="Enabled">true</bool>
-				<token name="Exclusivity">0</token>
-				<token name="GamepadKeyCode">1000</token>
-				<float name="HoldDuration">0</float>
-				<token name="KeyboardKeyCode">101</token>
-				<float name="MaxActivationDistance">5</float>
-				<float name="MaxIndicatorDistance">0</float>
-				<string name="ObjectText"></string>
-				<bool name="RequiresLineOfSight">false</bool>
-				<Ref name="RootLocalizationTable">null</Ref>
-				<token name="Style">0</token>
-				<Vector2 name="UIOffset">
-					<X>0</X>
-					<Y>0</Y>
-				</Vector2>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
-				<bool name="DefinesCapabilities">false</bool>
-				<string name="Name">ProximityPrompt</string>
-				<int64 name="SourceAssetId">-1</int64>
-				<BinaryString name="Tags">Q2hhaXI=</BinaryString>
 			</Properties>
 		</Item>
 	</Item>

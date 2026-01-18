@@ -1,13 +1,18 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
-local RunService = game:GetService("RunService")
+
 local StarterPlayer = game:GetService("StarterPlayer")
+local TweenService = game:GetService("TweenService")
+local CommonUIFunctions =
+	require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.GeneralUI.CommonUIFunctions.CommonUIFunctions)
 local RarityColor = require(ReplicatedStorage.Config.RarityColor)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local Networker = require(ReplicatedStorage.Packages.Networker).client
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local DataService = require(ReplicatedStorage.Packages.DataService).client
 local InventoryUIFunctions = {}
+
 InventoryUIFunctions.networker = Networker.new("InventoryRemotes", InventoryUIFunctions)
+local spinTweenInfo = TweenInfo.new(4, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1)
 
 local function SpawnViewportButton(category: string, object, item)
 	local parentPath =
@@ -27,14 +32,19 @@ local function SpawnViewportButton(category: string, object, item)
 
 	imageButton.BackgroundTransparency = 1
 	imageButton.ImageTransparency = 1
-	imageButton.Name = tostring(item.RarityChance)
+	imageButton.Name = item.Name
 
-	objectClone.CFrame = CFrame.new(0, 0, -5)
+	if item.Name == "Default" then
+		imageButton.LayoutOrder = -999
+	else
+		imageButton.LayoutOrder = -item.RarityChance
+	end
+
+	CommonUIFunctions.CameraLookAtObject(camera, objectClone)
 	objectClone.Parent = viewPort
 	objectClone.Material = item.Material
 	objectClone.BrickColor = item.Color
 
-	camera.CFrame = CFrame.new(Vector3.zero)
 	camera.Parent = viewPort
 
 	viewPort.BackgroundColor3 = RarityColor[item.RarityChance]
@@ -45,14 +55,8 @@ local function SpawnViewportButton(category: string, object, item)
 	imageButton.Parent = parentPath
 
 	-- spin
-	local conn = RunService.RenderStepped:Connect(function()
-		objectClone.CFrame *= CFrame.Angles(0, math.rad(1), 0)
-	end)
-
-	imageButton.Destroying:Connect(function()
-		print("destroyed!")
-		conn:Disconnect()
-	end)
+	TweenService:Create(objectClone, spinTweenInfo, { Orientation = objectClone.Orientation + Vector3.new(0, 360, 0) })
+		:Play()
 
 	-- equip item
 	imageButton.Activated:Connect(function()

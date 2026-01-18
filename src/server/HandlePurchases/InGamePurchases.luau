@@ -1,6 +1,7 @@
 local PolicyService = game:GetService("PolicyService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local ChairPacksData = require(ReplicatedStorage.Config.ChairPacksData)
+local BombPacksData = require(ReplicatedStorage.Config.BombPacksData)
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local DataService = require(ReplicatedStorage.Packages.DataService).server
@@ -81,38 +82,46 @@ function Roll(player: Player, dataKey: string, crateData)
 	end
 end
 
+local function BuyAndRoll(dataTable, objectOwnedKey: string, player: Player, playerCash: number, packName: string)
+	if not dataTable[packName] then
+		warn(`{packName} doesn't exist in table`)
+		return false
+	end
+	local packCost = dataTable[packName].Cost
+
+	if packCost > playerCash then
+		warn(`{player.Name} can't afford pack!`)
+		return false
+	end
+	-- can afford
+	DataService:update(player, { "currency" }, function(currentCash)
+		return currentCash - packCost
+	end)
+	Roll(player, objectOwnedKey, dataTable[packName])
+	return true
+end
+
 function InGamePurchases:AttemptBuy(player: Player, packType: number, packName: string)
-	print("entered")
 	-- if false, not allowed to buy due to country restrictions OR pcall failed.
 	if not CanPlayerBuyCrates(player) then
 		return false
 	end
-
 	print(packType)
 	print(packName)
 	local playerCash = DataService:get(player, { "currency" })
+	local objectOwnedKey = nil
 
-	-- chair crate
+	local packTable = nil
 	if packType == PackType.ChairPack then
-		if not ChairPacksData[packName] then
-			warn(`{packName} doesn't exist in table`)
-			return false
-		end
-		local packCost = ChairPacksData[packName].Cost
-
-		if packCost > playerCash then
-			warn(`{player.Name} can't afford pack!`)
-			return false
-		end
-		-- can afford
-		DataService:update(player, { "currency" }, function(currentCash)
-			return currentCash - packCost
-		end)
-		Roll(player, "chairsOwned", ChairPacksData[packName])
-		return true
+		packTable = ChairPacksData
+		objectOwnedKey = "chairsOwned"
+	elseif packType == PackType.BombPack then
+		packTable = BombPacksData
+		objectOwnedKey = "bombsOwned"
+	else
+		error(`Failed to get {packType} table!`)
 	end
-
-	return false
+	return BuyAndRoll(packTable, objectOwnedKey, player, playerCash, packName)
 end
 
 InGamePurchases.networker = Networker.new("InGamePurchaseRemotes", InGamePurchases, {

@@ -2,10 +2,12 @@ local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local ModularImageButtonUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularImageButtonUI)
 local React = require(ReplicatedStorage.Packages.React)
+local BombPacksData = require(ReplicatedStorage.Config.BombPacksData)
+local ChairPacksData = require(ReplicatedStorage.Config.ChairPacksData)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local e = React.createElement
 
-type ShopChairsUIProps = {
+type ShopPackDisplayerUIProps = {
 	Position: UDim2,
 	Size: UDim2,
 	AspectRatio: number?,
@@ -15,11 +17,31 @@ type ShopChairsUIProps = {
 	AnchorPoint: Vector2?,
 	IsOpen: boolean,
 	ConfirmationSetOpen: (boolean) -> (),
+	PackType: number,
 	PackSetType: (number) -> (),
 	PackSetName: (string) -> (),
 	PackSetPrice: (string) -> (),
 }
-local function ShopChairsUI(props: ShopChairsUIProps)
+
+local function _95PackImageID(props: ShopPackDisplayerUIProps)
+	if props.PackType == PackType.BombPack then
+		return "rbxassetid://71026580288153"
+	else
+		return "rbxassetid://110643834598127"
+	end
+end
+
+local function GetPriceOfPack(packType: number, packName: string)
+	local result = "???"
+	if packType == PackType.BombPack then
+		result = tostring(BombPacksData[packName].Cost)
+	elseif packType == PackType.ChairPack then
+		result = tostring(ChairPacksData[packName].Cost)
+	end
+
+	return result
+end
+local function ShopPackDisplayerUI(props: ShopPackDisplayerUIProps)
 	if not props.IsOpen then
 		return nil
 	end
@@ -43,15 +65,17 @@ local function ShopChairsUI(props: ShopChairsUIProps)
 			Position = UDim2.fromScale(0, 0),
 			Size = UDim2.fromScale(1, 0.11),
 			BackgroundTransparency = 1,
-			ImageID = "rbxassetid://110643834598127",
+			ImageID = _95PackImageID(props),
 			OnClick = function()
-				props.PackSetName("NineToFivePack")
-				props.PackSetType(PackType.ChairPack)
-				props.PackSetPrice("1000")
+				local packName = "NineToFivePack"
+				props.PackSetName(packName)
+				props.PackSetType(props.PackType)
+				props.PackSetPrice(GetPriceOfPack(props.PackType, packName))
 				props.ConfirmationSetOpen(true)
 			end,
+			IsOpen = props.IsOpen,
 		}),
 	})
 end
 
-return ShopChairsUI
+return ShopPackDisplayerUI

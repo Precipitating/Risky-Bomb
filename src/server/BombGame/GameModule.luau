@@ -1,7 +1,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
-local ServerScriptService = game:GetService("ServerScriptService")
+local ServerScriptService = game:GetService("ServerScriptService").Server
 local ServerStorage = game:GetService("ServerStorage")
-local SoundToClient = require(ServerScriptService.Server.ServerRemotesLogic.SoundToClient)
+local InventoryEvents = require(ServerScriptService.Inventory.InventoryEvents)
+local SoundToClient = require(ServerScriptService.ServerRemotesLogic.SoundToClient)
 local BombConfig = require(ReplicatedStorage.Config.BombSharedConfig)
 local DataService = require(ReplicatedStorage.Packages.DataService).server
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
@@ -182,9 +183,26 @@ function GameModule:SubmitBombTime(_: Player, tableID: string, timeToReduce: num
 	end
 end
 
+function GameModule.SetBombSkin(gameTable: Model, tableID: string)
+	-- pick random bomb skin
+	local playerList = BombGameStorage.GetPlayerList()
+	local playersInTable = playerList[tableID]
+	local bomb = gameTable:FindFirstChild("Bomb")
+	local equippedBombs = {}
+	for playerRef, _ in pairs(playersInTable) do
+		local objectEquipped = DataService:get(playerRef, { "bombEquipped" })
+		table.insert(equippedBombs, objectEquipped)
+	end
+
+	local chosenBombName = equippedBombs[math.random(#equippedBombs)]
+	InventoryEvents.SetEquippedSkin("bombEquipped", "Bombs", chosenBombName, bomb)
+end
+
 function GameModule.BeginGame(gameTable: Model)
 	local bomb = gameTable:FindFirstChild("Bomb")
 	local tableID = gameTable:GetAttribute("ID")
+
+	GameModule.SetBombSkin(gameTable, tableID)
 	gameTable:SetAttribute("GameActive", true)
 
 	GameModule:PlayAudioForTablePlayers(tableID, SoundManager.GetRandomBombThemeSound(), false)

@@ -7,6 +7,7 @@ local ModularTextButtonUI = require(StarterPlayer.StarterPlayerScripts.Client.Cl
 local ModularTextLabel = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularTextLabelUI)
 local React = require(ReplicatedStorage.Packages.React)
 local ReactRipple = require(ReplicatedStorage.Packages.ReactRipple)
+
 local e = React.createElement
 
 type InventoryFrameUIProps = {

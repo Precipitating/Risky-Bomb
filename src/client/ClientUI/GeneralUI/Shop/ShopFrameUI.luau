@@ -1,13 +1,14 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local ConfirmationUI = require(script.Parent.ConfirmationUI)
-local ShopChairs = require(script.Parent.ShopChairs)
+local ShopPackDisplayerUI = require(script.Parent.ShopPackDisplayerUI)
 local ShopRobux = require(script.Parent.ShopRobux)
 local ModularImageLabel = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularImageLabelUI)
 local ModularTextButtonUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularTextButtonUI)
 local ModularTextLabel = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularTextLabelUI)
 local React = require(ReplicatedStorage.Packages.React)
 local ReactRipple = require(ReplicatedStorage.Packages.ReactRipple)
+local PackType = require(ReplicatedStorage.Types.PackType)
 local e = React.createElement
 
 type ShopFrameUIProps = {
@@ -77,6 +78,7 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			TextYAlignment = Enum.TextYAlignment.Center,
 			Font = Enum.Font.FredokaOne,
 			TextColor = Color3.fromRGB(255, 255, 255),
+			isOpen = props.IsOpen,
 			OnClick = function()
 				props.SetIsOpen(false)
 				setRobuxPageOpened(false)
@@ -121,6 +123,7 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			TextXAlignment = Enum.TextXAlignment.Left,
 			BackgroundTransparency = 1,
 			StrokeThickness = 0,
+			isOpen = props.IsOpen,
 			CornerRadius = UDim.new(0.1, 0),
 			Font = Enum.Font.FredokaOne,
 			OnClick = function()
@@ -145,6 +148,7 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			StrokeThickness = 0,
 			CornerRadius = UDim.new(0.1, 0),
 			Font = Enum.Font.FredokaOne,
+			isOpen = props.IsOpen,
 			OnClick = function()
 				if chairPageOpened then
 					setChairPageOpened(false)
@@ -167,6 +171,7 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			StrokeThickness = 0,
 			CornerRadius = UDim.new(0.1, 0),
 			Font = Enum.Font.FredokaOne,
+			isOpen = props.IsOpen,
 			OnClick = function()
 				if bombPageOpened then
 					setBombPageOpened(false)
@@ -185,10 +190,21 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			Size = UDim2.fromScale(0.7, 0.4),
 			IsOpen = robuxPageOpened,
 		}),
-		ChairPage = ShopChairs({
+		ChairPage = ShopPackDisplayerUI({
 			Position = UDim2.fromScale(0.21, 0.25),
 			Size = UDim2.fromScale(0.7, 0.4),
 			IsOpen = chairPageOpened,
+			ConfirmationSetOpen = setConfirmationOpened,
+			PackType = PackType.ChairPack,
+			PackSetName = setPackName,
+			PackSetType = setCurrentPackType,
+			PackSetPrice = setPackPrice,
+		}),
+		BombPage = ShopPackDisplayerUI({
+			Position = UDim2.fromScale(0.21, 0.25),
+			Size = UDim2.fromScale(0.7, 0.4),
+			IsOpen = bombPageOpened,
+			PackType = PackType.BombPack,
 			ConfirmationSetOpen = setConfirmationOpened,
 			PackSetName = setPackName,
 			PackSetType = setCurrentPackType,

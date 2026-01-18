@@ -2,22 +2,22 @@
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
-	<Item class="Model" referent="RBX8DE05E858D414669A00EB2E1D2533FAD">
+	<Item class="Model" referent="RBXFBE9CACCF4DA478FBFC9AF9C818F2300">
 		<Properties>
 			<token name="LevelOfDetail">0</token>
 			<CoordinateFrame name="ModelMeshCFrame">
-				<X>38.1296768</X>
+				<X>58.9048767</X>
 				<Y>0</Y>
-				<Z>-274.180847</Z>
+				<Z>-277.966492</Z>
 				<R00>5.64212996e-08</R00>
 				<R01>0</R01>
 				<R02>0.998489857</R02>
 				<R10>0</R10>
 				<R11>1</R11>
 				<R12>0</R12>
-				<R20>-0.999658823</R20>
+				<R20>-0.99948734</R20>
 				<R21>0</R21>
-				<R22>-9.05462514e-08</R22>
+				<R22>-9.05306976e-08</R22>
 			</CoordinateFrame>
 			<SharedString name="ModelMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<Vector3 name="ModelMeshSize">
@@ -32,16 +32,16 @@
 			<SharedString name="SlimHash">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 			<OptionalCoordinateFrame name="WorldPivotData">
 				<CFrame>
-					<X>-106.899994</X>
+					<X>-86.124794</X>
 					<Y>2.10000014</Y>
-					<Z>-190.899994</Z>
+					<Z>-194.699982</Z>
 					<R00>0</R00>
 					<R01>0</R01>
 					<R02>1</R02>
 					<R10>0</R10>
 					<R11>1</R11>
 					<R12>0</R12>
-					<R20>-0.999999583</R20>
+					<R20>-0.999999046</R20>
 					<R21>0</R21>
 					<R22>0</R22>
 				</CFrame>
@@ -53,7 +53,7 @@
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags">QXNzaWduSWQAR2FtZVRhYmxl</BinaryString>
 		</Properties>
-		<Item class="Model" referent="RBX602B7E0A8B264079A9F57EB137981478">
+		<Item class="Model" referent="RBX5AB2AA3C487B4B1A8F0FA36174D88010">
 			<Properties>
 				<token name="LevelOfDetail">0</token>
 				<CoordinateFrame name="ModelMeshCFrame">
@@ -83,16 +83,16 @@
 				<SharedString name="SlimHash">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
 				<OptionalCoordinateFrame name="WorldPivotData">
 					<CFrame>
-						<X>-106.749992</X>
+						<X>-85.9747925</X>
 						<Y>1.5</Y>
-						<Z>-190.899994</Z>
+						<Z>-194.699982</Z>
 						<R00>0</R00>
 						<R01>0</R01>
 						<R02>0.999984503</R02>
 						<R10>0</R10>
 						<R11>1</R11>
 						<R12>0</R12>
-						<R20>-0.999996483</R20>
+						<R20>-0.99999404</R20>
 						<R21>0</R21>
 						<R22>0</R22>
 					</CFrame>
@@ -104,7 +104,7 @@
 				<int64 name="SourceAssetId">839550130</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="UnionOperation" referent="RBXCB6BCADDF8784287A6A357A77BCBCCA2">
+			<Item class="UnionOperation" referent="RBXEBA68B054D6E4AAC80BA8C4EFE15806D">
 				<Properties>
 					<Content name="AssetId"><null></null></Content>
 					<BinaryString name="ChildData"></BinaryString>
@@ -155,9 +155,9 @@
 					<token name="BottomSurface">0</token>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
-						<X>-108.749901</X>
+						<X>-87.9747009</X>
 						<Y>2.10000014</Y>
-						<Z>-188.299988</Z>
+						<Z>-192.099976</Z>
 						<R00>0.999996185</R00>
 						<R01>0</R01>
 						<R02>0</R02>
@@ -165,8 +165,8 @@
 						<R11>2.98023757e-08</R11>
 						<R12>1</R12>
 						<R20>0</R20>
-						<R21>-0.999998271</R21>
-						<R22>2.98023171e-08</R22>
+						<R21>-0.999995828</R21>
+						<R22>2.98022442e-08</R22>
 					</CoordinateFrame>
 					<bool name="CanCollide">true</bool>
 					<bool name="CanQuery">true</bool>
@@ -239,7 +239,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Part" referent="RBXFFF65CEA313B46C29C637479CD8C9E1E">
+			<Item class="Part" referent="RBXE12CBC91583943389F4138CAAE1BD218">
 				<Properties>
 					<token name="shape">1</token>
 					<token name="formFactorRaw">1</token>
@@ -254,16 +254,16 @@
 					<token name="BottomSurface">4</token>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
-						<X>-108.749977</X>
+						<X>-87.9747772</X>
 						<Y>1.4000001</Y>
-						<Z>-194.399994</Z>
+						<Z>-198.199982</Z>
 						<R00>0</R00>
 						<R01>0</R01>
 						<R02>0.999996185</R02>
 						<R10>0</R10>
 						<R11>1</R11>
 						<R12>0</R12>
-						<R20>-0.999998271</R20>
+						<R20>-0.999995828</R20>
 						<R21>0</R21>
 						<R22>0</R22>
 					</CoordinateFrame>
@@ -338,7 +338,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UnionOperation" referent="RBX417FF9C99B414B66B23DF4813FD9F9C7">
+			<Item class="UnionOperation" referent="RBXB924EB4C0BD14FBCB6756633E799526F">
 				<Properties>
 					<Content name="AssetId"><null></null></Content>
 					<BinaryString name="ChildData"></BinaryString>
@@ -389,9 +389,9 @@
 					<token name="BottomSurface">0</token>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
-						<X>-104.749916</X>
+						<X>-83.9747162</X>
 						<Y>2.10000014</Y>
-						<Z>-188.299988</Z>
+						<Z>-192.099976</Z>
 						<R00>0.999996185</R00>
 						<R01>0</R01>
 						<R02>0</R02>
@@ -399,8 +399,8 @@
 						<R11>2.98023757e-08</R11>
 						<R12>1</R12>
 						<R20>0</R20>
-						<R21>-0.999998271</R21>
-						<R22>2.98023171e-08</R22>
+						<R21>-0.999995828</R21>
+						<R22>2.98022442e-08</R22>
 					</CoordinateFrame>
 					<bool name="CanCollide">true</bool>
 					<bool name="CanQuery">true</bool>
@@ -473,7 +473,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Part" referent="RBX1387A11A5C7F4D69BE89F6C7F288EE43">
+			<Item class="Part" referent="RBX382C6E4A7E0B4AADAC6DA936C05CCA5B">
 				<Properties>
 					<token name="shape">1</token>
 					<token name="formFactorRaw">1</token>
@@ -488,16 +488,16 @@
 					<token name="BottomSurface">4</token>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
-						<X>-104.750038</X>
+						<X>-83.9748383</X>
 						<Y>1.4000001</Y>
-						<Z>-187.399994</Z>
+						<Z>-191.199982</Z>
 						<R00>0</R00>
 						<R01>0</R01>
 						<R02>0.999996185</R02>
 						<R10>0</R10>
 						<R11>1</R11>
 						<R12>0</R12>
-						<R20>-0.999998271</R20>
+						<R20>-0.999995828</R20>
 						<R21>0</R21>
 						<R22>0</R22>
 					</CoordinateFrame>
@@ -572,7 +572,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Part" referent="RBX82B0094DB8B54C1D8E54F761E601C7F7">
+			<Item class="Part" referent="RBX14D8454CCFD845D8893CEF0F0C06C90C">
 				<Properties>
 					<token name="shape">1</token>
 					<token name="formFactorRaw">1</token>
@@ -587,16 +587,16 @@
 					<token name="BottomSurface">4</token>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
-						<X>-104.750038</X>
+						<X>-83.9748383</X>
 						<Y>1.4000001</Y>
-						<Z>-194.399994</Z>
+						<Z>-198.199982</Z>
 						<R00>0</R00>
 						<R01>0</R01>
 						<R02>0.999996185</R02>
 						<R10>0</R10>
 						<R11>1</R11>
 						<R12>0</R12>
-						<R20>-0.999998271</R20>
+						<R20>-0.999995828</R20>
 						<R21>0</R21>
 						<R22>0</R22>
 					</CoordinateFrame>
@@ -671,7 +671,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UnionOperation" referent="RBX9F8C4C4FE5F14624ACCDAE62F858D181">
+			<Item class="UnionOperation" referent="RBXE189B3FEA42648F6AAE71D15A2EABF0C">
 				<Properties>
 					<Content name="AssetId"><null></null></Content>
 					<BinaryString name="ChildData"></BinaryString>
@@ -722,9 +722,9 @@
 					<token name="BottomSurface">0</token>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
-						<X>-108.749886</X>
+						<X>-87.9746857</X>
 						<Y>2.10000014</Y>
-						<Z>-193.499969</Z>
+						<Z>-197.299957</Z>
 						<R00>-0.999996185</R00>
 						<R01>0</R01>
 						<R02>0</R02>
@@ -732,7 +732,7 @@
 						<R11>0</R11>
 						<R12>1</R12>
 						<R20>0</R20>
-						<R21>0.999998271</R21>
+						<R21>0.999995828</R21>
 						<R22>0</R22>
 					</CoordinateFrame>
 					<bool name="CanCollide">true</bool>
@@ -806,7 +806,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Part" referent="RBX5314F566DFF1403F8CE931A9D48D2DE6">
+			<Item class="Part" referent="RBX8EC95D903E2C4ABBBDAC4F8B1DCCEAB5">
 				<Properties>
 					<token name="shape">1</token>
 					<token name="formFactorRaw">1</token>
@@ -821,16 +821,16 @@
 					<token name="BottomSurface">0</token>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
-						<X>-106.749992</X>
+						<X>-85.9747925</X>
 						<Y>2.9000001</Y>
-						<Z>-190.899994</Z>
+						<Z>-194.699982</Z>
 						<R00>0</R00>
 						<R01>0</R01>
 						<R02>0.999996185</R02>
 						<R10>0</R10>
 						<R11>1</R11>
 						<R12>0</R12>
-						<R20>-0.999998271</R20>
+						<R20>-0.999995828</R20>
 						<R21>0</R21>
 						<R22>0</R22>
 					</CoordinateFrame>
@@ -905,7 +905,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Part" referent="RBXEC09D2967E38432C942EE1901FFD012A">
+			<Item class="Part" referent="RBX0C61F16E4B0A4C05A5E5079A68A18DFA">
 				<Properties>
 					<token name="shape">1</token>
 					<token name="formFactorRaw">1</token>
@@ -920,16 +920,16 @@
 					<token name="BottomSurface">4</token>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
-						<X>-108.749977</X>
+						<X>-87.9747772</X>
 						<Y>1.4000001</Y>
-						<Z>-187.399994</Z>
+						<Z>-191.199982</Z>
 						<R00>0</R00>
 						<R01>0</R01>
 						<R02>0.999996185</R02>
 						<R10>0</R10>
 						<R11>1</R11>
 						<R12>0</R12>
-						<R20>-0.999998271</R20>
+						<R20>-0.999995828</R20>
 						<R21>0</R21>
 						<R22>0</R22>
 					</CoordinateFrame>
@@ -1004,7 +1004,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="UnionOperation" referent="RBX6F6AD645921144D19B2DE43E6F66A5E4">
+			<Item class="UnionOperation" referent="RBXB95C9023A8814BE1ABC1B74AF43FD128">
 				<Properties>
 					<Content name="AssetId"><null></null></Content>
 					<BinaryString name="ChildData"></BinaryString>
@@ -1055,9 +1055,9 @@
 					<token name="BottomSurface">0</token>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
-						<X>-104.749916</X>
+						<X>-83.9747162</X>
 						<Y>2.10000014</Y>
-						<Z>-193.499969</Z>
+						<Z>-197.299957</Z>
 						<R00>-0.999996185</R00>
 						<R01>0</R01>
 						<R02>0</R02>
@@ -1065,7 +1065,7 @@
 						<R11>0</R11>
 						<R12>1</R12>
 						<R20>0</R20>
-						<R21>0.999998271</R21>
+						<R21>0.999995828</R21>
 						<R22>0</R22>
 					</CoordinateFrame>
 					<bool name="CanCollide">true</bool>
@@ -1140,7 +1140,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="MeshPart" referent="RBX5B1AD9A709BF4CE383C384C96421A3F1">
+		<Item class="MeshPart" referent="RBXE33989D735814ECBB616C21166A8D7FA">
 			<Properties>
 				<bool name="DoubleSided">false</bool>
 				<bool name="HasJointOffset">false</bool>
@@ -1191,16 +1191,16 @@
 				<token name="BottomSurface">0</token>
 				<token name="BottomSurfaceInput">0</token>
 				<CoordinateFrame name="CFrame">
-					<X>-106.686806</X>
+					<X>-85.9116058</X>
 					<Y>3.53086138</Y>
-					<Z>-190.799194</Z>
+					<Z>-194.913467</Z>
 					<R00>0</R00>
 					<R01>0</R01>
-					<R02>0.999996185</R02>
+					<R02>1</R02>
 					<R10>0</R10>
 					<R11>1</R11>
-					<R12>0</R12>
-					<R20>-0.999998271</R20>
+					<R12>-0</R12>
+					<R20>-1</R20>
 					<R21>0</R21>
 					<R22>0</R22>
 				</CoordinateFrame>
@@ -1280,7 +1280,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="BillboardGui" referent="RBX0D6DF15924C34F3882EAB4AF5FBC3BEA">
+			<Item class="BillboardGui" referent="RBXF76DCE900F104021BCD99A174DD3D1D8">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Ref name="Adornee">null</Ref>
@@ -1339,7 +1339,7 @@
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="TextLabel" referent="RBX078BE6B3340E40F3BBD79B0D267EB1D7">
+				<Item class="TextLabel" referent="RBX0940C366B0E44D3CB822FA06FDEB0481">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/SourceSansPro.json</url></Family>
@@ -1435,7 +1435,7 @@
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="BillboardGui" referent="RBXD69E74087DBC4FC88348B0A18BBE6AE4">
+			<Item class="BillboardGui" referent="RBXDC4932637C544C3386A441AD1BEC7FFC">
 				<Properties>
 					<bool name="Active">false</bool>
 					<Ref name="Adornee">null</Ref>
@@ -1494,7 +1494,7 @@
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="TextLabel" referent="RBX223AE1E28AE74FCA863545A8032D062F">
+				<Item class="TextLabel" referent="RBX4AE446F362684E89A4698215A147DEF8">
 					<Properties>
 						<Font name="FontFace">
 							<Family><url>rbxasset://fonts/families/SourceSansPro.json</url></Family>
@@ -1590,7 +1590,7 @@
 					</Properties>
 				</Item>
 			</Item>
-			<Item class="AudioEmitter" referent="RBXBAB2C3D95D7649E5A24A7FA3C5BECF26">
+			<Item class="AudioEmitter" referent="RBX7EE726EDD4C54201AC9EDB48DB21D5CA">
 				<Properties>
 					<bool name="AcousticSimulationEnabled">true</bool>
 					<BinaryString name="AngleAttenuation">AA==</BinaryString>
@@ -1606,11 +1606,11 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="Wire" referent="RBX944FDBB6DA0843F59CB6B960B31A71CB">
+			<Item class="Wire" referent="RBX037FF526D9394A2CA3BF61DE7EB9BE28">
 				<Properties>
-					<Ref name="SourceInstance">RBXA54DC8EC53C44A8388C50FD3204939B3</Ref>
+					<Ref name="SourceInstance">RBX94E7E1F65B054DF187A1B98B039D3775</Ref>
 					<string name="SourceName">Output</string>
-					<Ref name="TargetInstance">RBXBAB2C3D95D7649E5A24A7FA3C5BECF26</Ref>
+					<Ref name="TargetInstance">RBX7EE726EDD4C54201AC9EDB48DB21D5CA</Ref>
 					<string name="TargetName">Input</string>
 					<BinaryString name="AttributesSerialize"></BinaryString>
 					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
@@ -1620,7 +1620,7 @@
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
 			</Item>
-			<Item class="AudioPlayer" referent="RBXA54DC8EC53C44A8388C50FD3204939B3">
+			<Item class="AudioPlayer" referent="RBX94E7E1F65B054DF187A1B98B039D3775">
 				<Properties>
 					<Content name="Asset"><url>rbxassetid://112335105705854</url></Content>
 					<bool name="AutoLoad">true</bool>
@@ -1641,7 +1641,7 @@
 				</Properties>
 			</Item>
 		</Item>
-		<Item class="MeshPart" referent="RBXA7F5DD6DC04C413686E8456507AA0889">
+		<Item class="MeshPart" referent="RBXF57EDA541B844C8CA78B6CDF8EB64289">
 			<Properties>
 				<bool name="DoubleSided">false</bool>
 				<bool name="HasJointOffset">false</bool>
@@ -1692,16 +1692,16 @@
 				<token name="BottomSurface">0</token>
 				<token name="BottomSurfaceInput">0</token>
 				<CoordinateFrame name="CFrame">
-					<X>-110.664871</X>
+					<X>-89.8896713</X>
 					<Y>2</Y>
-					<Z>-191.159012</Z>
+					<Z>-194.959</Z>
 					<R00>0</R00>
 					<R01>0</R01>
 					<R02>-1</R02>
 					<R10>0</R10>
 					<R11>1</R11>
 					<R12>0</R12>
-					<R20>1</R20>
+					<R20>0.999996722</R20>
 					<R21>0</R21>
 					<R22>0</R22>
 				</CoordinateFrame>
@@ -1775,7 +1775,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="Seat" referent="RBX4B417223B8C24FD9B66933AB4B551926">
+			<Item class="Seat" referent="RBX183C90B7290A4683B874835240DD4772">
 				<Properties>
 					<bool name="Disabled">true</bool>
 					<token name="shape">1</token>
@@ -1791,16 +1791,16 @@
 					<token name="BottomSurface">4</token>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
-						<X>-110.334457</X>
+						<X>-89.5592575</X>
 						<Y>2.00953889</Y>
-						<Z>-191.159012</Z>
+						<Z>-194.959</Z>
 						<R00>0</R00>
 						<R01>0</R01>
 						<R02>-1</R02>
 						<R10>0</R10>
 						<R11>1</R11>
 						<R12>0</R12>
-						<R20>1</R20>
+						<R20>0.999996722</R20>
 						<R21>0</R21>
 						<R22>0</R22>
 					</CoordinateFrame>
@@ -1874,7 +1874,7 @@
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="ProximityPrompt" referent="RBX0533CAC0898B43D696BF6379CF247D82">
+				<Item class="ProximityPrompt" referent="RBX01382F6A27A342B1A05174EF90D07733">
 					<Properties>
 						<string name="ActionText">Join</string>
 						<bool name="AutoLocalize">true</bool>
@@ -1904,7 +1904,7 @@
 				</Item>
 			</Item>
 		</Item>
-		<Item class="MeshPart" referent="RBXF774260E1BE94F5AAC2413DDB20574B7">
+		<Item class="MeshPart" referent="RBX60CB5401059B4033A83F4355D6BFEC1B">
 			<Properties>
 				<bool name="DoubleSided">false</bool>
 				<bool name="HasJointOffset">false</bool>
@@ -1955,16 +1955,16 @@
 				<token name="BottomSurface">0</token>
 				<token name="BottomSurfaceInput">0</token>
 				<CoordinateFrame name="CFrame">
-					<X>-102.664871</X>
+					<X>-81.8896713</X>
 					<Y>2</Y>
-					<Z>-191.159012</Z>
+					<Z>-194.959</Z>
 					<R00>0</R00>
 					<R01>0</R01>
 					<R02>1</R02>
 					<R10>0</R10>
 					<R11>1</R11>
 					<R12>0</R12>
-					<R20>-1</R20>
+					<R20>-0.999996722</R20>
 					<R21>0</R21>
 					<R22>0</R22>
 				</CoordinateFrame>
@@ -2038,7 +2038,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="Seat" referent="RBX6FF2BB215FA84020A71710FD43805565">
+			<Item class="Seat" referent="RBXD6F06A29603245D9A1F92E277FD74321">
 				<Properties>
 					<bool name="Disabled">true</bool>
 					<token name="shape">1</token>
@@ -2054,18 +2054,18 @@
 					<token name="BottomSurface">4</token>
 					<token name="BottomSurfaceInput">0</token>
 					<CoordinateFrame name="CFrame">
-						<X>-102.995316</X>
+						<X>-82.2201157</X>
 						<Y>2.00953865</Y>
-						<Z>-191.158936</Z>
+						<Z>-194.958923</Z>
 						<R00>-4.47034836e-08</R00>
 						<R01>0</R01>
 						<R02>0.999999583</R02>
 						<R10>0</R10>
 						<R11>0.999999762</R11>
 						<R12>0</R12>
-						<R20>-0.999999583</R20>
+						<R20>-0.999996305</R20>
 						<R21>0</R21>
-						<R22>-4.47034836e-08</R22>
+						<R22>-4.47033379e-08</R22>
 					</CoordinateFrame>
 					<bool name="CanCollide">true</bool>
 					<bool name="CanQuery">true</bool>
@@ -2137,7 +2137,7 @@
 					<int64 name="SourceAssetId">-1</int64>
 					<BinaryString name="Tags"></BinaryString>
 				</Properties>
-				<Item class="ProximityPrompt" referent="RBXA6DD296D14DB4788AAA44AABC7812870">
+				<Item class="ProximityPrompt" referent="RBX86A488911C004DA6BA32BB474E8B6DCB">
 					<Properties>
 						<string name="ActionText">Join</string>
 						<bool name="AutoLocalize">true</bool>

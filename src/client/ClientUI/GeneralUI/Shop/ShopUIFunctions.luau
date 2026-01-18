@@ -1,17 +1,22 @@
-local RunService = game:GetService("RunService")
 local StarterPlayer = game:GetService("StarterPlayer")
+local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local CommonUIFunctions =
+	require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.GeneralUI.CommonUIFunctions.CommonUIFunctions)
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local RarityColor = require(ReplicatedStorage.Config.RarityColor)
 local ChairPacksData = require(ReplicatedStorage.Config.ChairPacksData)
+local BombPacksData = require(ReplicatedStorage.Config.BombPacksData)
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local Networker = require(ReplicatedStorage.Packages.Networker).client
 local ShopUIFunctions = {}
+
 ShopUIFunctions.networker = Networker.new("InGamePurchaseRemotes", ShopUIFunctions)
 ShopUIFunctions.janitor = Janitor.new()
+local spinTweenInfo = TweenInfo.new(4, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1)
 
 function ShopUIFunctions.AttemptPurchase(packType: number, packName: string)
 	local result = ShopUIFunctions.networker:fetch("AttemptBuy", packType, packName)
@@ -27,10 +32,20 @@ local function SetViewportRarityColor(viewportFrame: ViewportFrame, packType: st
 
 	if packType == "Chairs" then
 		rarityOfItem = ChairPacksData[packName].ItemList[name]
-		viewportFrame.BackgroundColor3 = RarityColor[rarityOfItem]
 	elseif packType == "Bombs" then
-		--TODO
+		rarityOfItem = BombPacksData[packName].ItemList[name]
 	end
+	viewportFrame.BackgroundColor3 = RarityColor[rarityOfItem]
+end
+
+local function GetItemListOf(packType: string, packName: string)
+	if packType == "Chairs" then
+		return ChairPacksData[packName].ItemList
+	elseif packType == "Bombs" then
+		return BombPacksData[packName].ItemList
+	end
+
+	error(`Pack type of {packType} doesn't exist!`)
 end
 
 local function CreateViewportFrame(packType: string, packName: string, mesh: MeshPart)
@@ -43,32 +58,30 @@ local function CreateViewportFrame(packType: string, packName: string, mesh: Mes
 	aspectRatio.AspectType = Enum.AspectType.ScaleWithParentSize
 	aspectRatio.DominantAxis = Enum.DominantAxis.Height
 
+	-- setup the viewport to have camera and object
+	-- and position camera to look at object at a suitable distance
 	corner.CornerRadius = UDim.new(0.5, 0)
 	corner.Parent = viewportFrame
 	cam.Parent = viewportFrame
 	local obj = mesh:Clone()
 	obj.Parent = viewportFrame
 	viewportFrame.CurrentCamera = cam
-
-	obj.CFrame = CFrame.new(0, 0, -5)
-	cam.CFrame = CFrame.new(Vector3.zero)
+	CommonUIFunctions.CameraLookAtObject(cam, mesh)
 	viewportFrame.Size = UDim2.fromScale(1, 0.9)
 
-	local packTable = ChairPacksData[packName].ItemList
+	local packTable = GetItemListOf(packType, packName)
 	local itemRarity = packTable[obj.Name]
-	print(obj.Name)
-	print(itemRarity)
 
-	viewportFrame.Name = `{itemRarity - 100}`
+	-- order from common -> rare
+	viewportFrame.LayoutOrder = -itemRarity
+	viewportFrame.Name = obj.Name
 
 	SetViewportRarityColor(viewportFrame, packType, packName, mesh.Name)
 
 	-- spin
-	local conn = RunService.RenderStepped:Connect(function()
-		obj.CFrame *= CFrame.Angles(0, math.rad(1), 0)
-	end)
+	TweenService:Create(obj, spinTweenInfo, { Orientation = obj.Orientation + Vector3.new(0, 360, 0) }):Play()
 
-	-- random color/material display
+	-- random color/material display for chairs only
 	task.spawn(function()
 		while alive do
 			task.wait(1)
@@ -80,7 +93,6 @@ local function CreateViewportFrame(packType: string, packName: string, mesh: Mes
 	viewportFrame.Destroying:Connect(function()
 		print("destroyed!")
 		alive = false
-		conn:Disconnect()
 	end)
 
 	ShopUIFunctions.janitor:Add(viewportFrame)
@@ -90,7 +102,7 @@ end
 
 function ShopUIFunctions:RemoveOldViewports()
 	self.janitor:Cleanup()
-	print("should cleanup")
+	print("should cleanup viewport connections")
 end
 
 function ShopUIFunctions.SpawnLootTable(packType: number, packName: string)

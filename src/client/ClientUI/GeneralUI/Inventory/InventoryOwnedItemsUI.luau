@@ -37,7 +37,7 @@ local function InventoryOwnedItemsUI(props: InventoryOwnedItemsUIProps)
 		}),
 
 		UIGrid = e("UIGridLayout", {
-			SortOrder = Enum.SortOrder.Name,
+			SortOrder = Enum.SortOrder.LayoutOrder,
 			CellPadding = UDim2.fromScale(0.1, 0.1),
 			CellSize = UDim2.fromScale(0.4, 0.4),
 		}),

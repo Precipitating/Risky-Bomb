@@ -41,6 +41,7 @@ local function LootTableUI(props: LootTableUIProps)
 			HorizontalAlignment = Enum.HorizontalAlignment.Left,
 			FillDirection = Enum.FillDirection.Horizontal,
 			VerticalAlignment = Enum.VerticalAlignment.Center,
+			SortOrder = Enum.SortOrder.LayoutOrder,
 			ItemLineAlignment = Enum.ItemLineAlignment.Center,
 		}),
 	})

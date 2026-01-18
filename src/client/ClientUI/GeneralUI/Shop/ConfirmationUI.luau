@@ -77,6 +77,7 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 			AnchorPoint = Vector2.new(0, 0.5),
 			BackgroundColor = Color3.fromRGB(1, 255, 1),
 			Text = "Yes",
+			isOpen = props.IsOpen,
 			TextColor = Color3.fromRGB(255, 255, 255),
 			StrokeThickness = 0.1,
 			AspectRatio = 2,
@@ -104,6 +105,7 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 			Font = Enum.Font.FredokaOne,
 			TextScaled = true,
 			TextColor3 = Color3.fromRGB(255, 255, 255),
+			isOpen = props.IsOpen,
 			OnClick = function()
 				props.SetIsOpen(false)
 				props.SetLootTableOpen(false)
@@ -122,6 +124,7 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 			Font = Enum.Font.FredokaOne,
 			TextScaled = true,
 			TextColor3 = Color3.fromRGB(255, 255, 255),
+			isOpen = props.IsOpen,
 			OnClick = function()
 				local newState = not props.LootTableOpen
 				props.SetLootTableOpen(newState)

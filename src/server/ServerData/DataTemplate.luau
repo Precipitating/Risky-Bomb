@@ -1,5 +1,12 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Rarity = require(ReplicatedStorage.Shared.Config.Rarity)
+
+export type ItemData = {
+	Name: string,
+	RarityChance: number,
+	Material: Enum.Material,
+	Color: BrickColor,
+}
 return {
 	firstJoin = true,
 	currency = 999999,
@@ -13,16 +20,23 @@ return {
 		},
 	},
 	bombsOwned = {
-		Name = "Default",
-		RarityChance = Rarity.Common,
-		Material = Enum.Material.Plastic,
-		Color = BrickColor.Black(),
+		[1] = {
+			Name = "Default",
+			RarityChance = Rarity.Common,
+			Material = Enum.Material.SmoothPlastic,
+			Color = BrickColor.Black(),
+		},
 	},
 	chairEquipped = {
 		Name = "Default",
 		RarityChance = Rarity.Common,
-		Material = Enum.Material.Plastic,
+		Material = Enum.Material.SmoothPlastic,
 		Color = BrickColor.White(),
 	},
-	bombEquipped = { Name = "Default", Material = Enum.Material.Plastic, Color = BrickColor.White() },
+	bombEquipped = {
+		Name = "Default",
+		RarityChance = Rarity.Common,
+		Material = Enum.Material.SmoothPlastic,
+		Color = BrickColor.Black(),
+	},
 }

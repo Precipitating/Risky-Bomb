@@ -1,7 +1,7 @@
 local Rarity = require(script.Parent.Rarity)
 return {
 	NineToFivePack = {
-		Cost = 1000,
+		Cost = 1500,
 		ItemList = {
 			FoldingChair = Rarity.Common,
 			PlasticStool = Rarity.Common,
