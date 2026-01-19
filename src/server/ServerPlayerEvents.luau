@@ -1,10 +1,11 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService").Server
 local BombGameStorage = require(ServerScriptService.BombGame.BombGameStorage)
+local LeaderboardHandler = require(ServerScriptService.Leaderboards.LeaderboardHandler)
 local PlayerEvents = {}
 
 function PlayerEvents.Handle()
 	game.Players.PlayerAdded:Connect(function(player)
+		LeaderboardHandler:Initialize()
 		player.CharacterAdded:Connect(function(character)
 			character.Humanoid.Died:Connect(function()
 				-- if died on table, unassign

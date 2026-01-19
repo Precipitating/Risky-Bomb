@@ -5,6 +5,7 @@ local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local ClientRemotesHandler = require(script.ClientRemotes.ClientRemotesHandler)
 local MountUI = require(script.ClientUI.MountUI)
 local ProximityPromptHandler = require(script.Prompts.ProximityPromptHandler)
+local SurfaceGUIHandler = require(script.SurfaceGUIs.SurfaceGUIHandler)
 
 local function DisableRespawn()
 	repeat
@@ -21,6 +22,8 @@ local function ClientInit()
 	ProximityPromptHandler.ClientProximityPrompts()
 	ClientRemotesHandler.Handle()
 	SoundManager.Initialize()
+	SurfaceGUIHandler:Initialize()
+
 	MountUI()
 end
 
