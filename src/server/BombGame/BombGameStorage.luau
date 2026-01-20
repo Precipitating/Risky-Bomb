@@ -1,13 +1,10 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local ServerScriptService = game:GetService("ServerScriptService").Server
-local Networker = require(ReplicatedStorage.Packages.Networker).server
+local GUIRemotes = require(ServerScriptService.ServerRemotesLogic.GUIRemotes)
 local ServerSignals = require(ServerScriptService.ServerSignals.Signals)
-
 local BombGameStorage = {}
 
 local PlayersPlayingList = {}
 local GameTablesList = {}
-BombGameStorage.networker = Networker.new("GUIRemotes", BombGameStorage, {})
 
 function BombGameStorage.GetPlayerList()
 	return PlayersPlayingList
@@ -50,7 +47,7 @@ function BombGameStorage.ClearTable(tableID: string)
 		local playerModel = player.Character
 		if playerInTable then
 			playerModel:SetAttribute("AssignedTable", nil)
-			BombGameStorage.networker:fire(player, "BombGUIDisconnect")
+			GUIRemotes.networker:fire(player, "BombGUIDisconnect")
 			playerInTable = nil
 			ServerSignals.PlayerRemovedFromTable:Fire(tableID, player)
 			print(`(ClearTable) Unassigned player from table {tableID}, {PlayersPlayingList[tableID]} `)
@@ -75,7 +72,7 @@ function BombGameStorage.UnAssignSinglePlayerFromTable(tableID: string, player: 
 	local playerModel = player.Character
 	if playerInTable then
 		playerModel:SetAttribute("AssignedTable", nil)
-		BombGameStorage.networker:fire(player, "BombGUIDisconnect")
+		GUIRemotes.networker:fire(player, "BombGUIDisconnect")
 		playerInTable = nil
 		ServerSignals.PlayerRemovedFromTable:Fire(tableID, player)
 		print(`(Unassigned player from table {tableID}, {PlayersPlayingList} `)

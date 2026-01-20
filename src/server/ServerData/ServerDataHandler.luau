@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local Rarity = require(ReplicatedStorage.Config.Rarity)
 local DataTemplate = require(script.Parent.DataTemplate)
+local OrderedDataStores = require(script.Parent.OrderedDataStores)
 local DataService = require(ReplicatedStorage.Packages.DataService).server
 local ServerDataHandler = {}
 
@@ -37,6 +38,12 @@ function DataService:onPlayerInit(player: Player, data): ()
 
 		data.sessionJoinTime = os.time()
 	end
+
+	-- update cash store to update leaderboard
+	DataService:getChangedSignal(player, { "currency" }):Connect(function(newValue)
+		print("cash updated on server!")
+		OrderedDataStores.InGameMoneyBoard:SetAsync(player.UserId, newValue)
+	end)
 end
 
 function ServerDataHandler.Initialize()

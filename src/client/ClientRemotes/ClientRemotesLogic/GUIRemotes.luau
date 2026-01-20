@@ -1,6 +1,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local BombGameCharms = require(ReplicatedStorage.Charms.BombGameCharms)
 local BombConfig = require(ReplicatedStorage.Config.BombSharedConfig)
+local UICharms = require(ReplicatedStorage.Charms.UICharms)
 local Networker = require(ReplicatedStorage.Packages.Networker).client
 
 local Remotes = ReplicatedStorage.Remotes
@@ -52,6 +53,17 @@ end
 
 function GUIRemotes:UpdateCountdownBar(timeLeft: number)
 	BombGameCharms.BombInputTimeLeft(timeLeft)
+end
+
+-- content accessible via Data.Message due to global messaging
+function GUIRemotes:UpdateDonationText(receiveTable)
+	UICharms.CurrentDonationText(receiveTable.Data.Message)
+end
+
+function GUIRemotes:SetLastDonationMessage()
+	local msg = self.networker:fetch("GetLastDonationMessage")
+	print(msg)
+	UICharms.CurrentDonationText(msg)
 end
 
 local function GetBombGUIInput()

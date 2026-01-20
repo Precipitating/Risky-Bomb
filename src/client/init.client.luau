@@ -3,6 +3,7 @@ local StarterGui = game:GetService("StarterGui")
 local ClientDataHandler = require(script.ClientData.ClientDataHandler)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local ClientRemotesHandler = require(script.ClientRemotes.ClientRemotesHandler)
+local GUIRemotes = require(script.ClientRemotes.ClientRemotesLogic.GUIRemotes)
 local MountUI = require(script.ClientUI.MountUI)
 local ProximityPromptHandler = require(script.Prompts.ProximityPromptHandler)
 local SurfaceGUIHandler = require(script.SurfaceGUIs.SurfaceGUIHandler)
@@ -23,8 +24,8 @@ local function ClientInit()
 	ClientRemotesHandler.Handle()
 	SoundManager.Initialize()
 	SurfaceGUIHandler:Initialize()
-
 	MountUI()
+	GUIRemotes:SetLastDonationMessage()
 end
 
 ClientInit()

@@ -2,6 +2,9 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local ServerScriptService = game:GetService("ServerScriptService").Server
 local ServerStorage = game:GetService("ServerStorage")
 local InventoryEvents = require(ServerScriptService.Inventory.InventoryEvents)
+local LeaderboardHandler = require(ServerScriptService.Leaderboards.LeaderboardHandler)
+local GUIRemotes = require(ServerScriptService.ServerRemotesLogic.GUIRemotes)
+local OrderedDataStores = require(ServerScriptService.ServerData.OrderedDataStores)
 local SoundToClient = require(ServerScriptService.ServerRemotesLogic.SoundToClient)
 local BombConfig = require(ReplicatedStorage.Config.BombSharedConfig)
 local DataService = require(ReplicatedStorage.Packages.DataService).server
@@ -14,7 +17,10 @@ local BombServerConfig = require(script.Parent.BombServerConfig)
 local Remotes = ReplicatedStorage.Remotes
 local GameTablesList = BombGameStorage.GetGameTablesList()
 local PlayersPlayingList = BombGameStorage.GetPlayerList()
-local GUINetwork = BombGameStorage:GetNetworker()
+local GUINetwork = GUIRemotes.networker
+
+local WIN_REWARD = 100
+local LOSE_REWARD = 50
 
 local GameModule = {}
 
@@ -76,8 +82,9 @@ local function HandleLoser(loser)
 	end
 	SoundToClient:PlaySoundOnClient(loser, SoundManager.GameSounds.Lose, nil, false, nil)
 	DataService:update(loser, { "currency" }, function(currentCash)
-		return currentCash + 10
+		return currentCash + LOSE_REWARD
 	end)
+
 	local humanoid = loser.Character.Humanoid
 	humanoid.Health = 0
 end
@@ -89,8 +96,10 @@ local function HandleWinner(winner: Player)
 	SoundToClient:PlaySoundOnClient(winner, SoundManager.GameSounds.Win, nil, false, nil)
 	-- update to store
 	DataService:update(winner, { "currency" }, function(currentCash)
-		return currentCash + 100
+		return currentCash + WIN_REWARD
 	end)
+
+	LeaderboardHandler.AddValueToDataStore(OrderedDataStores.WinStore, winner, 1)
 
 	print(`Winner: {winner.DisplayName}`)
 end

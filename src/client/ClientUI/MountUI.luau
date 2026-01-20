@@ -3,6 +3,7 @@ local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local BombInputScreenGUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.BombInputUI.BombInputScreenGUI)
 local GeneralScreenGUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.GeneralUI.GeneralScreenGUI)
+local MessageBarUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.GlobalMessageBar.MessageBarUI)
 local JumpscareScreenGUI = require(script.Parent.JumpscareGUI.JumpscareScreenGUI)
 
 local React = require(ReplicatedStorage.Packages.React)
@@ -27,4 +28,5 @@ return function()
 	CreateScreenGUI("JumpscareGUI", JumpscareScreenGUI)
 	CreateScreenGUI("BombInputGUI", BombInputScreenGUI)
 	CreateScreenGUI("GeneralGUI", GeneralScreenGUI)
+	CreateScreenGUI("GlobalMessageBar", MessageBarUI)
 end

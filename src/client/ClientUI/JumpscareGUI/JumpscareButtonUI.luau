@@ -11,7 +11,7 @@ type JumpscareButtonUIProps = {
 }
 local function JumpscareButtonUI(props: JumpscareButtonUIProps)
 	return e("TextButton", {
-		Position = UDim2.fromScale(0.985, 0.03),
+		Position = UDim2.fromScale(0.985, 0.04),
 		Size = UDim2.fromScale(0.15, 0.03),
 		AnchorPoint = Vector2.new(1, 0.5),
 		BackgroundColor3 = props.BackgroundColor,
