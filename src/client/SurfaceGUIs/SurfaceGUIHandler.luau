@@ -30,8 +30,22 @@ function SurfaceGUIHandler.ConnectDonationButtons()
 	end
 end
 
+function SurfaceGUIHandler.ConnectVIPButtons()
+	local button = UtilityModule.Get(workspace, "Leaderboards", "VIPBoard", "SurfaceGui", "BGFrame", "BuyButton")
+
+	if not button then
+		warn("Can't find VIP buy button!")
+		return
+	end
+
+	button.Activated:Connect(function()
+		MarketplaceService:PromptGamePassPurchase(PlayerContext.Player, 1680854313)
+	end)
+end
+
 function SurfaceGUIHandler:Initialize()
 	SurfaceGUIHandler.ConnectDonationButtons()
+	SurfaceGUIHandler.ConnectVIPButtons()
 end
 
 return SurfaceGUIHandler

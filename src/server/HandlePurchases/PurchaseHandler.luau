@@ -4,6 +4,7 @@ local Players = game:GetService("Players")
 local ServerScriptService = game:GetService("ServerScriptService").Server
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local DataService = require(ReplicatedStorage.Packages.DataService).server
+local VIPHandler = require(ReplicatedStorage.VIP.VIPHandler)
 local LeaderboardHandler = require(ServerScriptService.Leaderboards.LeaderboardHandler)
 local OrderedDataStores = require(ServerScriptService.ServerData.OrderedDataStores)
 local JumpscareHandler = require(script.Parent.JumpscareHandler)
@@ -111,4 +112,15 @@ MarketplaceService.PromptProductPurchaseFinished:Connect(function(userId, produc
 		JumpscareHandler.JumpscarePurchaseFailed(Players:GetPlayerByUserId(userId), productId)
 	end
 end)
+
+MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, id, purchaseSuccessful)
+	if purchaseSuccessful then
+		if id == 1680854313 then
+			warn(`{player.UserId} has bought VIP ingame!`)
+			VIPHandler.AwardVIPRewards(player)
+			VIPHandler.SetVIPGUI(player)
+		end
+	end
+end)
+
 return PurchaseHandler

@@ -7,6 +7,7 @@ local GUIRemotes = require(ServerScriptService.ServerRemotesLogic.GUIRemotes)
 local OrderedDataStores = require(ServerScriptService.ServerData.OrderedDataStores)
 local SoundToClient = require(ServerScriptService.ServerRemotesLogic.SoundToClient)
 local BombConfig = require(ReplicatedStorage.Config.BombSharedConfig)
+local VIPHandler = require(ReplicatedStorage.VIP.VIPHandler)
 local DataService = require(ReplicatedStorage.Packages.DataService).server
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local Networker = require(ReplicatedStorage.Packages.Networker).server
@@ -80,27 +81,28 @@ local function HandleLoser(loser)
 	if not loser then
 		print("Loser player ref is nil!")
 	end
-	SoundToClient:PlaySoundOnClient(loser, SoundManager.GameSounds.Lose, nil, false, nil)
+
 	DataService:update(loser, { "currency" }, function(currentCash)
-		return currentCash + LOSE_REWARD
+		return currentCash + VIPHandler.DoubleRewardsIfVIP(loser, LOSE_REWARD)
 	end)
 
 	local humanoid = loser.Character.Humanoid
 	humanoid.Health = 0
+	SoundToClient:PlaySoundOnClient(loser, SoundManager.GameSounds.Lose, nil, false, nil)
 end
 
 local function HandleWinner(winner: Player)
 	if not winner then
 		print("Winner player ref is nil!")
 	end
-	SoundToClient:PlaySoundOnClient(winner, SoundManager.GameSounds.Win, nil, false, nil)
+
 	-- update to store
 	DataService:update(winner, { "currency" }, function(currentCash)
-		return currentCash + WIN_REWARD
+		return currentCash + VIPHandler.DoubleRewardsIfVIP(winner, WIN_REWARD)
 	end)
-
 	LeaderboardHandler.AddValueToDataStore(OrderedDataStores.WinStore, winner, 1)
 
+	SoundToClient:PlaySoundOnClient(winner, SoundManager.GameSounds.Win, nil, false, nil)
 	print(`Winner: {winner.DisplayName}`)
 end
 

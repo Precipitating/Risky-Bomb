@@ -5,7 +5,6 @@ local DonationStore = DataStoreService:GetDataStore("CurrentDonationStore")
 local GUIRemotes = {}
 
 function GUIRemotes.GetLastDonationMessage()
-	print("OI")
 	local msg = ""
 	local success, err = pcall(function()
 		msg = DonationStore:GetAsync("Message")

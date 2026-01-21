@@ -12,6 +12,8 @@ return {
 	firstJoin = true,
 	currency = 0,
 	sessionJoinTime = 0,
+	VIP = false,
+	VIPItemsAwarded = false,
 
 	chairsOwned = {
 		[1] = {

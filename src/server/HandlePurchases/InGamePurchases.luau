@@ -2,6 +2,7 @@ local PolicyService = game:GetService("PolicyService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local ChairPacksData = require(ReplicatedStorage.Config.ChairPacksData)
 local BombPacksData = require(ReplicatedStorage.Config.BombPacksData)
+local VIPHandler = require(ReplicatedStorage.VIP.VIPHandler)
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local DataService = require(ReplicatedStorage.Packages.DataService).server
@@ -87,7 +88,15 @@ local function BuyAndRoll(dataTable, objectOwnedKey: string, player: Player, pla
 		warn(`{packName} doesn't exist in table`)
 		return false
 	end
-	local packCost = dataTable[packName].Cost
+
+	local packCost = nil
+
+	-- 20% off if VIP
+	if VIPHandler.IsVIP(player) then
+		packCost = dataTable[packName].Cost - (dataTable[packName].Cost * 0.2)
+	else
+		packCost = dataTable[packName].Cost
+	end
 
 	if packCost > playerCash then
 		warn(`{player.Name} can't afford pack!`)

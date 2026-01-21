@@ -1,7 +1,4 @@
 local AssetService = game:GetService("AssetService")
-local ContentProvider = game:GetService("ContentProvider")
-local ServerScriptService = game:GetService("ServerScriptService")
-local DataTemplate = require(ServerScriptService.Server.ServerData.DataTemplate)
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local DataService = require(ReplicatedStorage.Packages.DataService).server
 local Networker = require(ReplicatedStorage.Packages.Networker).server
@@ -21,6 +18,10 @@ function InventoryEvents.ResetSkin(type: string, object: MeshPart)
 	object.Size = skinModel.Size
 	object.CFrame *= object.PivotOffset:Inverse()
 	object.PivotOffset = CFrame.identity
+	local hasParticle = object:FindFirstChildOfClass("ParticleEmitter")
+	if hasParticle then
+		hasParticle:Destroy()
+	end
 	newMesh:Destroy()
 end
 
@@ -34,7 +35,7 @@ local function GetEquippedObjectName(player: Player, equipKey: string)
 	return objectEquipped
 end
 
--- playerOrEquippedName = if player then get the equipped object manually, if string then its already done, so skip ahead
+-- playerOrTable = if player then get the equipped object manually, if string then its already done, so skip ahead
 function InventoryEvents.SetEquippedSkin(equipKey: string, objectType: string, playerOrTable, object: MeshPart)
 	local objectEquipped = nil
 	if typeof(playerOrTable) == "table" then
@@ -52,6 +53,12 @@ function InventoryEvents.SetEquippedSkin(equipKey: string, objectType: string, p
 		warn(`Can't find MeshPart {objectEquipped.Name}`)
 		return
 	end
+
+	local hasParticle = skinMesh:FindFirstChildOfClass("ParticleEmitter")
+	if hasParticle then
+		hasParticle.Parent = object
+	end
+
 	object.PivotOffset = skinMesh.PivotOffset
 	skinMesh:PivotTo(object:GetPivot())
 	object.CFrame *= skinMesh.PivotOffset
@@ -62,12 +69,12 @@ function InventoryEvents.SetEquippedSkin(equipKey: string, objectType: string, p
 		object.TextureID = skinMesh.TextureID
 	end
 
-	-- update mesh's info to match equipped chair
+	-- update mesh's info to match equipped object
 	object.BrickColor = BrickColor.new(objectEquipped.Color)
 	object.Size = skinMesh.Size
 	object.Material = Enum.Material[objectEquipped.Material] :: Enum.Material
 
-	-- set the new skin's seat position - it may be different
+	-- set the new skin's object position - it may be different
 	if equipKey == "chairEquipped" then
 		local chairSeat = object:FindFirstChildOfClass("Seat")
 		local skinMeshSeat = skinMesh:FindFirstChildOfClass("Seat")

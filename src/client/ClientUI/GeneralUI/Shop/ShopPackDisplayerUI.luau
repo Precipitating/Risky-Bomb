@@ -1,9 +1,11 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local ModularImageButtonUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularImageButtonUI)
+local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local React = require(ReplicatedStorage.Packages.React)
 local BombPacksData = require(ReplicatedStorage.Config.BombPacksData)
 local ChairPacksData = require(ReplicatedStorage.Config.ChairPacksData)
+local VIPHandler = require(ReplicatedStorage.VIP.VIPHandler)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local e = React.createElement
 
@@ -32,15 +34,25 @@ local function _95PackImageID(props: ShopPackDisplayerUIProps)
 end
 
 local function GetPriceOfPack(packType: number, packName: string)
+	local isVIP = VIPHandler.IsVIP(PlayerContext.Player)
 	local result = "???"
 	if packType == PackType.BombPack then
-		result = tostring(BombPacksData[packName].Cost)
+		if isVIP then
+			result = tostring(BombPacksData[packName].Cost - (BombPacksData[packName].Cost * 0.2))
+		else
+			result = tostring(BombPacksData[packName].Cost)
+		end
 	elseif packType == PackType.ChairPack then
-		result = tostring(ChairPacksData[packName].Cost)
+		if isVIP then
+			result = tostring(ChairPacksData[packName].Cost - (ChairPacksData[packName].Cost * 0.2))
+		else
+			result = tostring(ChairPacksData[packName].Cost)
+		end
 	end
 
 	return result
 end
+
 local function ShopPackDisplayerUI(props: ShopPackDisplayerUIProps)
 	if not props.IsOpen then
 		return nil

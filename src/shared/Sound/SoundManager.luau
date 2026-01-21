@@ -32,7 +32,7 @@ local SoundManager = {
 	},
 	GameSounds = {
 		Win = "rbxassetid://12222253",
-		Lose = "rbxassetid://190705984",
+		Lose = "rbxassetid://91020679481479",
 	},
 }
 

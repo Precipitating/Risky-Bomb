@@ -45,10 +45,10 @@ function LeaderboardHandler:PopulateLeaderboard(leaderboardKey: string, ascendin
 			local success, pages = pcall(function()
 				return leaderboard:GetSortedAsync(ascending, playersPerPage)
 			end)
-			print(pages:GetCurrentPage())
 			if success then
 				local entries = pages:GetCurrentPage()
 				for rank, entry in pairs(entries) do
+					--leaderboard:RemoveAsync(entry.key)
 					local leaderboardElement = LeaderboardTemplate:Clone()
 					local playerName = Players:GetNameFromUserIdAsync(tonumber(entry.key))
 					local playerValue = entry.value
