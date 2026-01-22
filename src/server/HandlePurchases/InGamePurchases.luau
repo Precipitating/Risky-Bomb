@@ -32,16 +32,28 @@ local function IsAlreadyOwned(
 	dataKey: string
 )
 	local inventory = DataService:get(player, { dataKey })
+
 	for _, ownedItemName in ipairs(inventory) do
 		if
 			ownedItemName.Name == itemWon
-			and ownedItemName.Material == materialRolled
-			and ownedItemName.Color == colorRolled
+			and ownedItemName.Material == materialRolled.Name
+			and ownedItemName.Color == colorRolled.Name
 		then
 			return true
 		end
 	end
 	return false
+end
+
+-- "SA" means it has a surface appearance, so no material will change the look which makes it redundant
+local function RollMaterial(itemName: string)
+	local material = nil
+	if string.find(itemName, "SA", 1, true) then
+		material = "None"
+	else
+		material = UtilityModule.GetRandomMaterial()
+	end
+	return material
 end
 function Roll(player: Player, dataKey: string, crateData)
 	if not crateData then
@@ -60,7 +72,7 @@ function Roll(player: Player, dataKey: string, crateData)
 	for name, itemChance in pairs(crateData.ItemList) do
 		cumulative += itemChance
 		if roll <= cumulative then
-			local material = UtilityModule.GetRandomMaterial()
+			local material = RollMaterial(name)
 			local color = BrickColor.random()
 
 			if not IsAlreadyOwned(name, material, color, player, dataKey) then

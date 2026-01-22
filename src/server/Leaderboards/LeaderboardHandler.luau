@@ -49,8 +49,12 @@ function LeaderboardHandler:PopulateLeaderboard(leaderboardKey: string, ascendin
 				local entries = pages:GetCurrentPage()
 				for rank, entry in pairs(entries) do
 					--leaderboard:RemoveAsync(entry.key)
+					local userId = tonumber(entry.key)
+					if userId <= 0 then
+						continue
+					end
 					local leaderboardElement = LeaderboardTemplate:Clone()
-					local playerName = Players:GetNameFromUserIdAsync(tonumber(entry.key))
+					local playerName = Players:GetNameFromUserIdAsync(userId)
 					local playerValue = entry.value
 
 					local nameLabel = leaderboardElement:FindFirstChild("Name", true)

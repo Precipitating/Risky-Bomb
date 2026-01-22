@@ -2,10 +2,14 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local Rarity = require(ReplicatedStorage.Config.Rarity)
+local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local DataService
+local SoundToClient
 if RunService:IsServer() then
+	local ServerScriptService = game:GetService("ServerScriptService").Server
 	DataService = require(ReplicatedStorage.Packages.DataService).server
+	SoundToClient = require(ServerScriptService.ServerRemotesLogic.SoundToClient)
 else
 	DataService = require(ReplicatedStorage.Packages.DataService).client
 end
@@ -52,6 +56,7 @@ end
 
 function VIPHandler.AwardVIPRewards(player: Player)
 	warn("Awarding VIP Items...")
+	SoundToClient:PlaySoundOnClient(player, SoundManager.UISounds.Arigato, nil, false, nil)
 	local alreadyBought = DataService:get(player, "VIP")
 	local VIPItemsAwarded = DataService:get(player, "VIPItemsAwarded")
 

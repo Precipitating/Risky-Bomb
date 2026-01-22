@@ -7,6 +7,7 @@ local InventoryEvents = {}
 
 function InventoryEvents.ResetSkin(type: string, object: MeshPart)
 	local skinModel: MeshPart = ReplicatedStorage:FindFirstChild(type):FindFirstChild("Default", true)
+	local hasSurfaceAppearance = object:FindFirstChildOfClass("SurfaceAppearance")
 	if not skinModel then
 		warn(`Can't find default {type} mesh`)
 		return
@@ -21,6 +22,9 @@ function InventoryEvents.ResetSkin(type: string, object: MeshPart)
 	local hasParticle = object:FindFirstChildOfClass("ParticleEmitter")
 	if hasParticle then
 		hasParticle:Destroy()
+	end
+	if hasSurfaceAppearance then
+		hasSurfaceAppearance:Destroy()
 	end
 	newMesh:Destroy()
 end
@@ -49,6 +53,8 @@ function InventoryEvents.SetEquippedSkin(equipKey: string, objectType: string, p
 	object.Transparency = 1
 	local skinMesh: MeshPart =
 		ReplicatedStorage:FindFirstChild(objectType):FindFirstChild(objectEquipped.Name, true):Clone()
+
+	local hasSurfaceAppearance: SurfaceAppearance | nil = skinMesh:FindFirstChildOfClass("SurfaceAppearance")
 	if not skinMesh then
 		warn(`Can't find MeshPart {objectEquipped.Name}`)
 		return
@@ -70,9 +76,16 @@ function InventoryEvents.SetEquippedSkin(equipKey: string, objectType: string, p
 	end
 
 	-- update mesh's info to match equipped object
-	object.BrickColor = BrickColor.new(objectEquipped.Color)
+
 	object.Size = skinMesh.Size
-	object.Material = Enum.Material[objectEquipped.Material] :: Enum.Material
+	if hasSurfaceAppearance then
+		local surfaceAppearanceClone = hasSurfaceAppearance:Clone()
+		surfaceAppearanceClone.Color = BrickColor.new(objectEquipped.Color).Color
+		surfaceAppearanceClone.Parent = object
+	else
+		object.BrickColor = BrickColor.new(objectEquipped.Color)
+		object.Material = Enum.Material[objectEquipped.Material] :: Enum.Material
+	end
 
 	-- set the new skin's object position - it may be different
 	if equipKey == "chairEquipped" then

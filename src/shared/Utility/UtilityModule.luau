@@ -24,7 +24,7 @@ function UtilityModule.GetRandomMaterial()
 	local material = nil
 	repeat
 		material = materialList[math.random(#materialList)]
-	until material ~= Enum.Material.Air and material ~= Enum.Material.Water
+	until material ~= Enum.Material.Air and material ~= Enum.Material.Water and material ~= Enum.Material.ForceField
 
 	return material
 end

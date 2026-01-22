@@ -64,6 +64,7 @@ local function CreateViewportFrame(packType: string, packName: string, mesh: Mes
 	corner.Parent = viewportFrame
 	cam.Parent = viewportFrame
 	local obj = mesh:Clone()
+	local hasSurfaceAppearance = obj:FindFirstChildOfClass("SurfaceAppearance")
 	obj.Parent = viewportFrame
 	viewportFrame.CurrentCamera = cam
 	CommonUIFunctions.CameraLookAtObject(cam, mesh)
@@ -81,12 +82,16 @@ local function CreateViewportFrame(packType: string, packName: string, mesh: Mes
 	-- spin
 	TweenService:Create(obj, spinTweenInfo, { Orientation = obj.Orientation + Vector3.new(0, 360, 0) }):Play()
 
-	-- random color/material display for chairs only
+	-- random color/material display
 	task.spawn(function()
 		while alive do
 			task.wait(1)
-			obj.BrickColor = BrickColor.random()
-			obj.Material = UtilityModule.GetRandomMaterial()
+			if hasSurfaceAppearance then
+				hasSurfaceAppearance.Color = BrickColor.random().Color
+			else
+				obj.BrickColor = BrickColor.random()
+				obj.Material = UtilityModule.GetRandomMaterial()
+			end
 		end
 	end)
 
@@ -120,7 +125,6 @@ function ShopUIFunctions.SpawnLootTable(packType: number, packName: string)
 
 	if folder then
 		for _, mesh in pairs(folder) do
-			print(mesh)
 			local viewport = CreateViewportFrame(packTypeString, packName, mesh)
 			viewport.Parent = lootTableFolder
 		end

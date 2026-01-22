@@ -7,15 +7,17 @@ local PlayerModule = PlayerContext.Player:WaitForChild("PlayerScripts"):WaitForC
 
 local InputRemotes = {}
 
-function InputRemotes:EnableFirstPerson(enable: boolean)
+function InputRemotes:SetGameCamera(enable: boolean, tableRef: Model)
 	if enable then
-		print("Enable first person")
-		local hrp: BasePart = PlayerContext.Player.Character.HumanoidRootPart
-		local firstPersonPosition = hrp:GetPivot() + (hrp.CFrame.lookVector * 1.5) + Vector3.new(0, 1, 0)
+		if not tableRef then
+			error("Table reference not found when setting camera to game table!")
+			return
+		end
+		local pos: Part = tableRef:FindFirstChild("CameraPos") :: Part
 		workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
-		workspace.CurrentCamera:PivotTo(firstPersonPosition)
+		workspace.CurrentCamera:PivotTo(pos.CFrame)
 	else
-		print("Disable first person")
+		print("Reset game camera pos")
 		workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
 	end
 end

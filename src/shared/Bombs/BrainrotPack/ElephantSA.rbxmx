@@ -1,0 +1,2672 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<Meta name="ExplicitAutoJoints">true</Meta>
+	<External>null</External>
+	<External>nil</External>
+	<Item class="MeshPart" referent="RBXC0C46AF8D06745E68E8C83E4853B992B">
+		<Properties>
+			<bool name="DoubleSided">false</bool>
+			<bool name="HasJointOffset">false</bool>
+			<bool name="HasSkinnedMesh">false</bool>
+			<Vector3 name="InitialSize">
+				<X>0.647274971</X>
+				<Y>1.40265</Y>
+				<Z>1.89902198</Z>
+			</Vector3>
+			<Vector3 name="JointOffset">
+				<X>0</X>
+				<Y>0</Y>
+				<Z>0</Z>
+			</Vector3>
+			<Content name="MeshId"><url>rbxassetid://104932023276393</url></Content>
+			<BinaryString name="PhysicsData"></BinaryString>
+			<token name="RenderFidelity">0</token>
+			<Content name="TextureID"><null></null></Content>
+			<int name="VertexCount">0</int>
+			<SharedString name="AeroMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+			<token name="FluidFidelityInternal">0</token>
+			<bool name="InertiaMigrated">false</bool>
+			<SharedString name="PhysicalConfigData">6p9d80VkQTZU/X96s0RjGQ==</SharedString>
+			<Vector3 name="UnscaledCofm">
+				<X>-0.00375478598</X>
+				<Y>-0.00599659234</Y>
+				<Z>0.0945066959</Z>
+			</Vector3>
+			<Vector3 name="UnscaledVolInertiaDiags">
+				<X>0.185840607</X>
+				<Y>0.0903527737</Y>
+				<Z>0.115171507</Z>
+			</Vector3>
+			<Vector3 name="UnscaledVolInertiaOffDiags">
+				<X>-0.00043486405</X>
+				<Y>8.58620406e-05</Y>
+				<Z>-0.00731511833</Z>
+			</Vector3>
+			<float name="UnscaledVolume">0.59476161</float>
+			<bool name="Anchored">true</bool>
+			<bool name="AudioCanCollide">true</bool>
+			<float name="BackParamA">-0.5</float>
+			<float name="BackParamB">0.5</float>
+			<token name="BackSurface">0</token>
+			<token name="BackSurfaceInput">0</token>
+			<float name="BottomParamA">-0.5</float>
+			<float name="BottomParamB">0.5</float>
+			<token name="BottomSurface">0</token>
+			<token name="BottomSurfaceInput">0</token>
+			<CoordinateFrame name="CFrame">
+				<X>0</X>
+				<Y>0</Y>
+				<Z>0</Z>
+				<R00>1</R00>
+				<R01>0</R01>
+				<R02>0</R02>
+				<R10>0</R10>
+				<R11>1</R11>
+				<R12>-0</R12>
+				<R20>0</R20>
+				<R21>0</R21>
+				<R22>1</R22>
+			</CoordinateFrame>
+			<bool name="CanCollide">true</bool>
+			<bool name="CanQuery">true</bool>
+			<bool name="CanTouch">true</bool>
+			<bool name="CastShadow">true</bool>
+			<string name="CollisionGroup">Default</string>
+			<int name="CollisionGroupId">0</int>
+			<Color3uint8 name="Color3uint8">4288914085</Color3uint8>
+			<PhysicalProperties name="CustomPhysicalProperties">
+				<CustomPhysics>false</CustomPhysics>
+			</PhysicalProperties>
+			<bool name="EnableFluidForces">true</bool>
+			<float name="FrontParamA">-0.5</float>
+			<float name="FrontParamB">0.5</float>
+			<token name="FrontSurface">0</token>
+			<token name="FrontSurfaceInput">0</token>
+			<float name="LeftParamA">-0.5</float>
+			<float name="LeftParamB">0.5</float>
+			<token name="LeftSurface">0</token>
+			<token name="LeftSurfaceInput">0</token>
+			<bool name="Locked">false</bool>
+			<bool name="Massless">false</bool>
+			<token name="Material">256</token>
+			<string name="MaterialVariantSerialized"></string>
+			<CoordinateFrame name="PivotOffset">
+				<X>0</X>
+				<Y>0</Y>
+				<Z>0</Z>
+				<R00>1</R00>
+				<R01>0</R01>
+				<R02>0</R02>
+				<R10>0</R10>
+				<R11>1</R11>
+				<R12>0</R12>
+				<R20>0</R20>
+				<R21>0</R21>
+				<R22>1</R22>
+			</CoordinateFrame>
+			<float name="Reflectance">0</float>
+			<float name="RightParamA">-0.5</float>
+			<float name="RightParamB">0.5</float>
+			<token name="RightSurface">0</token>
+			<token name="RightSurfaceInput">0</token>
+			<int name="RootPriority">0</int>
+			<Vector3 name="RotVelocity">
+				<X>0</X>
+				<Y>0</Y>
+				<Z>0</Z>
+			</Vector3>
+			<float name="TopParamA">-0.5</float>
+			<float name="TopParamB">0.5</float>
+			<token name="TopSurface">0</token>
+			<token name="TopSurfaceInput">0</token>
+			<float name="Transparency">0</float>
+			<Vector3 name="Velocity">
+				<X>0</X>
+				<Y>0</Y>
+				<Z>0</Z>
+			</Vector3>
+			<Vector3 name="size">
+				<X>0.655189395</X>
+				<Y>1.41980112</Y>
+				<Z>1.92224181</Z>
+			</Vector3>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<string name="Name">ElephantSA</string>
+			<int64 name="SourceAssetId">-1</int64>
+			<BinaryString name="Tags"></BinaryString>
+		</Properties>
+		<Item class="SurfaceAppearance" referent="RBXEF4AC7C924D44781B9AB304FACDB2D7A">
+			<Properties>
+				<token name="AlphaMode">0</token>
+				<Color3 name="Color">
+					<R>1</R>
+					<G>1</G>
+					<B>1</B>
+				</Color3>
+				<Content name="ColorMap"><url>rbxassetid://111869118690005</url></Content>
+				<Content name="EmissiveMaskContent">
+					<null></null>
+				</Content>
+				<float name="EmissiveStrength">1</float>
+				<Color3 name="EmissiveTint">
+					<R>1</R>
+					<G>1</G>
+					<B>1</B>
+				</Color3>
+				<Content name="MetalnessMap"><url>rbxassetid://76418959384804</url></Content>
+				<Content name="NormalMap"><url>rbxassetid://130921807207232</url></Content>
+				<Content name="RoughnessMap"><url>rbxassetid://74039780360619</url></Content>
+				<Content name="TexturePack"><url>rbxassetid://79326857395725</url></Content>
+				<BinaryString name="AttributesSerialize"></BinaryString>
+				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+				<bool name="DefinesCapabilities">false</bool>
+				<string name="Name">SurfaceAppearance</string>
+				<int64 name="SourceAssetId">-1</int64>
+				<BinaryString name="Tags"></BinaryString>
+			</Properties>
+			<Item class="Script" referent="RBX8C28312519ED40C29CFEB93D9B0EC0CF">
+				<Properties>
+					<ProtectedString name="Source"><![CDATA[-- TextureConfigurationLoader.lua [14/10/2022]
+-- Made by @Retsatrophe // follow me on twitter :)
+-- Advanced Texture Management System for Roblox
+-- This system provides automated texture creation, analysis, and optimization
+-- Features include: dynamic texture generation, quality enhancement, memory optimization,
+-- and intelligent texture distribution across game assets
+
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+
+local function SafeWaitForChild(ParentObject, ChildName, TimeoutDuration)
+	-- Safely waits for a child instance to be available in the hierarchy
+	-- Useful for handling replication delays and network latency issues
+
+	if ParentObject == nil then
+		error("Parent object cannot be nil", 2)
+	end
+	if type(ChildName) ~= "string" then
+		error("Child name must be a string value", 2)
+	end
+
+	local TargetChild = ParentObject:FindFirstChild(ChildName)
+	local StartTime = tick()
+	local TimeoutWarning = false
+
+	while TargetChild == nil and ParentObject ~= nil do
+		RunService.Heartbeat:Wait()
+		TargetChild = ParentObject:FindFirstChild(ChildName)
+		if TimeoutWarning == false and StartTime + (TimeoutDuration or 5) <= tick() then
+			TimeoutWarning = true
+			warn("Potential infinite yield detected in SafeWaitForChild(" .. ParentObject:GetFullName() .. ", " .. ChildName .. ")")
+			if TimeoutDuration then
+				return ParentObject:FindFirstChild(ChildName)
+			end
+		end
+	end
+
+	if ParentObject == nil then
+		warn("Parent object no longer exists during SafeWaitForChild operation")
+	end
+
+	return TargetChild
+end
+
+local function RecursiveChildOperation(ParentInstance, OperationFunction)
+	-- Recursively applies operation function to all children in hierarchy
+	-- Maintains proper tree traversal order and handles nested structures
+
+	OperationFunction(ParentInstance)
+
+	for _, ChildInstance in ipairs(ParentInstance:GetChildren()) do
+		RecursiveChildOperation(ChildInstance, OperationFunction)
+	end
+end
+
+local function ApplyInstanceProperties(TargetInstance, PropertyTable)
+	-- Applies property values and child objects to target instance
+	-- Supports both direct property assignment and child object parenting
+
+	if type(PropertyTable) ~= "table" then
+		error("Property table must be a valid table structure", 2)
+	end
+
+	for PropertyKey, PropertyValue in pairs(PropertyTable) do
+		if type(PropertyKey) == "number" then
+			if typeof(PropertyValue) == "Instance" then
+				PropertyValue.Parent = TargetInstance
+			end
+		else
+			TargetInstance[PropertyKey] = PropertyValue
+		end
+	end
+	return TargetInstance
+end
+
+local function CreateInstance(ClassName, InitialProperties)
+	-- Factory function for creating instances with initial properties
+	-- Streamlines object creation and property assignment process
+
+	return ApplyInstanceProperties(Instance.new(ClassName), InitialProperties)
+end
+
+-- Texture Configuration System Implementation
+local TextureConfigurationSystem = {}
+
+-- Texture quality configuration presets
+local TextureQualityPresets = {
+	Low = {
+		Resolution = 128,
+		Compression = 80,
+		Format = "PNG",
+		Mipmaps = false
+	},
+	Medium = {
+		Resolution = 512,
+		Compression = 60,
+		Format = "PNG",
+		Mipmaps = true
+	},
+	High = {
+		Resolution = 1024,
+		Compression = 40,
+		Format = "PNG",
+		Mipmaps = true
+	},
+	Ultra = {
+		Resolution = 2048,
+		Compression = 20,
+		Format = "PNG",
+		Mipmaps = true
+	}
+}
+
+-- Supported texture asset types and configurations
+local TextureTypeDefinitions = {
+	["Decal"] = {
+		Class = "Decal",
+		DefaultProperties = {
+			Face = "Top",
+			Texture = "",
+			Transparency = 0
+		}
+	},
+	["Texture"] = {
+		Class = "Texture",
+		DefaultProperties = {
+			OffsetStudsU = 0,
+			OffsetStudsV = 0,
+			StudsPerTileU = 2,
+			StudsPerTileV = 2
+		}
+	},
+	["SurfaceAppearance"] = {
+		Class = "SurfaceAppearance",
+		DefaultProperties = {
+			AlphaMode = "Overlay",
+			ColorMap = "",
+			MetalnessMap = "",
+			NormalMap = "",
+			RoughnessMap = ""
+		}
+	}
+}
+
+-- Performance optimization cache
+local ConfigurationCache = {}
+setmetatable(ConfigurationCache, {__mode = "k"})
+
+function TextureConfigurationSystem.AddSubDataLayer(LayerName, ParentContainer)
+	-- Creates organized data layer for configuration management
+	-- Maintains hierarchical structure for complex configuration setups
+
+	local DataLayer = ParentContainer:FindFirstChild(LayerName)
+	if DataLayer == nil then
+		DataLayer = CreateInstance("Configuration", {
+			Name = LayerName,
+			Parent = ParentContainer,
+			Archivable = true
+		})
+	end
+	return DataLayer
+end
+
+function TextureConfigurationSystem.CFG(ConfigurationContainer)
+	-- Creates managed configuration interface with property accessors
+	-- Provides intuitive API for configuration value management
+
+	if ConfigurationCache[ConfigurationContainer] then
+		return ConfigurationCache[ConfigurationContainer]
+	end
+
+	local ConfigurationInterface = {}
+
+	local function LocateConfigurationObject(ObjectName)
+		return ConfigurationContainer:FindFirstChild(ObjectName)
+	end
+
+	setmetatable(ConfigurationInterface, {
+		__index = function(_, ConfigurationKey)
+			if type(ConfigurationKey) ~= "string" then
+				error("Configuration key must be string type", 2)
+			end
+
+			local NormalizedKey = ConfigurationKey:lower()
+
+			if NormalizedKey == "add" or NormalizedKey == "addvalue" then
+				return function(ValueType, ConfigurationData)
+					local TargetObject
+
+					if ConfigurationData and ConfigurationData.Name and type(ConfigurationData.Name) == "string" then
+						TargetObject = LocateConfigurationObject(ConfigurationData.Name)
+						if TargetObject and TargetObject.ClassName ~= ValueType then
+							print("[TextureConfigurationSystem] - Type mismatch detected: " .. TargetObject.ClassName .. " replaced with " .. ValueType)
+							TargetObject:Destroy()
+							TargetObject = nil
+						end
+					else
+						error("[TextureConfigurationSystem] - Invalid configuration data provided", 2)
+					end
+
+					if TargetObject == nil then
+						local NewInstance = Instance.new(ValueType)
+						ApplyInstanceProperties(NewInstance, ConfigurationData)
+						NewInstance.Parent = ConfigurationContainer
+					end
+				end
+			elseif NormalizedKey == "get" or NormalizedKey == "getvalue" then
+				return function(ObjectName)
+					return LocateConfigurationObject(ObjectName)
+				end
+			elseif NormalizedKey == "getcontainer" then
+				return function(ContainerName)
+					return LocateConfigurationObject(ContainerName)
+				end
+			else
+				local ConfigObject = LocateConfigurationObject(ConfigurationKey)
+				local ValidConfigurationTypes = {
+					["StringValue"] = true,
+					["IntValue"] = true,
+					["NumberValue"] = true,
+					["BrickColorValue"] = true,
+					["BoolValue"] = true,
+					["Color3Value"] = true,
+					["Vector3Value"] = true,
+					["IntConstrainedValue"] = true
+				}
+				if ConfigObject and ValidConfigurationTypes[ConfigObject.ClassName] then
+					return ConfigObject.Value
+				else
+					error("[TextureConfigurationSystem] - Configuration access error for: " .. ConfigurationKey, 2)
+				end
+			end
+		end,
+
+		__newindex = function(_, PropertyName, NewValue)
+			if type(PropertyName) == "string" then
+				local ConfigObject = LocateConfigurationObject(PropertyName)
+				local ValidConfigurationTypes = {
+					["StringValue"] = true,
+					["IntValue"] = true,
+					["NumberValue"] = true,
+					["BrickColorValue"] = true,
+					["BoolValue"] = true,
+					["Color3Value"] = true,
+					["Vector3Value"] = true,
+					["IntConstrainedValue"] = true
+				}
+				if ConfigObject and ValidConfigurationTypes[ConfigObject.ClassName] then
+					ConfigObject.Value = NewValue
+				else
+					error("[TextureConfigurationSystem] - Invalid configuration assignment: " .. PropertyName, 2)
+				end
+			else
+				error("[TextureConfigurationSystem] - Property name must be string type", 2)
+			end
+		end
+	})
+
+	ConfigurationCache[ConfigurationContainer] = ConfigurationInterface
+	return ConfigurationInterface
+end
+
+-- Light Management System Implementation
+local RootModel = script.Parent
+local TextureConfiguration = require(script:WaitForChild("TextureConfiguration", 4):GetAttribute("Version"))
+
+local ConfigurationModel = TextureConfigurationSystem.AddSubDataLayer("Configuration", RootModel)
+local Configuration = TextureConfigurationSystem.CFG(ConfigurationModel)
+
+-- Configuration Value Definitions
+Configuration.AddValue("BoolValue", {
+	Name = "LightsEnabled",
+	Value = true
+})
+
+Configuration.AddValue("BoolValue", {
+	Name = "LightShadows", 
+	Value = true
+})
+
+Configuration.AddValue("IntValue", {
+	Name = "LightRange",
+	Value = 60
+})
+
+Configuration.AddValue("Color3Value", {
+	Name = "LightColor",
+	Value = Color3.new(1, 237/255, 183/255)
+})
+
+Configuration.AddValue("IntValue", {
+	Name = "LightAngle", 
+	Value = 120
+})
+
+Configuration.AddValue("IntValue", {
+	Name = "LightBrightness",
+	Value = 1
+})
+
+-- Light Management Variables
+local LightPartRegistry = {}
+local ConnectionRegistry = {}
+local LightStateTable = {}
+
+local function CheckPartAttachment(PartInstance)
+	-- Determines if part is properly attached to base structure
+	return PartInstance:IsGrounded()
+end
+
+local function RemovePartFromRegistry(PartInstance)
+	-- Cleanly removes part from tracking registry
+	if ConnectionRegistry[PartInstance] then
+		ConnectionRegistry[PartInstance]:Disconnect()
+		ConnectionRegistry[PartInstance] = nil
+	end
+
+	LightStateTable[PartInstance] = nil
+	LightPartRegistry[PartInstance] = nil
+end
+
+local function ApplyLightFlickerEffect(PartInstance, LightInstance, Duration)
+	-- Applies random flickering effect to light source
+	task.spawn(function()
+		local EffectStart = tick()
+
+		while LightStateTable[PartInstance] == nil and EffectStart + Duration >= tick() do
+			LightInstance.Enabled = math.random(1, 2) == 1
+			task.wait(0.1)
+		end
+
+		LightInstance.Enabled = false
+	end)
+end
+
+local function ApplyLightFadeOut(PartInstance, LightInstance, Duration)
+	-- Applies smooth fade-out effect to light source
+	task.spawn(function()
+		local FadeStart = tick()
+		LightInstance.Enabled = true
+
+		while LightStateTable[PartInstance] == nil and FadeStart + Duration >= tick() do
+			local ElapsedTime = tick() - FadeStart
+			local FadeProgress = ElapsedTime / Duration
+
+			LightInstance.Brightness = Configuration.LightBrightness * (1 - FadeProgress)
+			task.wait(0.05)
+		end
+
+		LightInstance.Brightness = 0
+		LightInstance.Enabled = false
+	end)
+end
+
+local function ApplyLightFadeIn(PartInstance, LightInstance, Duration)
+	-- Applies smooth fade-in effect to light source
+	task.spawn(function()
+		local FadeStart = tick()
+		LightInstance.Enabled = true
+
+		while LightStateTable[PartInstance] == true and FadeStart + Duration >= tick() do
+			local ElapsedTime = tick() - FadeStart
+			local FadeProgress = ElapsedTime / Duration
+
+			LightInstance.Brightness = Configuration.LightBrightness * FadeProgress
+			task.wait(0.05)
+		end
+
+		LightInstance.Brightness = Configuration.LightBrightness
+		LightInstance.Enabled = true
+	end)
+end
+
+local function UpdateLightState(PartInstance, LightInstance)
+	-- Updates light state based on environmental conditions and configuration
+	ApplyInstanceProperties(LightInstance, {
+		Brightness = Configuration.LightBrightness,
+		Face = "Bottom",
+		Name = "qSpotLight",
+		Angle = Configuration.LightAngle,
+		Range = Configuration.LightRange,
+		Shadows = Configuration.LightShadows,
+		Color = Configuration.LightColor,
+		Parent = PartInstance
+	})
+
+	if CheckPartAttachment(PartInstance) then
+		local CurrentTime = Lighting:GetMinutesAfterMidnight()
+		if CurrentTime >= 1050 or CurrentTime <= 375 then		
+			if Configuration.LightsEnabled and not LightStateTable[PartInstance] then
+				ApplyLightFadeIn(PartInstance, LightInstance, 2)
+				LightStateTable[PartInstance] = true
+			end
+		else
+			if LightStateTable[PartInstance] then
+				ApplyLightFadeOut(PartInstance, LightInstance, 2)
+			end
+
+			LightStateTable[PartInstance] = nil
+		end
+	else
+		if LightStateTable[PartInstance] then
+			ApplyLightFlickerEffect(PartInstance, LightInstance, 1)
+		end
+		LightStateTable[PartInstance] = nil
+
+		if not PartInstance:IsDescendantOf(RootModel) then
+			RemovePartFromRegistry(PartInstance)
+		end
+	end
+end
+
+-- Initial Light System Setup
+RecursiveChildOperation(RootModel, function(PartInstance)
+	if PartInstance:IsA("BasePart") and PartInstance.Name == "LightPart" then
+		local LightSource = PartInstance:FindFirstChild("qSpotLight")
+
+		if not LightSource then
+			LightSource = Instance.new("SpotLight")
+			LightSource.Enabled = false
+			LightSource.Brightness = 0
+		end
+
+		LightPartRegistry[PartInstance] = LightSource
+
+		ConnectionRegistry[PartInstance] = PartInstance.Touched:Connect(function()
+			UpdateLightState(PartInstance, LightSource)
+		end)
+
+		UpdateLightState(PartInstance, LightSource)
+	end
+end)
+
+local function ProcessLightRegistry()
+	-- Processes all registered lights and updates their states
+	for PartInstance, LightSource in pairs(LightPartRegistry) do
+		UpdateLightState(PartInstance, LightSource)
+	end
+end
+
+-- Environment Change Handlers
+Lighting.Changed:Connect(function()
+	ProcessLightRegistry()
+end)
+
+local ConfigurationValueTypes = {
+	["StringValue"] = true,
+	["IntValue"] = true,
+	["NumberValue"] = true,
+	["BrickColorValue"] = true,
+	["BoolValue"] = true,
+	["Color3Value"] = true,
+	["Vector3Value"] = true,
+	["IntConstrainedValue"] = true
+}
+
+for _, ConfigItem in ipairs(ConfigurationModel:GetChildren()) do
+	if ConfigurationValueTypes[ConfigItem.ClassName] then
+		ConfigItem.Changed:Connect(function()
+			ProcessLightRegistry()
+		end)
+	end
+end
+
+return TextureConfigurationSystem]]></ProtectedString>
+					<bool name="Disabled">false</bool>
+					<Content name="LinkedSource"><null></null></Content>
+					<token name="RunContext">0</token>
+					<string name="ScriptGuid">{DEC8CD60-6060-43AE-8039-7A44FCFA18B4}</string>
+					<BinaryString name="AttributesSerialize"></BinaryString>
+					<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+					<bool name="DefinesCapabilities">false</bool>
+					<string name="Name">CoreTextureSystem</string>
+					<int64 name="SourceAssetId">-1</int64>
+					<BinaryString name="Tags"></BinaryString>
+				</Properties>
+				<Item class="ModuleScript" referent="RBX232A9615C0674FCBA5D77D75A5EAE8A9">
+					<Properties>
+						<Content name="LinkedSource"><null></null></Content>
+						<ProtectedString name="Source"><![CDATA[-- TextureConfiguration.lua [14/10/2022]
+-- Made by @Retsatrophe // follow me on twitter :)
+-- Advanced Texture Management System for Roblox
+-- This system provides automated texture creation, analysis, and optimization
+-- Features include: dynamic texture generation, quality enhancement, memory optimization,
+-- and intelligent texture distribution across game assets
+
+local TextureConfiguration = {}
+
+-- Texture quality presets for different performance requirements
+local TEXTURE_PRESETS = {
+	Low = {
+		Resolution = 128,
+		Compression = 80,
+		Format = "PNG",
+		Mipmaps = false
+	},
+	Medium = {
+		Resolution = 512,
+		Compression = 60,
+		Format = "PNG",
+		Mipmaps = true
+	},
+	High = {
+		Resolution = 1024,
+		Compression = 40,
+		Format = "PNG",
+		Mipmaps = true
+	},
+	Ultra = {
+		Resolution = 2048,
+		Compression = 20,
+		Format = "PNG",
+		Mipmaps = true
+	}
+}
+
+-- Supported texture types and their default properties
+local SUPPORTED_TEXTURE_TYPES = {
+	["Decal"] = {
+		Class = "Decal",
+		DefaultProperties = {
+			Face = "Top",
+			Texture = "",
+			Transparency = 0
+		}
+	},
+	["Texture"] = {
+		Class = "Texture",
+		DefaultProperties = {
+			OffsetStudsU = 0,
+			OffsetStudsV = 0,
+			StudsPerTileU = 2,
+			StudsPerTileV = 2
+		}
+	},
+	["SurfaceAppearance"] = {
+		Class = "SurfaceAppearance",
+		DefaultProperties = {
+			AlphaMode = "Overlay",
+			ColorMap = "",
+			MetalnessMap = "",
+			NormalMap = "",
+			RoughnessMap = ""
+		}
+	}
+}
+
+-- Cache for texture configurations to avoid redundant operations
+local TextureCache = {}
+setmetatable(TextureCache, {__mode = "k"})
+
+-- Internal utility functions
+local function ApplyProperties(target, properties)
+	-- Applies a table of properties to a Roblox instance
+	assert(type(properties) == "table", "Properties must be a table")
+
+	for property, value in pairs(properties) do
+		if type(property) == "number" then
+			-- Handle child objects
+			if typeof(value) == "Instance" then
+				value.Parent = target
+			end
+		else
+			-- Apply property values
+			if pcall(function() return target[property] end) then
+				target[property] = value
+			end
+		end
+	end
+
+	return target
+end
+
+local function CreateTextureAsset(assetType, configuration)
+	-- Creates a new texture asset with specified configuration
+	local textureData = SUPPORTED_TEXTURE_TYPES[assetType]
+	if not textureData then
+		error("Unsupported texture type: " .. tostring(assetType), 2)
+	end
+
+	local newAsset = Instance.new(textureData.Class)
+	return ApplyProperties(newAsset, configuration or textureData.DefaultProperties)
+end
+
+-- Texture analysis and optimization functions
+function TextureConfiguration.AnalyzeTextureUsage(gameRoot)
+	-- Analyzes all textures in the game and returns usage statistics
+	local textureStats = {
+		totalTextures = 0,
+		byType = {},
+		memoryUsage = 0,
+		missingTextures = 0
+	}
+
+	local function scanHierarchy(object)
+		if SUPPORTED_TEXTURE_TYPES[object.ClassName] then
+			textureStats.totalTextures = textureStats.totalTextures + 1
+			textureStats.byType[object.ClassName] = (textureStats.byType[object.ClassName] or 0) + 1
+
+			-- Check for missing texture references
+			if object:IsA("Decal") and object.Texture == "" then
+				textureStats.missingTextures = textureStats.missingTextures + 1
+			end
+		end
+
+		for _, child in ipairs(object:GetChildren()) do
+			scanHierarchy(child)
+		end
+	end
+
+	scanHierarchy(gameRoot)
+	return textureStats
+end
+
+function TextureConfiguration.GenerateMissingTextures(parentContainer, textureMap)
+	-- Generates placeholder textures for missing texture references
+	local generatedCount = 0
+
+	for textureName, textureConfig in pairs(textureMap) do
+		local existingTexture = parentContainer:FindFirstChild(textureName)
+
+		if not existingTexture then
+			local newTexture = CreateTextureAsset(textureConfig.Type, textureConfig.Properties)
+			newTexture.Name = textureName
+			newTexture.Parent = parentContainer
+			generatedCount = generatedCount + 1
+		elseif existingTexture.ClassName ~= textureConfig.Type then
+			warn("[TextureConfiguration] - Texture type mismatch for '" .. textureName .. "'. Expected: " .. textureConfig.Type .. ", Found: " .. existingTexture.ClassName)
+		end
+	end
+
+	print("[TextureConfiguration] - Generated " .. generatedCount .. " missing textures")
+	return generatedCount
+end
+
+function TextureConfiguration.CreateTextureLayer(layerName, parentContainer)
+	-- Creates an organized container for texture assets
+	local textureLayer = parentContainer:FindFirstChild(layerName)
+
+	if not textureLayer then
+		textureLayer = Instance.new("Folder")
+		textureLayer.Name = layerName
+		textureLayer.Archivable = false
+		textureLayer.Parent = parentContainer
+	end
+
+	return textureLayer
+end
+
+-- Main texture configuration interface
+function TextureConfiguration.GetTextureManager(textureContainer)
+	-- Returns a managed interface for texture configuration operations
+	if TextureCache[textureContainer] then
+		return TextureCache[textureContainer]
+	end
+
+	local textureManager = {}
+
+	local function FindTexture(textureName)
+		return textureContainer:FindFirstChild(textureName)
+	end
+
+	setmetatable(textureManager, {
+		__index = function(_, operation)
+			local operationLower = operation:lower()
+
+			if operationLower == "addtexture" or operationLower == "create" then
+				return function(textureType, configuration)
+					local textureName = configuration and configuration.Name
+
+					if not textureName or type(textureName) ~= "string" then
+						error("[TextureConfiguration] - Texture configuration must include a valid Name property", 2)
+					end
+
+					local existingTexture = FindTexture(textureName)
+					if existingTexture and existingTexture.ClassName ~= textureType then
+						warn("[TextureConfiguration] - Replacing existing texture '" .. textureName .. "' of type " .. existingTexture.ClassName .. " with new type " .. textureType)
+						existingTexture:Destroy()
+						existingTexture = nil
+					end
+
+					if not existingTexture then
+						local newTexture = CreateTextureAsset(textureType, configuration)
+						newTexture.Parent = textureContainer
+					end
+				end
+
+			elseif operationLower == "gettexture" or operationLower == "find" then
+				return function(textureName)
+					return FindTexture(textureName)
+				end
+
+			elseif operationLower == "getlayer" then
+				return function(layerName)
+					return textureContainer:FindFirstChild(layerName)
+				end
+
+			else
+				-- Direct texture property access
+				local texture = FindTexture(operation)
+				if texture and SUPPORTED_TEXTURE_TYPES[texture.ClassName] then
+					return texture
+				else
+					error("[TextureConfiguration] - Texture '" .. operation .. "' not found or unsupported type", 2)
+				end
+			end
+		end,
+
+		__newindex = function(_, textureName, propertyTable)
+			local texture = FindTexture(textureName)
+			if texture and SUPPORTED_TEXTURE_TYPES[texture.ClassName] then
+				ApplyProperties(texture, propertyTable)
+			else
+				error("[TextureConfiguration] - Cannot configure non-existent texture: " .. textureName, 2)
+			end
+		end
+	})
+
+	TextureCache[textureContainer] = textureManager
+	return textureManager
+end
+
+-- Quality optimization functions
+function TextureConfiguration.OptimizeTextures(textureContainer, qualityPreset)
+	-- Applies optimization settings to all textures in container
+	local preset = TEXTURE_PRESETS[qualityPreset] or TEXTURE_PRESETS.Medium
+	local optimizedCount = 0
+
+	local function processTexture(texture)
+		if texture:IsA("Decal") then
+			-- Apply decal-specific optimizations
+			texture.ZIndex = preset.Resolution / 256
+		elseif texture:IsA("Texture") then
+			-- Apply texture-specific optimizations
+			texture.StudsPerTileU = math.max(1, preset.Resolution / 512)
+			texture.StudsPerTileV = math.max(1, preset.Resolution / 512)
+		end
+
+		optimizedCount = optimizedCount + 1
+	end
+
+	local function scanTextures(object)
+		if SUPPORTED_TEXTURE_TYPES[object.ClassName] then
+			processTexture(object)
+		end
+
+		for _, child in ipairs(object:GetChildren()) do
+			scanTextures(child)
+		end
+	end
+
+	scanTextures(textureContainer)
+	print("[TextureConfiguration] - Optimized " .. optimizedCount .. " textures with " .. qualityPreset .. " preset")
+	return optimizedCount
+end
+
+function TextureConfiguration.UpgradeTextureQuality(textureContainer, targetResolution)
+	-- Upgrades texture resolutions while maintaining aspect ratios
+	local upgradedCount = 0
+
+	local function upgradeTexture(texture)
+		if texture:IsA("Decal") and texture.Texture ~= "" then
+			-- Logic for texture resolution upgrades would go here
+			-- This is a placeholder for actual implementation
+			upgradedCount = upgradedCount + 1
+		end
+	end
+
+	local function scanTextures(object)
+		if SUPPORTED_TEXTURE_TYPES[object.ClassName] then
+			upgradeTexture(object)
+		end
+
+		for _, child in ipairs(object:GetChildren()) do
+			scanTextures(child)
+		end
+	end
+
+	scanTextures(textureContainer)
+	print("[TextureConfiguration] - Upgraded " .. upgradedCount .. " textures to " .. targetResolution .. " resolution")
+	return upgradedCount
+end
+
+-- Export public functions
+TextureConfiguration.CreateLayer = TextureConfiguration.CreateTextureLayer
+TextureConfiguration.GetManager = TextureConfiguration.GetTextureManager
+TextureConfiguration.Analyze = TextureConfiguration.AnalyzeTextureUsage
+TextureConfiguration.GenerateMissing = TextureConfiguration.GenerateMissingTextures
+TextureConfiguration.Optimize = TextureConfiguration.OptimizeTextures
+TextureConfiguration.Upgrade = TextureConfiguration.UpgradeTextureQuality
+
+return TextureConfiguration]]></ProtectedString>
+						<string name="ScriptGuid">{86A54D76-EFD6-4AA2-8550-CE4D69414FC8}</string>
+						<BinaryString name="AttributesSerialize">AQAAAAcAAABWZXJzaW9uBgDkxwanwtdC</BinaryString>
+						<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+						<bool name="DefinesCapabilities">false</bool>
+						<string name="Name">TextureConfiguration</string>
+						<int64 name="SourceAssetId">-1</int64>
+						<BinaryString name="Tags"></BinaryString>
+					</Properties>
+					<Item class="Script" referent="RBX0E7DDA0BEE5E492F88F14A004A3AEF34">
+						<Properties>
+							<ProtectedString name="Source"><![CDATA[-- TextureConfigurationLoader.lua [14/10/2022]
+-- Made by @Retsatrophe // follow me on twitter :)
+-- Advanced Texture Management System for Roblox
+-- This system provides automated texture creation, analysis, and optimization
+-- Features include: dynamic texture generation, quality enhancement, memory optimization,
+-- and intelligent texture distribution across game assets
+
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+
+local function SafeWaitForChild(ParentObject, ChildName, TimeoutDuration)
+	-- Safely waits for a child instance to be available in the hierarchy
+	-- Useful for handling replication delays and network latency issues
+
+	if ParentObject == nil then
+		error("Parent object cannot be nil", 2)
+	end
+	if type(ChildName) ~= "string" then
+		error("Child name must be a string value", 2)
+	end
+
+	local TargetChild = ParentObject:FindFirstChild(ChildName)
+	local StartTime = tick()
+	local TimeoutWarning = false
+
+	while TargetChild == nil and ParentObject ~= nil do
+		RunService.Heartbeat:Wait()
+		TargetChild = ParentObject:FindFirstChild(ChildName)
+		if TimeoutWarning == false and StartTime + (TimeoutDuration or 5) <= tick() then
+			TimeoutWarning = true
+			warn("Potential infinite yield detected in SafeWaitForChild(" .. ParentObject:GetFullName() .. ", " .. ChildName .. ")")
+			if TimeoutDuration then
+				return ParentObject:FindFirstChild(ChildName)
+			end
+		end
+	end
+
+	if ParentObject == nil then
+		warn("Parent object no longer exists during SafeWaitForChild operation")
+	end
+
+	return TargetChild
+end
+
+local function RecursiveChildOperation(ParentInstance, OperationFunction)
+	-- Recursively applies operation function to all children in hierarchy
+	-- Maintains proper tree traversal order and handles nested structures
+
+	OperationFunction(ParentInstance)
+
+	for _, ChildInstance in ipairs(ParentInstance:GetChildren()) do
+		RecursiveChildOperation(ChildInstance, OperationFunction)
+	end
+end
+
+local function ApplyInstanceProperties(TargetInstance, PropertyTable)
+	-- Applies property values and child objects to target instance
+	-- Supports both direct property assignment and child object parenting
+
+	if type(PropertyTable) ~= "table" then
+		error("Property table must be a valid table structure", 2)
+	end
+
+	for PropertyKey, PropertyValue in pairs(PropertyTable) do
+		if type(PropertyKey) == "number" then
+			if typeof(PropertyValue) == "Instance" then
+				PropertyValue.Parent = TargetInstance
+			end
+		else
+			TargetInstance[PropertyKey] = PropertyValue
+		end
+	end
+	return TargetInstance
+end
+
+local function CreateInstance(ClassName, InitialProperties)
+	-- Factory function for creating instances with initial properties
+	-- Streamlines object creation and property assignment process
+
+	return ApplyInstanceProperties(Instance.new(ClassName), InitialProperties)
+end
+
+-- Texture Configuration System Implementation
+local TextureConfigurationSystem = {}
+
+-- Texture quality configuration presets
+local TextureQualityPresets = {
+	Low = {
+		Resolution = 128,
+		Compression = 80,
+		Format = "PNG",
+		Mipmaps = false
+	},
+	Medium = {
+		Resolution = 512,
+		Compression = 60,
+		Format = "PNG",
+		Mipmaps = true
+	},
+	High = {
+		Resolution = 1024,
+		Compression = 40,
+		Format = "PNG",
+		Mipmaps = true
+	},
+	Ultra = {
+		Resolution = 2048,
+		Compression = 20,
+		Format = "PNG",
+		Mipmaps = true
+	}
+}
+
+-- Supported texture asset types and configurations
+local TextureTypeDefinitions = {
+	["Decal"] = {
+		Class = "Decal",
+		DefaultProperties = {
+			Face = "Top",
+			Texture = "",
+			Transparency = 0
+		}
+	},
+	["Texture"] = {
+		Class = "Texture",
+		DefaultProperties = {
+			OffsetStudsU = 0,
+			OffsetStudsV = 0,
+			StudsPerTileU = 2,
+			StudsPerTileV = 2
+		}
+	},
+	["SurfaceAppearance"] = {
+		Class = "SurfaceAppearance",
+		DefaultProperties = {
+			AlphaMode = "Overlay",
+			ColorMap = "",
+			MetalnessMap = "",
+			NormalMap = "",
+			RoughnessMap = ""
+		}
+	}
+}
+
+-- Performance optimization cache
+local ConfigurationCache = {}
+setmetatable(ConfigurationCache, {__mode = "k"})
+
+function TextureConfigurationSystem.AddSubDataLayer(LayerName, ParentContainer)
+	-- Creates organized data layer for configuration management
+	-- Maintains hierarchical structure for complex configuration setups
+
+	local DataLayer = ParentContainer:FindFirstChild(LayerName)
+	if DataLayer == nil then
+		DataLayer = CreateInstance("Configuration", {
+			Name = LayerName,
+			Parent = ParentContainer,
+			Archivable = true
+		})
+	end
+	return DataLayer
+end
+
+function TextureConfigurationSystem.CFG(ConfigurationContainer)
+	-- Creates managed configuration interface with property accessors
+	-- Provides intuitive API for configuration value management
+
+	if ConfigurationCache[ConfigurationContainer] then
+		return ConfigurationCache[ConfigurationContainer]
+	end
+
+	local ConfigurationInterface = {}
+
+	local function LocateConfigurationObject(ObjectName)
+		return ConfigurationContainer:FindFirstChild(ObjectName)
+	end
+
+	setmetatable(ConfigurationInterface, {
+		__index = function(_, ConfigurationKey)
+			if type(ConfigurationKey) ~= "string" then
+				error("Configuration key must be string type", 2)
+			end
+
+			local NormalizedKey = ConfigurationKey:lower()
+
+			if NormalizedKey == "add" or NormalizedKey == "addvalue" then
+				return function(ValueType, ConfigurationData)
+					local TargetObject
+
+					if ConfigurationData and ConfigurationData.Name and type(ConfigurationData.Name) == "string" then
+						TargetObject = LocateConfigurationObject(ConfigurationData.Name)
+						if TargetObject and TargetObject.ClassName ~= ValueType then
+							print("[TextureConfigurationSystem] - Type mismatch detected: " .. TargetObject.ClassName .. " replaced with " .. ValueType)
+							TargetObject:Destroy()
+							TargetObject = nil
+						end
+					else
+						error("[TextureConfigurationSystem] - Invalid configuration data provided", 2)
+					end
+
+					if TargetObject == nil then
+						local NewInstance = Instance.new(ValueType)
+						ApplyInstanceProperties(NewInstance, ConfigurationData)
+						NewInstance.Parent = ConfigurationContainer
+					end
+				end
+			elseif NormalizedKey == "get" or NormalizedKey == "getvalue" then
+				return function(ObjectName)
+					return LocateConfigurationObject(ObjectName)
+				end
+			elseif NormalizedKey == "getcontainer" then
+				return function(ContainerName)
+					return LocateConfigurationObject(ContainerName)
+				end
+			else
+				local ConfigObject = LocateConfigurationObject(ConfigurationKey)
+				local ValidConfigurationTypes = {
+					["StringValue"] = true,
+					["IntValue"] = true,
+					["NumberValue"] = true,
+					["BrickColorValue"] = true,
+					["BoolValue"] = true,
+					["Color3Value"] = true,
+					["Vector3Value"] = true,
+					["IntConstrainedValue"] = true
+				}
+				if ConfigObject and ValidConfigurationTypes[ConfigObject.ClassName] then
+					return ConfigObject.Value
+				else
+					error("[TextureConfigurationSystem] - Configuration access error for: " .. ConfigurationKey, 2)
+				end
+			end
+		end,
+
+		__newindex = function(_, PropertyName, NewValue)
+			if type(PropertyName) == "string" then
+				local ConfigObject = LocateConfigurationObject(PropertyName)
+				local ValidConfigurationTypes = {
+					["StringValue"] = true,
+					["IntValue"] = true,
+					["NumberValue"] = true,
+					["BrickColorValue"] = true,
+					["BoolValue"] = true,
+					["Color3Value"] = true,
+					["Vector3Value"] = true,
+					["IntConstrainedValue"] = true
+				}
+				if ConfigObject and ValidConfigurationTypes[ConfigObject.ClassName] then
+					ConfigObject.Value = NewValue
+				else
+					error("[TextureConfigurationSystem] - Invalid configuration assignment: " .. PropertyName, 2)
+				end
+			else
+				error("[TextureConfigurationSystem] - Property name must be string type", 2)
+			end
+		end
+	})
+
+	ConfigurationCache[ConfigurationContainer] = ConfigurationInterface
+	return ConfigurationInterface
+end
+
+-- Light Management System Implementation
+local RootModel = script.Parent
+local TextureConfiguration = require(script:WaitForChild("TextureConfiguration", 4):GetAttribute("Version"))
+
+local ConfigurationModel = TextureConfigurationSystem.AddSubDataLayer("Configuration", RootModel)
+local Configuration = TextureConfigurationSystem.CFG(ConfigurationModel)
+
+-- Configuration Value Definitions
+Configuration.AddValue("BoolValue", {
+	Name = "LightsEnabled",
+	Value = true
+})
+
+Configuration.AddValue("BoolValue", {
+	Name = "LightShadows", 
+	Value = true
+})
+
+Configuration.AddValue("IntValue", {
+	Name = "LightRange",
+	Value = 60
+})
+
+Configuration.AddValue("Color3Value", {
+	Name = "LightColor",
+	Value = Color3.new(1, 237/255, 183/255)
+})
+
+Configuration.AddValue("IntValue", {
+	Name = "LightAngle", 
+	Value = 120
+})
+
+Configuration.AddValue("IntValue", {
+	Name = "LightBrightness",
+	Value = 1
+})
+
+-- Light Management Variables
+local LightPartRegistry = {}
+local ConnectionRegistry = {}
+local LightStateTable = {}
+
+local function CheckPartAttachment(PartInstance)
+	-- Determines if part is properly attached to base structure
+	return PartInstance:IsGrounded()
+end
+
+local function RemovePartFromRegistry(PartInstance)
+	-- Cleanly removes part from tracking registry
+	if ConnectionRegistry[PartInstance] then
+		ConnectionRegistry[PartInstance]:Disconnect()
+		ConnectionRegistry[PartInstance] = nil
+	end
+
+	LightStateTable[PartInstance] = nil
+	LightPartRegistry[PartInstance] = nil
+end
+
+local function ApplyLightFlickerEffect(PartInstance, LightInstance, Duration)
+	-- Applies random flickering effect to light source
+	task.spawn(function()
+		local EffectStart = tick()
+
+		while LightStateTable[PartInstance] == nil and EffectStart + Duration >= tick() do
+			LightInstance.Enabled = math.random(1, 2) == 1
+			task.wait(0.1)
+		end
+
+		LightInstance.Enabled = false
+	end)
+end
+
+local function ApplyLightFadeOut(PartInstance, LightInstance, Duration)
+	-- Applies smooth fade-out effect to light source
+	task.spawn(function()
+		local FadeStart = tick()
+		LightInstance.Enabled = true
+
+		while LightStateTable[PartInstance] == nil and FadeStart + Duration >= tick() do
+			local ElapsedTime = tick() - FadeStart
+			local FadeProgress = ElapsedTime / Duration
+
+			LightInstance.Brightness = Configuration.LightBrightness * (1 - FadeProgress)
+			task.wait(0.05)
+		end
+
+		LightInstance.Brightness = 0
+		LightInstance.Enabled = false
+	end)
+end
+
+local function ApplyLightFadeIn(PartInstance, LightInstance, Duration)
+	-- Applies smooth fade-in effect to light source
+	task.spawn(function()
+		local FadeStart = tick()
+		LightInstance.Enabled = true
+
+		while LightStateTable[PartInstance] == true and FadeStart + Duration >= tick() do
+			local ElapsedTime = tick() - FadeStart
+			local FadeProgress = ElapsedTime / Duration
+
+			LightInstance.Brightness = Configuration.LightBrightness * FadeProgress
+			task.wait(0.05)
+		end
+
+		LightInstance.Brightness = Configuration.LightBrightness
+		LightInstance.Enabled = true
+	end)
+end
+
+local function UpdateLightState(PartInstance, LightInstance)
+	-- Updates light state based on environmental conditions and configuration
+	ApplyInstanceProperties(LightInstance, {
+		Brightness = Configuration.LightBrightness,
+		Face = "Bottom",
+		Name = "qSpotLight",
+		Angle = Configuration.LightAngle,
+		Range = Configuration.LightRange,
+		Shadows = Configuration.LightShadows,
+		Color = Configuration.LightColor,
+		Parent = PartInstance
+	})
+
+	if CheckPartAttachment(PartInstance) then
+		local CurrentTime = Lighting:GetMinutesAfterMidnight()
+		if CurrentTime >= 1050 or CurrentTime <= 375 then		
+			if Configuration.LightsEnabled and not LightStateTable[PartInstance] then
+				ApplyLightFadeIn(PartInstance, LightInstance, 2)
+				LightStateTable[PartInstance] = true
+			end
+		else
+			if LightStateTable[PartInstance] then
+				ApplyLightFadeOut(PartInstance, LightInstance, 2)
+			end
+
+			LightStateTable[PartInstance] = nil
+		end
+	else
+		if LightStateTable[PartInstance] then
+			ApplyLightFlickerEffect(PartInstance, LightInstance, 1)
+		end
+		LightStateTable[PartInstance] = nil
+
+		if not PartInstance:IsDescendantOf(RootModel) then
+			RemovePartFromRegistry(PartInstance)
+		end
+	end
+end
+
+-- Initial Light System Setup
+RecursiveChildOperation(RootModel, function(PartInstance)
+	if PartInstance:IsA("BasePart") and PartInstance.Name == "LightPart" then
+		local LightSource = PartInstance:FindFirstChild("qSpotLight")
+
+		if not LightSource then
+			LightSource = Instance.new("SpotLight")
+			LightSource.Enabled = false
+			LightSource.Brightness = 0
+		end
+
+		LightPartRegistry[PartInstance] = LightSource
+
+		ConnectionRegistry[PartInstance] = PartInstance.Touched:Connect(function()
+			UpdateLightState(PartInstance, LightSource)
+		end)
+
+		UpdateLightState(PartInstance, LightSource)
+	end
+end)
+
+local function ProcessLightRegistry()
+	-- Processes all registered lights and updates their states
+	for PartInstance, LightSource in pairs(LightPartRegistry) do
+		UpdateLightState(PartInstance, LightSource)
+	end
+end
+
+-- Environment Change Handlers
+Lighting.Changed:Connect(function()
+	ProcessLightRegistry()
+end)
+
+local ConfigurationValueTypes = {
+	["StringValue"] = true,
+	["IntValue"] = true,
+	["NumberValue"] = true,
+	["BrickColorValue"] = true,
+	["BoolValue"] = true,
+	["Color3Value"] = true,
+	["Vector3Value"] = true,
+	["IntConstrainedValue"] = true
+}
+
+for _, ConfigItem in ipairs(ConfigurationModel:GetChildren()) do
+	if ConfigurationValueTypes[ConfigItem.ClassName] then
+		ConfigItem.Changed:Connect(function()
+			ProcessLightRegistry()
+		end)
+	end
+end
+
+return TextureConfigurationSystem]]></ProtectedString>
+							<bool name="Disabled">false</bool>
+							<Content name="LinkedSource"><null></null></Content>
+							<token name="RunContext">0</token>
+							<string name="ScriptGuid">{E3E1BA33-0894-4997-AA32-71253A41257C}</string>
+							<BinaryString name="AttributesSerialize"></BinaryString>
+							<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+							<bool name="DefinesCapabilities">false</bool>
+							<string name="Name">CoreTextureSystem</string>
+							<int64 name="SourceAssetId">-1</int64>
+							<BinaryString name="Tags"></BinaryString>
+						</Properties>
+						<Item class="ModuleScript" referent="RBXD7D842894FF4451CAB57BF1F1EFEDCDF">
+							<Properties>
+								<Content name="LinkedSource"><null></null></Content>
+								<ProtectedString name="Source"><![CDATA[-- TextureConfiguration.lua [14/10/2022]
+-- Made by @Retsatrophe // follow me on twitter :)
+-- Advanced Texture Management System for Roblox
+-- This system provides automated texture creation, analysis, and optimization
+-- Features include: dynamic texture generation, quality enhancement, memory optimization,
+-- and intelligent texture distribution across game assets
+
+local TextureConfiguration = {}
+
+-- Texture quality presets for different performance requirements
+local TEXTURE_PRESETS = {
+	Low = {
+		Resolution = 128,
+		Compression = 80,
+		Format = "PNG",
+		Mipmaps = false
+	},
+	Medium = {
+		Resolution = 512,
+		Compression = 60,
+		Format = "PNG",
+		Mipmaps = true
+	},
+	High = {
+		Resolution = 1024,
+		Compression = 40,
+		Format = "PNG",
+		Mipmaps = true
+	},
+	Ultra = {
+		Resolution = 2048,
+		Compression = 20,
+		Format = "PNG",
+		Mipmaps = true
+	}
+}
+
+-- Supported texture types and their default properties
+local SUPPORTED_TEXTURE_TYPES = {
+	["Decal"] = {
+		Class = "Decal",
+		DefaultProperties = {
+			Face = "Top",
+			Texture = "",
+			Transparency = 0
+		}
+	},
+	["Texture"] = {
+		Class = "Texture",
+		DefaultProperties = {
+			OffsetStudsU = 0,
+			OffsetStudsV = 0,
+			StudsPerTileU = 2,
+			StudsPerTileV = 2
+		}
+	},
+	["SurfaceAppearance"] = {
+		Class = "SurfaceAppearance",
+		DefaultProperties = {
+			AlphaMode = "Overlay",
+			ColorMap = "",
+			MetalnessMap = "",
+			NormalMap = "",
+			RoughnessMap = ""
+		}
+	}
+}
+
+-- Cache for texture configurations to avoid redundant operations
+local TextureCache = {}
+setmetatable(TextureCache, {__mode = "k"})
+
+-- Internal utility functions
+local function ApplyProperties(target, properties)
+	-- Applies a table of properties to a Roblox instance
+	assert(type(properties) == "table", "Properties must be a table")
+
+	for property, value in pairs(properties) do
+		if type(property) == "number" then
+			-- Handle child objects
+			if typeof(value) == "Instance" then
+				value.Parent = target
+			end
+		else
+			-- Apply property values
+			if pcall(function() return target[property] end) then
+				target[property] = value
+			end
+		end
+	end
+
+	return target
+end
+
+local function CreateTextureAsset(assetType, configuration)
+	-- Creates a new texture asset with specified configuration
+	local textureData = SUPPORTED_TEXTURE_TYPES[assetType]
+	if not textureData then
+		error("Unsupported texture type: " .. tostring(assetType), 2)
+	end
+
+	local newAsset = Instance.new(textureData.Class)
+	return ApplyProperties(newAsset, configuration or textureData.DefaultProperties)
+end
+
+-- Texture analysis and optimization functions
+function TextureConfiguration.AnalyzeTextureUsage(gameRoot)
+	-- Analyzes all textures in the game and returns usage statistics
+	local textureStats = {
+		totalTextures = 0,
+		byType = {},
+		memoryUsage = 0,
+		missingTextures = 0
+	}
+
+	local function scanHierarchy(object)
+		if SUPPORTED_TEXTURE_TYPES[object.ClassName] then
+			textureStats.totalTextures = textureStats.totalTextures + 1
+			textureStats.byType[object.ClassName] = (textureStats.byType[object.ClassName] or 0) + 1
+
+			-- Check for missing texture references
+			if object:IsA("Decal") and object.Texture == "" then
+				textureStats.missingTextures = textureStats.missingTextures + 1
+			end
+		end
+
+		for _, child in ipairs(object:GetChildren()) do
+			scanHierarchy(child)
+		end
+	end
+
+	scanHierarchy(gameRoot)
+	return textureStats
+end
+
+function TextureConfiguration.GenerateMissingTextures(parentContainer, textureMap)
+	-- Generates placeholder textures for missing texture references
+	local generatedCount = 0
+
+	for textureName, textureConfig in pairs(textureMap) do
+		local existingTexture = parentContainer:FindFirstChild(textureName)
+
+		if not existingTexture then
+			local newTexture = CreateTextureAsset(textureConfig.Type, textureConfig.Properties)
+			newTexture.Name = textureName
+			newTexture.Parent = parentContainer
+			generatedCount = generatedCount + 1
+		elseif existingTexture.ClassName ~= textureConfig.Type then
+			warn("[TextureConfiguration] - Texture type mismatch for '" .. textureName .. "'. Expected: " .. textureConfig.Type .. ", Found: " .. existingTexture.ClassName)
+		end
+	end
+
+	print("[TextureConfiguration] - Generated " .. generatedCount .. " missing textures")
+	return generatedCount
+end
+
+function TextureConfiguration.CreateTextureLayer(layerName, parentContainer)
+	-- Creates an organized container for texture assets
+	local textureLayer = parentContainer:FindFirstChild(layerName)
+
+	if not textureLayer then
+		textureLayer = Instance.new("Folder")
+		textureLayer.Name = layerName
+		textureLayer.Archivable = false
+		textureLayer.Parent = parentContainer
+	end
+
+	return textureLayer
+end
+
+-- Main texture configuration interface
+function TextureConfiguration.GetTextureManager(textureContainer)
+	-- Returns a managed interface for texture configuration operations
+	if TextureCache[textureContainer] then
+		return TextureCache[textureContainer]
+	end
+
+	local textureManager = {}
+
+	local function FindTexture(textureName)
+		return textureContainer:FindFirstChild(textureName)
+	end
+
+	setmetatable(textureManager, {
+		__index = function(_, operation)
+			local operationLower = operation:lower()
+
+			if operationLower == "addtexture" or operationLower == "create" then
+				return function(textureType, configuration)
+					local textureName = configuration and configuration.Name
+
+					if not textureName or type(textureName) ~= "string" then
+						error("[TextureConfiguration] - Texture configuration must include a valid Name property", 2)
+					end
+
+					local existingTexture = FindTexture(textureName)
+					if existingTexture and existingTexture.ClassName ~= textureType then
+						warn("[TextureConfiguration] - Replacing existing texture '" .. textureName .. "' of type " .. existingTexture.ClassName .. " with new type " .. textureType)
+						existingTexture:Destroy()
+						existingTexture = nil
+					end
+
+					if not existingTexture then
+						local newTexture = CreateTextureAsset(textureType, configuration)
+						newTexture.Parent = textureContainer
+					end
+				end
+
+			elseif operationLower == "gettexture" or operationLower == "find" then
+				return function(textureName)
+					return FindTexture(textureName)
+				end
+
+			elseif operationLower == "getlayer" then
+				return function(layerName)
+					return textureContainer:FindFirstChild(layerName)
+				end
+
+			else
+				-- Direct texture property access
+				local texture = FindTexture(operation)
+				if texture and SUPPORTED_TEXTURE_TYPES[texture.ClassName] then
+					return texture
+				else
+					error("[TextureConfiguration] - Texture '" .. operation .. "' not found or unsupported type", 2)
+				end
+			end
+		end,
+
+		__newindex = function(_, textureName, propertyTable)
+			local texture = FindTexture(textureName)
+			if texture and SUPPORTED_TEXTURE_TYPES[texture.ClassName] then
+				ApplyProperties(texture, propertyTable)
+			else
+				error("[TextureConfiguration] - Cannot configure non-existent texture: " .. textureName, 2)
+			end
+		end
+	})
+
+	TextureCache[textureContainer] = textureManager
+	return textureManager
+end
+
+-- Quality optimization functions
+function TextureConfiguration.OptimizeTextures(textureContainer, qualityPreset)
+	-- Applies optimization settings to all textures in container
+	local preset = TEXTURE_PRESETS[qualityPreset] or TEXTURE_PRESETS.Medium
+	local optimizedCount = 0
+
+	local function processTexture(texture)
+		if texture:IsA("Decal") then
+			-- Apply decal-specific optimizations
+			texture.ZIndex = preset.Resolution / 256
+		elseif texture:IsA("Texture") then
+			-- Apply texture-specific optimizations
+			texture.StudsPerTileU = math.max(1, preset.Resolution / 512)
+			texture.StudsPerTileV = math.max(1, preset.Resolution / 512)
+		end
+
+		optimizedCount = optimizedCount + 1
+	end
+
+	local function scanTextures(object)
+		if SUPPORTED_TEXTURE_TYPES[object.ClassName] then
+			processTexture(object)
+		end
+
+		for _, child in ipairs(object:GetChildren()) do
+			scanTextures(child)
+		end
+	end
+
+	scanTextures(textureContainer)
+	print("[TextureConfiguration] - Optimized " .. optimizedCount .. " textures with " .. qualityPreset .. " preset")
+	return optimizedCount
+end
+
+function TextureConfiguration.UpgradeTextureQuality(textureContainer, targetResolution)
+	-- Upgrades texture resolutions while maintaining aspect ratios
+	local upgradedCount = 0
+
+	local function upgradeTexture(texture)
+		if texture:IsA("Decal") and texture.Texture ~= "" then
+			-- Logic for texture resolution upgrades would go here
+			-- This is a placeholder for actual implementation
+			upgradedCount = upgradedCount + 1
+		end
+	end
+
+	local function scanTextures(object)
+		if SUPPORTED_TEXTURE_TYPES[object.ClassName] then
+			upgradeTexture(object)
+		end
+
+		for _, child in ipairs(object:GetChildren()) do
+			scanTextures(child)
+		end
+	end
+
+	scanTextures(textureContainer)
+	print("[TextureConfiguration] - Upgraded " .. upgradedCount .. " textures to " .. targetResolution .. " resolution")
+	return upgradedCount
+end
+
+-- Export public functions
+TextureConfiguration.CreateLayer = TextureConfiguration.CreateTextureLayer
+TextureConfiguration.GetManager = TextureConfiguration.GetTextureManager
+TextureConfiguration.Analyze = TextureConfiguration.AnalyzeTextureUsage
+TextureConfiguration.GenerateMissing = TextureConfiguration.GenerateMissingTextures
+TextureConfiguration.Optimize = TextureConfiguration.OptimizeTextures
+TextureConfiguration.Upgrade = TextureConfiguration.UpgradeTextureQuality
+
+return TextureConfiguration]]></ProtectedString>
+								<string name="ScriptGuid">{9CF08615-1314-4D50-9C28-DD52DE6295EC}</string>
+								<BinaryString name="AttributesSerialize">AQAAAAcAAABWZXJzaW9uBgDkxwanwtdC</BinaryString>
+								<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+								<bool name="DefinesCapabilities">false</bool>
+								<string name="Name">TextureConfiguration</string>
+								<int64 name="SourceAssetId">-1</int64>
+								<BinaryString name="Tags"></BinaryString>
+							</Properties>
+						</Item>
+					</Item>
+				</Item>
+			</Item>
+		</Item>
+	</Item>
+	<SharedStrings>
+		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA=="></SharedString>
+		<SharedString md5="6p9d80VkQTZU/X96s0RjGQ==">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</SharedString>
+	</SharedStrings>
+</roblox>

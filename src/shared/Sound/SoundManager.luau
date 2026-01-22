@@ -1,6 +1,5 @@
 local SoundService = game:GetService("SoundService")
 local Debris = game:GetService("Debris")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ThemeSoundHandle = SoundService.Background
 
 local MainSounds = {
@@ -25,6 +24,7 @@ local SoundManager = {
 		Cash = "rbxassetid://14621507602",
 		Success = "rbxassetid://12221990",
 		Thanks = "rbxassetid://101848247153533",
+		Arigato = "rbxassetid://88955287410162",
 	},
 	PromptSounds = {
 		ChairSit = "rbxassetid://12222152",

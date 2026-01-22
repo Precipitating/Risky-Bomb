@@ -30,7 +30,7 @@ function GameModule:DisablePlayerControlsOnTable(tableID)
 	print(PlayersPlayingList[tableID])
 	for player, _ in pairs(PlayersPlayingList[tableID]) do
 		self.inputNetworker:fire(player, "DisableControls", true)
-		self.inputNetworker:fire(player, "EnableFirstPerson", true)
+		self.inputNetworker:fire(player, "SetGameCamera", true, BombGameStorage.GetGameTable(tableID))
 	end
 end
 
@@ -115,7 +115,7 @@ function GameModule:FinishGame(tableID: string)
 		local playerInTable = PlayersPlayingList[tableID][player]
 
 		self.inputNetworker:fire(player, "DisableControls", false)
-		self.inputNetworker:fire(player, "EnableFirstPerson", false)
+		self.inputNetworker:fire(player, "SetGameCamera", false, nil)
 
 		if playerInTable.YourTurn then
 			loser = player

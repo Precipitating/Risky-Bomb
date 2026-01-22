@@ -54,13 +54,15 @@ function ChairRemote:ChairSat(player: Player, gameTable, chair: MeshPart, sat: b
 		gameTable:FindFirstChild("Bomb"):FindFirstChild("CountdownBillboard"):FindFirstChildOfClass("TextLabel", true)
 
 	-- modify players joined count
+
 	local currentJoined = playerCountText:GetAttribute("JoinedCount")
 	print(currentJoined)
+
 	local newCurrentJoined = sat and math.clamp(currentJoined + 1, 0, 2) or math.clamp(currentJoined - 1, 0, 2)
 	playerCountText:SetAttribute("JoinedCount", newCurrentJoined)
 	playerCountText.Text = `<b>Players Joined: {newCurrentJoined}/2</b>`
 
-	-- add player reference to table's ID dictionary (on server)
+	-- add player reference to ID dictionary
 	if sat then
 		BombGameStorage.AssignPlayerToTable(gameTable:GetAttribute("ID"), player)
 		InventoryEvents.SetEquippedSkin("chairEquipped", "Chairs", player, chair)

@@ -3,7 +3,10 @@ local GUIRemotes = require(ServerScriptService.ServerRemotesLogic.GUIRemotes)
 local ServerSignals = require(ServerScriptService.ServerSignals.Signals)
 local BombGameStorage = {}
 
+-- stores the player references inside the table ID, with a YourTurn property
 local PlayersPlayingList = {}
+
+-- stores the actual model table reference, referenced via its table ID
 local GameTablesList = {}
 
 function BombGameStorage.GetPlayerList()

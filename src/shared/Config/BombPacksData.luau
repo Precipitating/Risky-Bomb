@@ -1,7 +1,7 @@
 local Rarity = require(script.Parent.Rarity)
 return {
 	NineToFivePack = {
-		Cost = 2500,
+		Cost = 1250,
 		ItemList = {
 			Bag = Rarity.Common,
 			Can = Rarity.Common,
@@ -13,5 +13,18 @@ return {
 			Monitor = Rarity.Legendary,
 		},
 		AlreadyOwnedPayment = 500,
+	},
+	BrainrotPack = {
+		Cost = 1500,
+		ItemList = {
+			TabletSA = Rarity.Common,
+			ElephantSA = Rarity.Common,
+			PotSA = Rarity.Rare,
+			HoundSA = Rarity.Rare,
+			BuffSA = Rarity.Epic,
+			FeetBroSA = Rarity.Epic,
+			PlaneSA = Rarity.Legendary,
+			TungBombSA = Rarity.Legendary,
+		},
 	},
 }

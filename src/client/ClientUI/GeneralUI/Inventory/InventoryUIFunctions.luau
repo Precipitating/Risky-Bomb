@@ -42,8 +42,19 @@ local function SpawnViewportButton(category: string, object, item)
 
 	CommonUIFunctions.CameraLookAtObject(camera, objectClone)
 	objectClone.Parent = viewPort
-	objectClone.Material = Enum.Material[item.Material]
-	objectClone.BrickColor = BrickColor.new(item.Color)
+
+	if string.find(item.Name, "SA", 1, true) then
+		local surfaceAppearance: SurfaceAppearance | nil = objectClone:FindFirstChildOfClass("SurfaceAppearance")
+		if not surfaceAppearance then
+			warn("VIEWPORT OBJECT HAS NO SURFACE APPERANCE?")
+			return
+		end
+		surfaceAppearance.Color = BrickColor.new(item.Color).Color
+		print(BrickColor.new(item.Color).Color)
+	else
+		objectClone.Material = Enum.Material[item.Material]
+		objectClone.BrickColor = BrickColor.new(item.Color)
+	end
 
 	camera.Parent = viewPort
 

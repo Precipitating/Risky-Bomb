@@ -25,11 +25,11 @@ type ShopPackDisplayerUIProps = {
 	PackSetPrice: (string) -> (),
 }
 
-local function _95PackImageID(props: ShopPackDisplayerUIProps)
+local function GetImageId(bombID: string, chairID: string, props: ShopPackDisplayerUIProps)
 	if props.PackType == PackType.BombPack then
-		return "rbxassetid://71026580288153"
+		return bombID
 	else
-		return "rbxassetid://110643834598127"
+		return chairID
 	end
 end
 
@@ -77,9 +77,23 @@ local function ShopPackDisplayerUI(props: ShopPackDisplayerUIProps)
 			Position = UDim2.fromScale(0, 0),
 			Size = UDim2.fromScale(1, 0.11),
 			BackgroundTransparency = 1,
-			ImageID = _95PackImageID(props),
+			ImageID = GetImageId("rbxassetid://71026580288153", "rbxassetid://110643834598127", props),
 			OnClick = function()
 				local packName = "NineToFivePack"
+				props.PackSetName(packName)
+				props.PackSetType(props.PackType)
+				props.PackSetPrice(GetPriceOfPack(props.PackType, packName))
+				props.ConfirmationSetOpen(true)
+			end,
+			IsOpen = props.IsOpen,
+		}),
+		BrainrotPack = ModularImageButtonUI({
+			Position = UDim2.fromScale(0, 0),
+			Size = UDim2.fromScale(1, 0.11),
+			BackgroundTransparency = 1,
+			ImageID = GetImageId("rbxassetid://136780506331527", "rbxassetid://126547977248693", props),
+			OnClick = function()
+				local packName = "BrainrotPack"
 				props.PackSetName(packName)
 				props.PackSetType(props.PackType)
 				props.PackSetPrice(GetPriceOfPack(props.PackType, packName))
