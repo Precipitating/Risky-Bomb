@@ -14,6 +14,7 @@ local function BombInputScreenGUI()
 	local shopOpen, setShopOpen = React.useState(false)
 	local inventoryOpen, setInventoryOpen = React.useState(false)
 	local lootTableOpen, setLootTableOpen = React.useState(false)
+	local packBought, SetPackBought = React.useState(false)
 
 	return e(React.Fragment, nil, {
 		ShopButton = GeneralImageButtonUI({
@@ -65,6 +66,8 @@ local function BombInputScreenGUI()
 			SetIsOpen = setShopOpen,
 			LootTableOpen = lootTableOpen,
 			SetLootTableOpen = setLootTableOpen,
+			PackBought = packBought,
+			SetPackBought = SetPackBought,
 		}),
 		Inventory = InventoryFrameUI({
 			Position = UDim2.fromScale(0.3, 0.55),

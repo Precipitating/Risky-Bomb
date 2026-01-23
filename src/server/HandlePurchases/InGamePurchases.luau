@@ -1,12 +1,11 @@
 local PolicyService = game:GetService("PolicyService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
-local ChairPacksData = require(ReplicatedStorage.Config.ChairPacksData)
-local BombPacksData = require(ReplicatedStorage.Config.BombPacksData)
 local VIPHandler = require(ReplicatedStorage.VIP.VIPHandler)
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local DataService = require(ReplicatedStorage.Packages.DataService).server
 local Networker = require(ReplicatedStorage.Packages.Networker).server
+local DISCOUNT_MULTIPLIER: number = 0.2
 local InGamePurchases = {}
 
 local function CanPlayerBuyCrates(player: Player)
@@ -45,70 +44,57 @@ local function IsAlreadyOwned(
 	return false
 end
 
--- "SA" means it has a surface appearance, so no material will change the look which makes it redundant
-local function RollMaterial(itemName: string)
-	local material = nil
-	if string.find(itemName, "SA", 1, true) then
-		material = "None"
-	else
-		material = UtilityModule.GetRandomMaterial()
-	end
-	return material
-end
-function Roll(player: Player, dataKey: string, crateData)
-	if not crateData then
+function Roll(player: Player, dataKey: string, packData)
+	if not packData then
 		error("Crate data is wrong. Cannot roll")
 		return
 	end
 
-	local totalWeight = 0
-	for _, itemChance in pairs(crateData.ItemList) do
-		totalWeight += itemChance
+	local isDuplicate = false
+
+	local randomItemFromPack = UtilityModule.GetRandomPackItem(packData)
+
+	if
+		not IsAlreadyOwned(
+			randomItemFromPack.Name,
+			randomItemFromPack.Material,
+			randomItemFromPack.Color,
+			player,
+			dataKey
+		)
+	then
+		print(
+			`{player.Name} won... {randomItemFromPack.Name} with material {randomItemFromPack.Material} and color {randomItemFromPack.Color}`
+		)
+		DataService:arrayInsert(player, { dataKey }, randomItemFromPack)
+	else
+		-- duplicate, cashback
+		warn(`{player.Name} already owns this, refunding {packData.AlreadyOwnedPayment}`)
+		DataService:update(player, { "currency" }, function(currentCash)
+			return currentCash + packData.AlreadyOwnedPayment
+		end)
+		isDuplicate = true
 	end
 
-	local roll = math.random() * totalWeight
-
-	local cumulative = 0
-	for name, itemChance in pairs(crateData.ItemList) do
-		cumulative += itemChance
-		if roll <= cumulative then
-			local material = RollMaterial(name)
-			local color = BrickColor.random()
-
-			if not IsAlreadyOwned(name, material, color, player, dataKey) then
-				print(`{player.Name} won... {name}`)
-				DataService:arrayInsert(player, { dataKey }, {
-					Name = name,
-					RarityChance = itemChance,
-					Material = material.Name,
-					Color = color.Name,
-				})
-			else
-				warn(`{player.Name} already owns this, refunding {crateData.AlreadyOwnedPayment}`)
-				DataService:update(player, { "currency" }, function(currentCash)
-					return currentCash + crateData.AlreadyOwnedPayment
-				end)
-			end
-
-			return
-		end
-	end
+	return isDuplicate, randomItemFromPack
 end
 
-local function BuyAndRoll(dataTable, objectOwnedKey: string, player: Player, playerCash: number, packName: string)
-	if not dataTable[packName] then
-		warn(`{packName} doesn't exist in table`)
+function InGamePurchases.AttemptToApplyDiscount(player: Player, packTable: { ItemsList: {}, Cost: number })
+	local inputPrice = packTable.Cost
+	if VIPHandler.IsVIP(player) then
+		inputPrice -= (packTable.Cost * DISCOUNT_MULTIPLIER)
+	end
+
+	return inputPrice
+end
+
+local function BuyAndRoll(packTable, objectOwnedKey: string, player: Player, playerCash: number)
+	if not packTable then
+		warn(`pack list is nil, check AttemptBuy args`)
 		return false
 	end
 
-	local packCost = nil
-
-	-- 20% off if VIP
-	if VIPHandler.IsVIP(player) then
-		packCost = dataTable[packName].Cost - (dataTable[packName].Cost * 0.2)
-	else
-		packCost = dataTable[packName].Cost
-	end
+	local packCost = InGamePurchases.AttemptToApplyDiscount(player, packTable)
 
 	if packCost > playerCash then
 		warn(`{player.Name} can't afford pack!`)
@@ -118,8 +104,17 @@ local function BuyAndRoll(dataTable, objectOwnedKey: string, player: Player, pla
 	DataService:update(player, { "currency" }, function(currentCash)
 		return currentCash - packCost
 	end)
-	Roll(player, objectOwnedKey, dataTable[packName])
-	return true
+	return Roll(player, objectOwnedKey, packTable)
+end
+
+local function GetItemsOwnedDatastoreKey(packType: number)
+	if packType == PackType.ChairPack then
+		return "chairsOwned"
+	elseif packType == PackType.BombPack then
+		return "bombsOwned"
+	else
+		error(`Failed to get {packType} key1`)
+	end
 end
 
 function InGamePurchases:AttemptBuy(player: Player, packType: number, packName: string)
@@ -127,22 +122,14 @@ function InGamePurchases:AttemptBuy(player: Player, packType: number, packName: 
 	if not CanPlayerBuyCrates(player) then
 		return false
 	end
-	print(packType)
-	print(packName)
-	local playerCash = DataService:get(player, { "currency" })
-	local objectOwnedKey = nil
+	print(`Attempting to buy a {packType} of name {packName}...`)
 
-	local packTable = nil
-	if packType == PackType.ChairPack then
-		packTable = ChairPacksData
-		objectOwnedKey = "chairsOwned"
-	elseif packType == PackType.BombPack then
-		packTable = BombPacksData
-		objectOwnedKey = "bombsOwned"
-	else
-		error(`Failed to get {packType} table!`)
-	end
-	return BuyAndRoll(packTable, objectOwnedKey, player, playerCash, packName)
+	local playerCash = DataService:get(player, { "currency" })
+	local objectOwnedKey = GetItemsOwnedDatastoreKey(packType)
+
+	local packTable = UtilityModule.GetPackList(packType, packName)
+
+	return BuyAndRoll(packTable, objectOwnedKey, player, playerCash)
 end
 
 InGamePurchases.networker = Networker.new("InGamePurchaseRemotes", InGamePurchases, {

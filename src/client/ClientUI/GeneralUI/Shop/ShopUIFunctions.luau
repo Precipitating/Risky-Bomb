@@ -6,8 +6,6 @@ local CommonUIFunctions =
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local RarityColor = require(ReplicatedStorage.Config.RarityColor)
-local ChairPacksData = require(ReplicatedStorage.Config.ChairPacksData)
-local BombPacksData = require(ReplicatedStorage.Config.BombPacksData)
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
@@ -17,77 +15,70 @@ local ShopUIFunctions = {}
 ShopUIFunctions.networker = Networker.new("InGamePurchaseRemotes", ShopUIFunctions)
 ShopUIFunctions.janitor = Janitor.new()
 local spinTweenInfo = TweenInfo.new(4, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1)
+local rollTweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
 function ShopUIFunctions.AttemptPurchase(packType: number, packName: string)
-	local result = ShopUIFunctions.networker:fetch("AttemptBuy", packType, packName)
-	if not result then
+	local isDuplicate, itemWon = ShopUIFunctions.networker:fetch("AttemptBuy", packType, packName)
+	if not isDuplicate and not itemWon then
 		SoundManager.PlayExistingSound(SoundManager.UISounds.Error)
-		return false
+		return nil
 	end
-	return true
+	return isDuplicate, itemWon
 end
 
-local function SetViewportRarityColor(viewportFrame: ViewportFrame, packType: string, packName: string, name: string)
-	local rarityOfItem = nil
-
-	if packType == "Chairs" then
-		rarityOfItem = ChairPacksData[packName].ItemList[name]
-	elseif packType == "Bombs" then
-		rarityOfItem = BombPacksData[packName].ItemList[name]
-	end
+local function SetViewportRarityColor(
+	viewportFrame: ViewportFrame,
+	packTable: { ItemList: {}, Cost: number },
+	itemName: string
+)
+	local rarityOfItem = packTable.ItemList[itemName]
 	viewportFrame.BackgroundColor3 = RarityColor[rarityOfItem]
 end
 
-local function GetItemListOf(packType: string, packName: string)
-	if packType == "Chairs" then
-		return ChairPacksData[packName].ItemList
-	elseif packType == "Bombs" then
-		return BombPacksData[packName].ItemList
-	end
-
-	error(`Pack type of {packType} doesn't exist!`)
-end
-
-local function CreateViewportFrame(packType: string, packName: string, mesh: MeshPart)
+local function CreateViewportUI(): ViewportFrame
 	local viewportFrame = Instance.new("ViewportFrame")
-	local cam = Instance.new("Camera")
 	local corner = Instance.new("UICorner")
 	local aspectRatio = Instance.new("UIAspectRatioConstraint")
-	local alive = true
+
 	aspectRatio.Parent = viewportFrame
 	aspectRatio.AspectType = Enum.AspectType.ScaleWithParentSize
 	aspectRatio.DominantAxis = Enum.DominantAxis.Height
 
-	-- setup the viewport to have camera and object
-	-- and position camera to look at object at a suitable distance
 	corner.CornerRadius = UDim.new(0.5, 0)
 	corner.Parent = viewportFrame
-	cam.Parent = viewportFrame
-	local obj = mesh:Clone()
-	local hasSurfaceAppearance = obj:FindFirstChildOfClass("SurfaceAppearance")
-	obj.Parent = viewportFrame
-	viewportFrame.CurrentCamera = cam
-	CommonUIFunctions.CameraLookAtObject(cam, mesh)
+
 	viewportFrame.Size = UDim2.fromScale(1, 0.9)
 
-	local packTable = GetItemListOf(packType, packName)
-	local itemRarity = packTable[obj.Name]
+	return viewportFrame
+end
 
-	-- order from common -> rare
-	viewportFrame.LayoutOrder = -itemRarity
-	viewportFrame.Name = obj.Name
+local function PrepareViewportMesh(mesh: MeshPart): MeshPart
+	local obj = mesh:Clone()
+	obj.Parent = nil -- parent later
+	local surfaceAppearance = obj:FindFirstChildOfClass("SurfaceAppearance")
+	return obj, surfaceAppearance
+end
 
-	SetViewportRarityColor(viewportFrame, packType, packName, mesh.Name)
+local function SetupViewportCamera(viewport: ViewportFrame, mesh: MeshPart)
+	local cam = Instance.new("Camera")
+	cam.Parent = viewport
+	viewport.CurrentCamera = cam
+	CommonUIFunctions.CameraLookAtObject(cam, mesh)
+end
 
-	-- spin
+local function StartSpinning(obj: MeshPart)
 	TweenService:Create(obj, spinTweenInfo, { Orientation = obj.Orientation + Vector3.new(0, 360, 0) }):Play()
+end
 
-	-- random color/material display
+local function RandomSkinSwitching(obj: MeshPart, surfaceAppearance: SurfaceAppearance)
+	local alive = true
+
+	-- random color/material loop
 	task.spawn(function()
 		while alive do
 			task.wait(1)
-			if hasSurfaceAppearance then
-				hasSurfaceAppearance.Color = BrickColor.random().Color
+			if surfaceAppearance then
+				surfaceAppearance.Color = BrickColor.random().Color
 			else
 				obj.BrickColor = BrickColor.random()
 				obj.Material = UtilityModule.GetRandomMaterial()
@@ -95,14 +86,62 @@ local function CreateViewportFrame(packType: string, packName: string, mesh: Mes
 		end
 	end)
 
-	viewportFrame.Destroying:Connect(function()
-		print("destroyed!")
+	return function()
 		alive = false
-	end)
+	end
+end
 
-	ShopUIFunctions.janitor:Add(viewportFrame)
+local function OrderAscending(
+	viewport: ViewportFrame,
+	mesh: MeshPart,
+	packTable: { ItemList: {}, Cost: number },
+	ordered: boolean
+)
+	local itemRarity = -packTable.ItemList[mesh.Name]
 
-	return viewportFrame
+	if ordered then
+		viewport.LayoutOrder = -itemRarity
+	end
+end
+
+local function CreateViewportFrame(
+	packTable: { ItemList: {}, Cost: number },
+	mesh: MeshPart,
+	skinSwitch: boolean,
+	shouldOrder: boolean
+)
+	local viewport = CreateViewportUI()
+	local obj, surfaceAppearance = PrepareViewportMesh(mesh)
+	obj.Parent = viewport
+
+	SetupViewportCamera(viewport, obj)
+	StartSpinning(obj)
+	SetViewportRarityColor(viewport, packTable, mesh.Name)
+	viewport.Name = mesh.Name
+
+	if skinSwitch then
+		local stopSkinSwapping = RandomSkinSwitching(obj, surfaceAppearance)
+		viewport.Destroying:Connect(function()
+			stopSkinSwapping()
+		end)
+	else
+		obj.BrickColor = BrickColor.random()
+		local materialRolled = UtilityModule.RollMaterial(obj.Name)
+		if materialRolled == "None" then
+			if surfaceAppearance then
+				surfaceAppearance.Color = BrickColor.random().Color
+			end
+		else
+			obj.Material = materialRolled
+		end
+	end
+
+	if shouldOrder then
+		OrderAscending(viewport, obj, packTable, true)
+	end
+
+	ShopUIFunctions.janitor:Add(viewport)
+	return viewport
 end
 
 function ShopUIFunctions:RemoveOldViewports()
@@ -110,7 +149,51 @@ function ShopUIFunctions:RemoveOldViewports()
 	print("should cleanup viewport connections")
 end
 
-function ShopUIFunctions.SpawnLootTable(packType: number, packName: string)
+local function CreateActualRewardViewport(
+	packTable: { ItemList: {}, Cost: number },
+	mesh: MeshPart,
+	itemWon: {
+		Name: string,
+		RarityChance: number,
+		Material: string,
+		Color: string,
+	}?
+)
+	if not itemWon then
+		warn("Misisng item won table")
+		return
+	end
+
+	local viewport = CreateViewportUI()
+	local obj, surfaceAppearance = PrepareViewportMesh(mesh)
+	obj.Parent = viewport
+	SetupViewportCamera(viewport, obj)
+
+	-- apply skin color
+	if surfaceAppearance then
+		surfaceAppearance.Color = BrickColor.new(itemWon.Color :: any).Color
+	else
+		obj.BrickColor = BrickColor.new(itemWon.Color :: any)
+	end
+
+	SetViewportRarityColor(viewport, packTable, mesh.Name)
+	StartSpinning(obj)
+	viewport.Name = mesh.Name
+
+	return viewport
+end
+
+function ShopUIFunctions.SpawnLootTable(
+	packType: number,
+	packName: string,
+	isSpinMode: boolean,
+	itemWon: {
+		Name: string,
+		RarityChance: number,
+		Material: string,
+		Color: string,
+	}?
+)
 	local packTypeString = ""
 	if packType == PackType.ChairPack then
 		packTypeString = "Chairs"
@@ -118,18 +201,65 @@ function ShopUIFunctions.SpawnLootTable(packType: number, packName: string)
 		packTypeString = "Bombs"
 	end
 	-- ensure packName matches the table name
-	local folder = UtilityModule.Get(ReplicatedStorage, packTypeString, packName):GetChildren()
+	local folder = UtilityModule.GetMeshFolderListOf(packTypeString, packName)
+	local packTable = UtilityModule.GetPackList(packType, packName)
+	local lootTableFolder = nil
 
-	local lootTableFolder =
-		UtilityModule.Get(PlayerContext.PlayerGui, "GeneralGUI", "Shop", "ConfirmationPrompt", "LootTable")
+	-- determine parent
+	if not isSpinMode then
+		lootTableFolder =
+			UtilityModule.Get(PlayerContext.PlayerGui, "GeneralGUI", "Shop", "ConfirmationPrompt", "LootTable")
+	else
+		lootTableFolder = UtilityModule.Get(PlayerContext.PlayerGui, "GeneralGUI", "Shop", "SpinTable")
+	end
 
-	if folder then
-		for _, mesh in pairs(folder) do
-			local viewport = CreateViewportFrame(packTypeString, packName, mesh)
+	-- view pack items
+	if not isSpinMode then
+		print("Normal loot pool mode")
+		-- spawn each viewport frame into the scrolling frame
+		for _, mesh in ipairs(folder) do
+			local viewport = CreateViewportFrame(packTable, mesh, true, true)
 			viewport.Parent = lootTableFolder
 		end
 	else
-		error("Can't find pack name. Double check the name is correct.")
+		-- bought pack, show spinning pack mode
+		print("Spinning pool mode")
+		if not itemWon then
+			warn("Can't get item won")
+			return
+		end
+
+		local poolCount = (#folder * 2) - 1
+		local wonItemViewport: ViewportFrame | nil = nil
+		-- add actual reward in pool with its properties
+		UtilityModule.GetItemMeshCalled(itemWon.Name, folder, function(mesh)
+			wonItemViewport = CreateActualRewardViewport(packTable, mesh, itemWon)
+			if wonItemViewport then
+				wonItemViewport.LayoutOrder = math.random(1, poolCount)
+				wonItemViewport.Parent = lootTableFolder
+			else
+				error("Won item viewport reference nil")
+				return
+			end
+		end)
+
+		-- fill rest with random items
+		for _ = 1, poolCount do
+			local randomItem = UtilityModule.GetRandomPackItem(packTable)
+			local mesh = UtilityModule.GetItemMeshCalled(randomItem.Name, folder)
+			local viewport = CreateViewportFrame(packTable, mesh, false, false)
+			viewport.LayoutOrder = math.random(1, poolCount)
+			viewport.Parent = lootTableFolder
+		end
+
+		-- tween scroll
+
+		if wonItemViewport then
+			local targetXPos = 100
+			local tween = TweenService
+				:Create(lootTableFolder, rollTweenInfo, { CanvasPosition = Vector2.new(targetXPos, 0) })
+				:Play()
+		end
 	end
 end
 

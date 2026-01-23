@@ -8,6 +8,7 @@ type LootTableUIProps = {
 	Size: UDim2,
 	AnchorPoint: Vector2?,
 	IsOpen: boolean,
+	ZIndex: number?,
 	SetIsOpen: (boolean) -> (),
 }
 local function LootTableUI(props: LootTableUIProps)
@@ -24,7 +25,7 @@ local function LootTableUI(props: LootTableUIProps)
 		AutomaticCanvasSize = Enum.AutomaticSize.X,
 		AnchorPoint = props.AnchorPoint,
 		ScrollBarImageColor3 = Color3.fromRGB(255, 1, 1),
-		ZIndex = 2,
+		ZIndex = props.ZIndex or 2,
 		ScrollingDirection = Enum.ScrollingDirection.X,
 		CanvasSize = UDim2.fromScale(2, 0),
 	}, {

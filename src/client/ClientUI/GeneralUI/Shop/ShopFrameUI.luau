@@ -1,6 +1,7 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local ConfirmationUI = require(script.Parent.ConfirmationUI)
+local LootTableUI = require(script.Parent.LootTableUI)
 local ShopPackDisplayerUI = require(script.Parent.ShopPackDisplayerUI)
 local ShopRobux = require(script.Parent.ShopRobux)
 local ModularImageLabel = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularImageLabelUI)
@@ -21,6 +22,8 @@ type ShopFrameUIProps = {
 	SetIsOpen: (boolean) -> (),
 	LootTableOpen: boolean,
 	SetLootTableOpen: (boolean) -> (),
+	PackBought: boolean,
+	SetPackBought: (boolean) -> (),
 }
 
 local function ShopFrameUI(props: ShopFrameUIProps)
@@ -210,6 +213,7 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			PackSetType = setCurrentPackType,
 			PackSetPrice = setPackPrice,
 		}),
+
 		ConfirmationPrompt = ConfirmationUI({
 			Position = UDim2.fromScale(0.55, 0.3),
 			StrokeColor = Color3.fromRGB(255, 255, 255),
@@ -223,13 +227,24 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			PackName = packName,
 			LootTableOpen = props.LootTableOpen,
 			SetLootTableOpen = props.SetLootTableOpen,
+			PackBought = props.PackBought,
+			SetPackBought = props.SetPackBought,
+		}),
+		SpinTable = LootTableUI({
+			Position = UDim2.fromScale(0.5, 0.2),
+			AnchorPoint = Vector2.new(0.5),
+			Size = UDim2.fromScale(1, 0.5),
+			IsOpen = props.PackBought,
+			ZIndex = 5,
+			SetIsOpen = props.SetPackBought,
 		}),
 
 		BlockingFrame = e("TextButton", {
 			Position = UDim2.fromScale(0.5, 0.5),
 			AnchorPoint = Vector2.new(0.5, 0.5),
-			ZIndex = 4,
-			Visible = confirmationOpened,
+			ZIndex = 5,
+			Visible = confirmationOpened or props.PackBought,
+			Text = "",
 			BackgroundColor3 = Color3.fromRGB(1, 1, 1),
 			BackgroundTransparency = 0.5,
 			Size = UDim2.fromOffset(9999, 9999),

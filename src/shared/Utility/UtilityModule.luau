@@ -1,4 +1,8 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local RunService = game:GetService("RunService")
+local BombPacksData = require(ReplicatedStorage.Config.BombPacksData)
+local ChairPacksData = require(ReplicatedStorage.Config.ChairPacksData)
+local PackType = require(ReplicatedStorage.Types.PackType)
 local UtilityModule = {}
 
 function UtilityModule.Get(parent, ...)
@@ -27,6 +31,96 @@ function UtilityModule.GetRandomMaterial()
 	until material ~= Enum.Material.Air and material ~= Enum.Material.Water and material ~= Enum.Material.ForceField
 
 	return material
+end
+
+-- "SA" means it has a surface appearance, so no material will change the look which makes it redundant
+function UtilityModule.RollMaterial(itemName: string)
+	local material = nil
+	if string.find(itemName, "SA", 1, true) then
+		material = "None"
+	else
+		material = UtilityModule.GetRandomMaterial()
+	end
+	return material
+end
+
+function UtilityModule.GetPackList(packType: number, packName: string)
+	local packTable = nil
+	if packType == PackType.ChairPack then
+		packTable = ChairPacksData[packName]
+	elseif packType == PackType.BombPack then
+		packTable = BombPacksData[packName]
+	else
+		error(`Failed to get {packType} table!`)
+	end
+
+	return packTable
+end
+
+function UtilityModule.GetMeshFolderListOf(packTypeString: string, packName: string)
+	local folder = UtilityModule.Get(ReplicatedStorage, packTypeString, packName)
+	if not folder then
+		error("Getting mesh of item failed, folder path is wrong!")
+		return nil
+	end
+
+	return folder:GetChildren()
+end
+function UtilityModule.GetItemMeshCalled(itemName: string, folderToSearch: any, ifFoundFunc: any)
+	local meshRef = nil
+
+	for _, mesh in ipairs(folderToSearch) do
+		if mesh.Name == itemName then
+			if ifFoundFunc then
+				ifFoundFunc(mesh)
+			end
+			meshRef = mesh
+			break
+		end
+	end
+
+	return meshRef
+end
+
+-- returns a table of
+-- Name = name,
+-- RarityChance = itemChance,
+-- Material = material.Name,
+-- Color = color.Name
+
+function UtilityModule.GetRandomPackItem(packTable, packType: number?, packName: string?)
+	if not packTable and packType and packName then
+		packTable = UtilityModule.GetPackList(packType, packName)
+	end
+	if not packTable then
+		error("Failed to get random pack item, check args")
+		return
+	end
+
+	-- sum up rarity weights
+	local totalWeight = 0
+	for _, itemChance in pairs(packTable.ItemList) do
+		totalWeight += itemChance
+	end
+
+	-- roll a random item based on these weights
+	local roll = math.random() * totalWeight
+	local cumulative = 0
+	for name, itemChance in pairs(packTable.ItemList) do
+		cumulative += itemChance
+		if roll <= cumulative then
+			local material = UtilityModule.RollMaterial(name)
+			local color = BrickColor.random()
+			return {
+				Name = name,
+				RarityChance = itemChance,
+				Material = material.Name,
+				Color = color.Name,
+			}
+		end
+	end
+
+	return nil
 end
 
 return UtilityModule

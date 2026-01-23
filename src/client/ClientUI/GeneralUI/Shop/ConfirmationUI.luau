@@ -19,6 +19,8 @@ type ConfirmationUIProps = {
 	SetIsOpen: (boolean) -> (),
 	LootTableOpen: boolean,
 	SetLootTableOpen: (boolean) -> (),
+	PackBought: boolean,
+	SetPackBought: (boolean) -> (),
 }
 local function ConfirmationUI(props: ConfirmationUIProps)
 	if not props.IsOpen then
@@ -86,11 +88,16 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 			TextScaled = true,
 			TextColor3 = Color3.fromRGB(255, 255, 255),
 			OnClick = function()
-				local result = ShopUIFunctions.AttemptPurchase(props.PackType, props.PackName)
-				if result then
-					props.SetIsOpen(false)
-					props.SetLootTableOpen(false)
+				-- if nil, can't afford
+				local isDuplicateOrInvalid, itemWon = ShopUIFunctions.AttemptPurchase(props.PackType, props.PackName)
+				props.SetIsOpen(false)
+				props.SetLootTableOpen(false)
+				props.SetPackBought(true)
+				if isDuplicateOrInvalid == nil then
+					return
 				end
+				ShopUIFunctions:RemoveOldViewports()
+				ShopUIFunctions.SpawnLootTable(props.PackType, props.PackName, true, itemWon)
 			end,
 		}),
 		NoButton = ModularTextButtonUI({
@@ -109,6 +116,7 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 			OnClick = function()
 				props.SetIsOpen(false)
 				props.SetLootTableOpen(false)
+				ShopUIFunctions:RemoveOldViewports()
 			end,
 		}),
 		ShowLootTable = ModularTextButtonUI({
@@ -128,9 +136,8 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 			OnClick = function()
 				local newState = not props.LootTableOpen
 				props.SetLootTableOpen(newState)
-
 				if newState then
-					ShopUIFunctions.SpawnLootTable(props.PackType, props.PackName)
+					ShopUIFunctions.SpawnLootTable(props.PackType, props.PackName, false)
 				else
 					ShopUIFunctions:RemoveOldViewports()
 				end
