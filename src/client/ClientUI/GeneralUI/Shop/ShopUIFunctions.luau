@@ -1,3 +1,4 @@
+local RunService = game:GetService("RunService")
 local StarterPlayer = game:GetService("StarterPlayer")
 local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
@@ -6,6 +7,7 @@ local CommonUIFunctions =
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local RarityColor = require(ReplicatedStorage.Config.RarityColor)
+local Rarity = require(ReplicatedStorage.Config.Rarity)
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
@@ -15,7 +17,7 @@ local ShopUIFunctions = {}
 ShopUIFunctions.networker = Networker.new("InGamePurchaseRemotes", ShopUIFunctions)
 ShopUIFunctions.janitor = Janitor.new()
 local spinTweenInfo = TweenInfo.new(4, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1)
-local rollTweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+local rollTweenInfo = TweenInfo.new(10, Enum.EasingStyle.Quart)
 
 function ShopUIFunctions.AttemptPurchase(packType: number, packName: string)
 	local isDuplicate, itemWon = ShopUIFunctions.networker:fetch("AttemptBuy", packType, packName)
@@ -48,6 +50,7 @@ local function CreateViewportUI(): ViewportFrame
 	corner.Parent = viewportFrame
 
 	viewportFrame.Size = UDim2.fromScale(1, 0.9)
+	viewportFrame.AnchorPoint = Vector2.new(0.5, 0)
 
 	return viewportFrame
 end
@@ -100,7 +103,7 @@ local function OrderAscending(
 	local itemRarity = -packTable.ItemList[mesh.Name]
 
 	if ordered then
-		viewport.LayoutOrder = -itemRarity
+		viewport.LayoutOrder = itemRarity
 	end
 end
 
@@ -182,6 +185,54 @@ local function CreateActualRewardViewport(
 
 	return viewport
 end
+local function GetScrollFrameRef(isSpinMode: boolean)
+	local lootTableFolder = nil
+	if not isSpinMode then
+		lootTableFolder =
+			UtilityModule.Get(PlayerContext.PlayerGui, "GeneralGUI", "Shop", "ConfirmationPrompt", "LootTable")
+	else
+		lootTableFolder = UtilityModule.Get(PlayerContext.PlayerGui, "GeneralGUI", "Shop", "SpinTable")
+	end
+
+	return lootTableFolder
+end
+
+-- get the position to where the marker lands perfectly in the middle of an item
+local function MarkerToItemPosition(
+	wonItemViewport: ViewportFrame,
+	scrollFrameRef: ScrollingFrame,
+	scrollMarkerRef: Frame
+)
+	if wonItemViewport then
+		local itemCenter = (
+			(wonItemViewport.AbsolutePosition.X - scrollFrameRef.AbsolutePosition.X)
+			+ scrollFrameRef.CanvasPosition.X
+			+ (wonItemViewport.AbsoluteSize.X * 0.5)
+
+		)
+		local markerCenter = scrollMarkerRef.AbsolutePosition.X
+			- scrollFrameRef.AbsolutePosition.X
+			+ scrollFrameRef.CanvasPosition.X
+
+		local target = itemCenter - markerCenter
+
+		return target
+	end
+
+	return nil
+end
+
+local function PlayRewardSound(rarity: number)
+	if rarity == Rarity.Common then
+		SoundManager.PlayExistingSound(SoundManager.UISounds.Common)
+	elseif rarity == Rarity.Rare then
+		SoundManager.PlayExistingSound(SoundManager.UISounds.Rare)
+	elseif rarity == Rarity.Epic then
+		SoundManager.PlayExistingSound(SoundManager.UISounds.Epic)
+	elseif rarity == Rarity.Legendary then
+		SoundManager.PlayExistingSound(SoundManager.UISounds.Legendary)
+	end
+end
 
 function ShopUIFunctions.SpawnLootTable(
 	packType: number,
@@ -203,15 +254,14 @@ function ShopUIFunctions.SpawnLootTable(
 	-- ensure packName matches the table name
 	local folder = UtilityModule.GetMeshFolderListOf(packTypeString, packName)
 	local packTable = UtilityModule.GetPackList(packType, packName)
-	local lootTableFolder = nil
+	local scrollFrameRef: ScrollingFrame = nil
+	local scrollMarkerRef: Frame = UtilityModule.Get(PlayerContext.PlayerGui, "GeneralGUI", "Shop", "SpinTableMarker")
+
+	-- stores positions where tick sound should play
+	local markerPassPositions = {}
 
 	-- determine parent
-	if not isSpinMode then
-		lootTableFolder =
-			UtilityModule.Get(PlayerContext.PlayerGui, "GeneralGUI", "Shop", "ConfirmationPrompt", "LootTable")
-	else
-		lootTableFolder = UtilityModule.Get(PlayerContext.PlayerGui, "GeneralGUI", "Shop", "SpinTable")
-	end
+	scrollFrameRef = GetScrollFrameRef(isSpinMode)
 
 	-- view pack items
 	if not isSpinMode then
@@ -219,8 +269,10 @@ function ShopUIFunctions.SpawnLootTable(
 		-- spawn each viewport frame into the scrolling frame
 		for _, mesh in ipairs(folder) do
 			local viewport = CreateViewportFrame(packTable, mesh, true, true)
-			viewport.Parent = lootTableFolder
+			viewport.Parent = scrollFrameRef
 		end
+
+		return true
 	else
 		-- bought pack, show spinning pack mode
 		print("Spinning pool mode")
@@ -229,37 +281,58 @@ function ShopUIFunctions.SpawnLootTable(
 			return
 		end
 
-		local poolCount = (#folder * 2) - 1
+		local poolCount = 45
+		local wonItemLayoutOrder = 40
 		local wonItemViewport: ViewportFrame | nil = nil
 		-- add actual reward in pool with its properties
 		UtilityModule.GetItemMeshCalled(itemWon.Name, folder, function(mesh)
 			wonItemViewport = CreateActualRewardViewport(packTable, mesh, itemWon)
 			if wonItemViewport then
-				wonItemViewport.LayoutOrder = math.random(1, poolCount)
-				wonItemViewport.Parent = lootTableFolder
+				wonItemViewport.LayoutOrder = 40
+				wonItemViewport.Parent = scrollFrameRef
 			else
 				error("Won item viewport reference nil")
 				return
 			end
 		end)
 
+		if not wonItemViewport then
+			error("Won item viewport missing")
+		end
+
 		-- fill rest with random items
-		for _ = 1, poolCount do
+		for i = 1, poolCount do
 			local randomItem = UtilityModule.GetRandomPackItem(packTable)
 			local mesh = UtilityModule.GetItemMeshCalled(randomItem.Name, folder)
 			local viewport = CreateViewportFrame(packTable, mesh, false, false)
-			viewport.LayoutOrder = math.random(1, poolCount)
-			viewport.Parent = lootTableFolder
+			if viewport.LayoutOrder ~= wonItemLayoutOrder then
+				viewport.LayoutOrder = i
+			end
+			viewport.Parent = scrollFrameRef
+
+			table.insert(markerPassPositions, MarkerToItemPosition(viewport, scrollFrameRef, scrollMarkerRef))
 		end
 
-		-- tween scroll
+		local target = MarkerToItemPosition(wonItemViewport, scrollFrameRef, scrollMarkerRef)
+		local tween = TweenService:Create(scrollFrameRef, rollTweenInfo, { CanvasPosition = Vector2.new(target, 0) })
+		tween:Play()
 
-		if wonItemViewport then
-			local targetXPos = 100
-			local tween = TweenService
-				:Create(lootTableFolder, rollTweenInfo, { CanvasPosition = Vector2.new(targetXPos, 0) })
-				:Play()
-		end
+		local currIdx = 1
+
+		-- play tick if marker passes center of an item
+		-- janitor will cleanup this connection when UI is unrendered.
+		ShopUIFunctions.janitor:Add(RunService.RenderStepped:Connect(function()
+			if scrollFrameRef.CanvasPosition.X > markerPassPositions[currIdx] then
+				currIdx += 1
+				SoundManager.PlayExistingSound(SoundManager.UISounds.Tick)
+			end
+		end))
+
+		tween.Completed:Wait()
+
+		PlayRewardSound(itemWon.RarityChance)
+
+		return true
 	end
 end
 

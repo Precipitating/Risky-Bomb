@@ -235,8 +235,17 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			AnchorPoint = Vector2.new(0.5),
 			Size = UDim2.fromScale(1, 0.5),
 			IsOpen = props.PackBought,
+			ScrollBarImageTransparency = 1,
 			ZIndex = 5,
 			SetIsOpen = props.SetPackBought,
+		}),
+		SpinTableMarker = e("Frame", {
+			Position = UDim2.fromScale(0.5, 0.201),
+			Visible = props.PackBought,
+			Size = UDim2.fromScale(0.01, 0.498),
+			AnchorPoint = Vector2.new(0.5, 0),
+			BackgroundColor3 = Color3.fromRGB(255, 1, 1),
+			ZIndex = 6,
 		}),
 
 		BlockingFrame = e("TextButton", {

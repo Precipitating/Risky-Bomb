@@ -10,6 +10,7 @@ type LootTableUIProps = {
 	IsOpen: boolean,
 	ZIndex: number?,
 	SetIsOpen: (boolean) -> (),
+	ScrollBarImageTransparency: number?,
 }
 local function LootTableUI(props: LootTableUIProps)
 	if not props.IsOpen then
@@ -21,6 +22,7 @@ local function LootTableUI(props: LootTableUIProps)
 		Visible = props.IsOpen,
 		BackgroundTransparency = 0.9,
 		BackgroundColor3 = Color3.fromRGB(1, 1, 1),
+		ScrollBarImageTransparency = props.ScrollBarImageTransparency or 0,
 		BorderSizePixel = 0,
 		AutomaticCanvasSize = Enum.AutomaticSize.X,
 		AnchorPoint = props.AnchorPoint,

@@ -8,7 +8,7 @@ return {
 			Backpack = Rarity.Rare,
 			Printer = Rarity.Rare,
 			Briefcase = Rarity.Epic,
-			Nokia = Rarity.Epic,
+			NokiaSA = Rarity.Epic,
 			Car = Rarity.Legendary,
 			Monitor = Rarity.Legendary,
 		},

@@ -97,7 +97,12 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 					return
 				end
 				ShopUIFunctions:RemoveOldViewports()
-				ShopUIFunctions.SpawnLootTable(props.PackType, props.PackName, true, itemWon)
+				local result = ShopUIFunctions.SpawnLootTable(props.PackType, props.PackName, true, itemWon)
+
+				if result then
+					ShopUIFunctions:RemoveOldViewports()
+					props.SetPackBought(false)
+				end
 			end,
 		}),
 		NoButton = ModularTextButtonUI({
