@@ -17,7 +17,7 @@ type ModularTextLabelProps = {
 	StrokeColor: Color3?,
 	RichText: boolean?,
 	StrokeThickness: number?,
-	AspectRatio: number?,
+	LayoutOrder: number?,
 }
 local function ModularTextLabel(props: ModularTextLabelProps)
 	return e("TextLabel", {
@@ -29,23 +29,22 @@ local function ModularTextLabel(props: ModularTextLabelProps)
 		Text = props.Text,
 		TextColor3 = props.TextColor,
 		TextScaled = true,
+		RichText = props.RichText,
 		Font = props.Font,
 		TextYAlignment = props.TextYAlignment,
 		TextXAlignment = props.TextXAlignment,
+		LayoutOrder = props.LayoutOrder or 1,
 	}, {
-		UICorner = e("UICorner", {
+		UICorner = props.CornerRadius and e("UICorner", {
 			CornerRadius = props.CornerRadius,
-		}),
-		Stroke = e("UIStroke", {
+		}) or nil,
+		Stroke = (props.StrokeColor or props.StrokeThickness) and e("UIStroke", {
 			ApplyStrokeMode = Enum.ApplyStrokeMode.Contextual,
 			Color = props.StrokeColor,
 			Thickness = props.StrokeThickness,
 			StrokeSizingMode = Enum.StrokeSizingMode.ScaledSize,
 			BorderStrokePosition = Enum.BorderStrokePosition.Outer,
-		}),
-		AspectRatio = e("UIAspectRatioConstraint", {
-			AspectRatio = props.AspectRatio,
-		}),
+		}) or nil,
 	})
 end
 

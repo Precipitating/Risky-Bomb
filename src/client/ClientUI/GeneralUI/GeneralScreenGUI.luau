@@ -1,5 +1,6 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local ToolTipUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.GeneralUI.HoverDisplay.ToolTipUI)
 local InventoryFrameUI =
 	require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.GeneralUI.Inventory.InventoryFrameUI)
 local GeneralCashUI = require(script.Parent.GeneralCashUI)

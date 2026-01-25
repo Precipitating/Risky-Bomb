@@ -9,6 +9,9 @@ local ModularTextButtonUI = require(StarterPlayer.StarterPlayerScripts.Client.Cl
 local ModularTextLabel = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularTextLabelUI)
 local React = require(ReplicatedStorage.Packages.React)
 local ReactRipple = require(ReplicatedStorage.Packages.ReactRipple)
+local Rarity = require(ReplicatedStorage.Config.Rarity)
+local RarityColor = require(ReplicatedStorage.Config.RarityColor)
+local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local e = React.createElement
 
@@ -258,6 +261,24 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			BackgroundTransparency = 0.5,
 			Size = UDim2.fromOffset(9999, 9999),
 			AutoButtonColor = false,
+		}),
+
+		ChanceText = ModularTextLabel({
+			Position = UDim2.fromScale(0.3, 0.07),
+			Size = UDim2.fromScale(0.4, 0.2),
+			RichText = true,
+			BackgroundTransparency = 1,
+			Font = Enum.Font.FredokaOne,
+			Text = (function()
+				local result = ""
+				for _, item in pairs(Rarity.SortedArray()) do
+					result = result
+						.. `<font color="{UtilityModule.RGBToHex(RarityColor[item.value])}">{item.key} = {tostring(
+							item.value
+						)}%</font><br/>`
+				end
+				return result
+			end)(),
 		}),
 	})
 end

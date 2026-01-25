@@ -66,6 +66,13 @@ function UtilityModule.GetMeshFolderListOf(packTypeString: string, packName: str
 
 	return folder:GetChildren()
 end
+
+function UtilityModule.RGBToHex(color: Color3)
+	local r = math.clamp(math.floor(color.R * 255), 0, 255)
+	local g = math.clamp(math.floor(color.G * 255), 0, 255)
+	local b = math.clamp(math.floor(color.B * 255), 0, 255)
+	return string.format("#%02X%02X%02X", r, g, b)
+end
 function UtilityModule.GetItemMeshCalled(itemName: string, folderToSearch: any, ifFoundFunc: any)
 	local meshRef = nil
 

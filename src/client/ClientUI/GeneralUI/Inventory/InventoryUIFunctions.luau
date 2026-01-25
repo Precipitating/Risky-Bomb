@@ -1,10 +1,12 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
-
 local StarterPlayer = game:GetService("StarterPlayer")
 local TweenService = game:GetService("TweenService")
 local CommonUIFunctions =
 	require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.GeneralUI.CommonUIFunctions.CommonUIFunctions)
 local RarityColor = require(ReplicatedStorage.Config.RarityColor)
+local UICharms = require(ReplicatedStorage.Charms.UICharms)
+local ItemToDisplayName = require(ReplicatedStorage.Config.ItemToDisplayName)
+local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local Networker = require(ReplicatedStorage.Packages.Networker).client
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
@@ -26,6 +28,7 @@ local function SpawnViewportButton(category: string, object, item)
 	local objectClone = object:Clone()
 	local camera: Camera = Instance.new("Camera")
 	local corner: UICorner = Instance.new("UICorner")
+	local surfaceAppearance: SurfaceAppearance | nil = objectClone:FindFirstChildOfClass("SurfaceAppearance")
 
 	corner.CornerRadius = UDim.new(0.1, 0)
 	corner.Parent = viewPort
@@ -33,6 +36,7 @@ local function SpawnViewportButton(category: string, object, item)
 	imageButton.BackgroundTransparency = 1
 	imageButton.ImageTransparency = 1
 	imageButton.Name = item.Name
+	imageButton.AnchorPoint = Vector2.new(0.5, 0.5)
 
 	if item.Name == "Default" then
 		imageButton.LayoutOrder = -999
@@ -43,8 +47,7 @@ local function SpawnViewportButton(category: string, object, item)
 	CommonUIFunctions.CameraLookAtObject(camera, objectClone)
 	objectClone.Parent = viewPort
 
-	if string.find(item.Name, "SA", 1, true) then
-		local surfaceAppearance: SurfaceAppearance | nil = objectClone:FindFirstChildOfClass("SurfaceAppearance")
+	if surfaceAppearance then
 		if not surfaceAppearance then
 			warn("VIEWPORT OBJECT HAS NO SURFACE APPERANCE?")
 			return
@@ -68,6 +71,27 @@ local function SpawnViewportButton(category: string, object, item)
 	-- spin
 	TweenService:Create(objectClone, spinTweenInfo, { Orientation = objectClone.Orientation + Vector3.new(0, 360, 0) })
 		:Play()
+
+	-- tooltip visibility events
+	imageButton.MouseEnter:Connect(function()
+		print(item.Name)
+		UICharms.CurrentToolTipInfo({
+			ItemName = `<font color="{UtilityModule.RGBToHex(RarityColor[item.RarityChance])}">Name: {ItemToDisplayName[item.Name] or item.Name}</font>`,
+			ItemColor = `<font color="{UtilityModule.RGBToHex(BrickColor.new(item.Color).Color)}">Color: {item.Color}</font>`,
+			ItemMaterial = `<font color="#4D7C0F">Material: {item.Material}</font>`,
+		})
+		UICharms.ToolTipOpen(true)
+	end)
+
+	imageButton.MouseLeave:Connect(function()
+		UICharms.CurrentToolTipInfo({
+			ItemName = "???",
+			ItemColor = "???",
+			ItemMaterial = "???",
+			Position = { X = 0.5, Y = 0.5 },
+		})
+		UICharms.ToolTipOpen(false)
+	end)
 
 	-- equip item
 	imageButton.Activated:Connect(function()

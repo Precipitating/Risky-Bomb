@@ -7,7 +7,7 @@ local ServerDataHandler = {}
 
 local Options = {
 	template = DataTemplate,
-	profileStoreIndex = "Testing",
+	profileStoreIndex = "Public",
 	useMock = true,
 	resetData = true,
 }
