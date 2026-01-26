@@ -17,7 +17,6 @@ return {
 	BrainrotPack = {
 		Cost = 2500,
 		ItemList = {
-
 			GiraffeChair = Rarity.Common,
 			ClippyChair = Rarity.Common,
 			CappucinoChairSA = Rarity.Rare,
@@ -26,6 +25,19 @@ return {
 			RacoonChairSA = Rarity.Legendary,
 			OwlChair = Rarity.Legendary,
 			TungChairSA = Rarity.Legendary,
+		},
+		AlreadyOwnedPayment = 500,
+	},
+	RetroPack = {
+		Cost = 2500,
+		ItemList = {
+			RetroHalloweenChair = Rarity.Common,
+			RetroSofa = Rarity.Common,
+			RetroTree = Rarity.Rare,
+			RetroCircle = Rarity.Rare,
+			RetroTrampoline = Rarity.Epic,
+			RetroCar = Rarity.Epic,
+			RetroNoobHead = Rarity.Legendary,
 		},
 		AlreadyOwnedPayment = 500,
 	},

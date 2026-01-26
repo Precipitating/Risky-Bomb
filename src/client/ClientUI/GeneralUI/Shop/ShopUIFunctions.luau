@@ -8,6 +8,7 @@ local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerCo
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local RarityColor = require(ReplicatedStorage.Config.RarityColor)
 local Rarity = require(ReplicatedStorage.Config.Rarity)
+local UICharms = require(ReplicatedStorage.Charms.UICharms)
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
@@ -18,6 +19,12 @@ ShopUIFunctions.networker = Networker.new("InGamePurchaseRemotes", ShopUIFunctio
 ShopUIFunctions.janitor = Janitor.new()
 local spinTweenInfo = TweenInfo.new(4, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1)
 local rollTweenInfo = TweenInfo.new(10, Enum.EasingStyle.Quart)
+local skipTweenInfo = TweenInfo.new(1, Enum.EasingStyle.Quart)
+
+-- how much random spin items we should populate the scroll frame
+local PoolCount = 45
+-- the layout order of where the actual reward will appear
+local WonItemLayoutOrder = 40
 
 function ShopUIFunctions.AttemptPurchase(packType: number, packName: string)
 	local isDuplicate, itemWon = ShopUIFunctions.networker:fetch("AttemptBuy", packType, packName)
@@ -82,6 +89,7 @@ local function RandomSkinSwitching(obj: MeshPart, surfaceAppearance: SurfaceAppe
 			task.wait(1)
 			if surfaceAppearance then
 				surfaceAppearance.Color = BrickColor.random().Color
+				obj.BrickColor = BrickColor.random()
 			else
 				obj.BrickColor = BrickColor.random()
 				obj.Material = UtilityModule.GetRandomMaterial()
@@ -251,7 +259,7 @@ function ShopUIFunctions.SpawnLootTable(
 	elseif packType == PackType.BombPack then
 		packTypeString = "Bombs"
 	end
-	-- ensure packName matches the table name
+	-- ensure packName matches
 	local folder = UtilityModule.GetMeshFolderListOf(packTypeString, packName)
 	local packTable = UtilityModule.GetPackList(packType, packName)
 	local scrollFrameRef: ScrollingFrame = nil
@@ -271,8 +279,6 @@ function ShopUIFunctions.SpawnLootTable(
 			local viewport = CreateViewportFrame(packTable, mesh, true, true)
 			viewport.Parent = scrollFrameRef
 		end
-
-		return true
 	else
 		-- bought pack, show spinning pack mode
 		print("Spinning pool mode")
@@ -281,14 +287,12 @@ function ShopUIFunctions.SpawnLootTable(
 			return
 		end
 
-		local poolCount = 45
-		local wonItemLayoutOrder = 40
 		local wonItemViewport: ViewportFrame | nil = nil
 		-- add actual reward in pool with its properties
 		UtilityModule.GetItemMeshCalled(itemWon.Name, folder, function(mesh)
 			wonItemViewport = CreateActualRewardViewport(packTable, mesh, itemWon)
 			if wonItemViewport then
-				wonItemViewport.LayoutOrder = 40
+				wonItemViewport.LayoutOrder = WonItemLayoutOrder
 				wonItemViewport.Parent = scrollFrameRef
 			else
 				error("Won item viewport reference nil")
@@ -301,11 +305,11 @@ function ShopUIFunctions.SpawnLootTable(
 		end
 
 		-- fill rest with random items
-		for i = 1, poolCount do
+		for i = 1, PoolCount do
 			local randomItem = UtilityModule.GetRandomPackItem(packTable)
 			local mesh = UtilityModule.GetItemMeshCalled(randomItem.Name, folder)
 			local viewport = CreateViewportFrame(packTable, mesh, false, false)
-			if viewport.LayoutOrder ~= wonItemLayoutOrder then
+			if viewport.LayoutOrder ~= WonItemLayoutOrder then
 				viewport.LayoutOrder = i
 			end
 			viewport.Parent = scrollFrameRef
@@ -315,25 +319,55 @@ function ShopUIFunctions.SpawnLootTable(
 
 		local target = MarkerToItemPosition(wonItemViewport, scrollFrameRef, scrollMarkerRef)
 		local tween = TweenService:Create(scrollFrameRef, rollTweenInfo, { CanvasPosition = Vector2.new(target, 0) })
-		tween:Play()
-
-		local currIdx = 1
 
 		-- play tick if marker passes center of an item
 		-- janitor will cleanup this connection when UI is unrendered.
+		local currIdx = 1
 		ShopUIFunctions.janitor:Add(RunService.RenderStepped:Connect(function()
 			if scrollFrameRef.CanvasPosition.X > markerPassPositions[currIdx] then
 				currIdx += 1
 				SoundManager.PlayExistingSound(SoundManager.UISounds.Tick)
 			end
 		end))
+		local completeConn = tween.Completed:Connect(function()
+			PlayRewardSound(itemWon.RarityChance)
+			UICharms.PackBought(false)
+			ShopUIFunctions:RemoveOldViewports()
+		end)
 
-		tween.Completed:Wait()
+		UICharms.SpinTweenHandle({
+			Tween = tween,
+			CompleteConn = completeConn,
+			Target = target,
+			ItemWonRarityChance = itemWon.RarityChance,
+		})
 
-		PlayRewardSound(itemWon.RarityChance)
-
-		return true
+		tween:Play()
 	end
+end
+
+function ShopUIFunctions.SkipSpin()
+	local currentSpinInfo = UICharms.SpinTweenHandle()
+	local itemRarity = currentSpinInfo.ItemWonRarityChance
+
+	-- cancel current tween and connections
+	currentSpinInfo.Tween:Cancel()
+	currentSpinInfo.CompleteConn:Disconnect()
+
+	-- create new tween with a shortened duration time
+	local scrollFrameRef = GetScrollFrameRef(true)
+	local tween =
+		TweenService:Create(scrollFrameRef, skipTweenInfo, { CanvasPosition = Vector2.new(currentSpinInfo.Target, 0) })
+
+	tween:Play()
+	tween.Completed:Connect(function()
+		PlayRewardSound(itemRarity)
+		UICharms.PackBought(false)
+		ShopUIFunctions:RemoveOldViewports()
+	end)
+
+	-- shouldn't need the previous tween info anymore.
+	currentSpinInfo = {}
 end
 
 return ShopUIFunctions

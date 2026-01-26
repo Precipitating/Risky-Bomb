@@ -101,6 +101,20 @@ local function ShopPackDisplayerUI(props: ShopPackDisplayerUIProps)
 			end,
 			IsOpen = props.IsOpen,
 		}),
+		RetroPack = ModularImageButtonUI({
+			Position = UDim2.fromScale(0, 0),
+			Size = UDim2.fromScale(1, 0.11),
+			BackgroundTransparency = 1,
+			ImageID = GetImageId("rbxassetid://80834896765015", "rbxassetid://135308861179903", props),
+			OnClick = function()
+				local packName = "RetroPack"
+				props.PackSetName(packName)
+				props.PackSetType(props.PackType)
+				props.PackSetPrice(GetPriceOfPack(props.PackType, packName))
+				props.ConfirmationSetOpen(true)
+			end,
+			IsOpen = props.IsOpen,
+		}),
 	})
 end
 

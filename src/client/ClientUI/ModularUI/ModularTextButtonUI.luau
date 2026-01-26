@@ -4,6 +4,7 @@ local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local e = React.createElement
 
 type ModularTextButtonProps = {
+	Ref: any?,
 	Position: UDim2,
 	Size: UDim2,
 	AnchorPoint: Vector2?,
@@ -17,14 +18,22 @@ type ModularTextButtonProps = {
 	isOpen: boolean,
 	Font: Font?,
 	StrokeColor: Color3?,
+	ZIndex: number?,
 	StrokeThickness: number?,
 	AspectRatio: number?,
 	RichText: boolean?,
+	DisableOnClick: boolean?,
 	OnHover: () -> ()?,
 	OnClick: () -> ()?,
 }
+
 local function ModularTextButton(props: ModularTextButtonProps)
+	if not props.isOpen then
+		return nil
+	end
+
 	return e("TextButton", {
+		ref = props.Ref,
 		Position = props.Position,
 		Size = props.Size,
 		AnchorPoint = props.AnchorPoint,
@@ -32,6 +41,7 @@ local function ModularTextButton(props: ModularTextButtonProps)
 		BackgroundColor3 = props.BackgroundColor,
 		BackgroundTransparency = props.BackgroundTransparency,
 		Text = props.Text,
+		ZIndex = props.ZIndex or 1,
 		TextColor3 = props.TextColor,
 		TextScaled = true,
 		Font = props.Font,
@@ -46,6 +56,13 @@ local function ModularTextButton(props: ModularTextButtonProps)
 				SoundManager.PlayExistingSound(SoundManager.UISounds.ButtonClick)
 				if props.OnClick then
 					props.OnClick()
+				end
+				if props.DisableOnClick then
+					if not props.Ref then
+						warn("Missing ref for modular text button")
+						return
+					end
+					props.Ref.current.Interactable = false
 				end
 			end
 		end,

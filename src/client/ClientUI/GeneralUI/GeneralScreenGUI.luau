@@ -15,7 +15,6 @@ local function BombInputScreenGUI()
 	local shopOpen, setShopOpen = React.useState(false)
 	local inventoryOpen, setInventoryOpen = React.useState(false)
 	local lootTableOpen, setLootTableOpen = React.useState(false)
-	local packBought, SetPackBought = React.useState(false)
 
 	return e(React.Fragment, nil, {
 		ShopButton = GeneralImageButtonUI({

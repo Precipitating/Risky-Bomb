@@ -4,6 +4,7 @@ local ConfirmationUI = require(script.Parent.ConfirmationUI)
 local LootTableUI = require(script.Parent.LootTableUI)
 local ShopPackDisplayerUI = require(script.Parent.ShopPackDisplayerUI)
 local ShopRobux = require(script.Parent.ShopRobux)
+local ShopUIFunctions = require(script.Parent.ShopUIFunctions)
 local ModularImageLabel = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularImageLabelUI)
 local ModularTextButtonUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularTextButtonUI)
 local ModularTextLabel = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularTextLabelUI)
@@ -11,6 +12,8 @@ local React = require(ReplicatedStorage.Packages.React)
 local ReactRipple = require(ReplicatedStorage.Packages.ReactRipple)
 local Rarity = require(ReplicatedStorage.Config.Rarity)
 local RarityColor = require(ReplicatedStorage.Config.RarityColor)
+local UICharms = require(ReplicatedStorage.Charms.UICharms)
+local ReactCharm = require(ReplicatedStorage.Packages.ReactCharm)
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local e = React.createElement
@@ -25,10 +28,11 @@ type ShopFrameUIProps = {
 	SetIsOpen: (boolean) -> (),
 	LootTableOpen: boolean,
 	SetLootTableOpen: (boolean) -> (),
-	PackBought: boolean,
-	SetPackBought: (boolean) -> (),
 }
 
+local function PackBought()
+	return ReactCharm.useAtom(UICharms.PackBought)
+end
 local function ShopFrameUI(props: ShopFrameUIProps)
 	local robuxPageOpened, setRobuxPageOpened = React.useState(false)
 	local chairPageOpened, setChairPageOpened = React.useState(false)
@@ -38,6 +42,8 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 	local currentPackType, setCurrentPackType = React.useState(-1)
 	local packName, setPackName = React.useState("nil")
 	local packPrice, setPackPrice = React.useState("unset")
+	local packBought = PackBought()
+	local skipButtonRef = React.useRef(nil)
 
 	if not props.IsOpen then
 		return nil
@@ -230,21 +236,35 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			PackName = packName,
 			LootTableOpen = props.LootTableOpen,
 			SetLootTableOpen = props.SetLootTableOpen,
-			PackBought = props.PackBought,
-			SetPackBought = props.SetPackBought,
 		}),
 		SpinTable = LootTableUI({
 			Position = UDim2.fromScale(0.5, 0.2),
 			AnchorPoint = Vector2.new(0.5),
 			Size = UDim2.fromScale(1, 0.5),
-			IsOpen = props.PackBought,
 			ScrollBarImageTransparency = 1,
 			ZIndex = 5,
-			SetIsOpen = props.SetPackBought,
+			IsOpen = packBought,
+		}),
+		SpinTableSkipButton = ModularTextButtonUI({
+			Ref = skipButtonRef,
+			Position = UDim2.fromScale(0.5, 0.77),
+			Size = UDim2.fromScale(0.5, 0.08),
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			AspectRatio = 3,
+			Text = "Skip",
+			StrokeColor = Color3.fromRGB(255, 255, 255),
+			ZIndex = 5,
+			TextColor = Color3.fromRGB(255, 255, 255),
+			StrokeThickness = 0.05,
+			isOpen = packBought,
+			OnClick = function()
+				ShopUIFunctions.SkipSpin()
+			end,
+			DisableOnClick = true,
 		}),
 		SpinTableMarker = e("Frame", {
 			Position = UDim2.fromScale(0.5, 0.201),
-			Visible = props.PackBought,
+			Visible = packBought,
 			Size = UDim2.fromScale(0.01, 0.498),
 			AnchorPoint = Vector2.new(0.5, 0),
 			BackgroundColor3 = Color3.fromRGB(255, 1, 1),
@@ -255,7 +275,7 @@ local function ShopFrameUI(props: ShopFrameUIProps)
 			Position = UDim2.fromScale(0.5, 0.5),
 			AnchorPoint = Vector2.new(0.5, 0.5),
 			ZIndex = 5,
-			Visible = confirmationOpened or props.PackBought,
+			Visible = confirmationOpened or packBought,
 			Text = "",
 			BackgroundColor3 = Color3.fromRGB(1, 1, 1),
 			BackgroundTransparency = 0.5,

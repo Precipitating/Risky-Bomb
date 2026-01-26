@@ -4,6 +4,7 @@ local LootTableUI = require(script.Parent.LootTableUI)
 local ShopUIFunctions = require(script.Parent.ShopUIFunctions)
 local ModularTextButtonUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularTextButtonUI)
 local React = require(ReplicatedStorage.Packages.React)
+local UICharms = require(ReplicatedStorage.Charms.UICharms)
 local e = React.createElement
 
 type ConfirmationUIProps = {
@@ -19,8 +20,6 @@ type ConfirmationUIProps = {
 	SetIsOpen: (boolean) -> (),
 	LootTableOpen: boolean,
 	SetLootTableOpen: (boolean) -> (),
-	PackBought: boolean,
-	SetPackBought: (boolean) -> (),
 }
 local function ConfirmationUI(props: ConfirmationUIProps)
 	if not props.IsOpen then
@@ -92,17 +91,14 @@ local function ConfirmationUI(props: ConfirmationUIProps)
 				local isDuplicateOrInvalid, itemWon = ShopUIFunctions.AttemptPurchase(props.PackType, props.PackName)
 				props.SetIsOpen(false)
 				props.SetLootTableOpen(false)
-				props.SetPackBought(true)
+
 				if isDuplicateOrInvalid == nil then
 					return
 				end
 				ShopUIFunctions:RemoveOldViewports()
-				local result = ShopUIFunctions.SpawnLootTable(props.PackType, props.PackName, true, itemWon)
+				UICharms.PackBought(true)
 
-				if result then
-					ShopUIFunctions:RemoveOldViewports()
-					props.SetPackBought(false)
-				end
+				ShopUIFunctions.SpawnLootTable(props.PackType, props.PackName, true, itemWon)
 			end,
 		}),
 		NoButton = ModularTextButtonUI({

@@ -26,6 +26,12 @@ function DataService:onPlayerInit(player: Player, data): ()
 				Material = "SmoothPlastic",
 				Color = "White",
 			},
+			[2] = {
+				Name = "RetroNoobHead",
+				RarityChance = Rarity.Rare,
+				Material = "Metal",
+				Color = "Grass",
+			},
 		}
 		data.bombsOwned = {
 			[1] = {

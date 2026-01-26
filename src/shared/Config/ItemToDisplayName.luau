@@ -37,4 +37,6 @@ return {
 
 	VIPChair = "Very Important Seat",
 	VIPBomb = "Cashalicious Bomba",
+	RetroHalloweenChair = "Retro Chair",
+	RetroCar = "Retro Jeep",
 }

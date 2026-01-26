@@ -9,7 +9,7 @@ type LootTableUIProps = {
 	AnchorPoint: Vector2?,
 	IsOpen: boolean,
 	ZIndex: number?,
-	SetIsOpen: (boolean) -> (),
+	SetIsOpen: (boolean) -> ()?,
 	ScrollBarImageTransparency: number?,
 }
 local function LootTableUI(props: LootTableUIProps)
