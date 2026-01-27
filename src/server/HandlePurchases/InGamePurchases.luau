@@ -23,20 +23,17 @@ local function CanPlayerBuyCrates(player: Player)
 	return true
 end
 
-local function IsAlreadyOwned(
-	itemWon: string,
-	materialRolled: Enum.Material,
-	colorRolled: BrickColor,
-	player: Player,
-	dataKey: string
-)
+local function IsAlreadyOwned(itemWon, player: Player, dataKey: string)
 	local inventory = DataService:get(player, { dataKey })
 
 	for _, ownedItemName in ipairs(inventory) do
+		print(
+			`{itemWon.Name} -> {ownedItemName.Name}, {itemWon.Material} -> {ownedItemName.Material}, {itemWon.Color} -> {ownedItemName.Color}`
+		)
 		if
-			ownedItemName.Name == itemWon
-			and ownedItemName.Material == materialRolled.Name
-			and ownedItemName.Color == colorRolled.Name
+			itemWon.Name == ownedItemName.Name
+			and itemWon.Material == ownedItemName.Material
+			and itemWon.Color == ownedItemName.Color
 		then
 			return true
 		end
@@ -54,15 +51,11 @@ function Roll(player: Player, dataKey: string, packData)
 
 	local randomItemFromPack = UtilityModule.GetRandomPackItem(packData)
 
-	if
-		not IsAlreadyOwned(
-			randomItemFromPack.Name,
-			randomItemFromPack.Material,
-			randomItemFromPack.Color,
-			player,
-			dataKey
-		)
-	then
+	print(
+		`Item Chosen: {randomItemFromPack.Name} with material {randomItemFromPack.Material} and color {randomItemFromPack.Color}`
+	)
+
+	if not IsAlreadyOwned(randomItemFromPack, player, dataKey) then
 		print(
 			`{player.Name} won... {randomItemFromPack.Name} with material {randomItemFromPack.Material} and color {randomItemFromPack.Color}`
 		)

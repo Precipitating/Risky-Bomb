@@ -37,6 +37,23 @@ return {
 
 	VIPChair = "Very Important Seat",
 	VIPBomb = "Cashalicious Bomba",
+
 	RetroHalloweenChair = "Retro Chair",
 	RetroCar = "Retro Jeep",
+
+	RetroCircle = "Navigation Circle",
+	RetroSofa = "Retro Sofa",
+	RetroNoobHead = "Big Head",
+	RetroTrampoline = "Trampoline",
+	RetroTree = "Retro Tree",
+
+	DuckSA = "Ducky",
+	RetroTeapotBombSA = "Retro Teapot Turret",
+	RetroBombSA = "Retro Bomb",
+	ScrambledEggSA = "2013 Scrambled Egg",
+	NoobSA = "Noob Bomb",
+	UglyEggSA = "Agonizingly Ugly Bomb",
+	TixSA = "Tix",
+	NecroBookSA = "???",
+	PumpkinSA = "Pumpkineer",
 }

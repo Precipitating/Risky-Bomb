@@ -88,10 +88,10 @@ local function RandomSkinSwitching(obj: MeshPart, surfaceAppearance: SurfaceAppe
 		while alive do
 			task.wait(1)
 			if surfaceAppearance then
-				surfaceAppearance.Color = BrickColor.random().Color
-				obj.BrickColor = BrickColor.random()
+				surfaceAppearance.Color = UtilityModule.GetRandomColor().Color
+				obj.BrickColor = UtilityModule.GetRandomColor()
 			else
-				obj.BrickColor = BrickColor.random()
+				obj.BrickColor = UtilityModule.GetRandomColor()
 				obj.Material = UtilityModule.GetRandomMaterial()
 			end
 		end
@@ -136,11 +136,11 @@ local function CreateViewportFrame(
 			stopSkinSwapping()
 		end)
 	else
-		obj.BrickColor = BrickColor.random()
+		obj.BrickColor = UtilityModule.GetRandomColor()
 		local materialRolled = UtilityModule.RollMaterial(obj.Name)
 		if materialRolled == "None" then
 			if surfaceAppearance then
-				surfaceAppearance.Color = BrickColor.random().Color
+				surfaceAppearance.Color = UtilityModule.GetRandomColor().Color
 			end
 		else
 			obj.Material = materialRolled

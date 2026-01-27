@@ -38,6 +38,7 @@ return {
 			RetroTrampoline = Rarity.Epic,
 			RetroCar = Rarity.Epic,
 			RetroNoobHead = Rarity.Legendary,
+			RetroTeapotTurret = Rarity.Legendary,
 		},
 		AlreadyOwnedPayment = 500,
 	},

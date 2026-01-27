@@ -1,5 +1,6 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local InventoryItemFiltersUI = require(script.Parent.InventoryItemFiltersUI)
 local InventoryOwnedItemsUI = require(script.Parent.InventoryOwnedItemsUI)
 local InventoryUIFunctions = require(script.Parent.InventoryUIFunctions)
 local ModularImageLabel = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.ModularUI.ModularImageLabelUI)
@@ -122,7 +123,7 @@ local function InventoryFrameUI(props: InventoryFrameUIProps)
 				end
 				setBombPageOpened(false)
 				setChairPageOpened(true)
-				InventoryUIFunctions.OpenInventoryOf("chairs")
+				InventoryUIFunctions.OpenInventoryOf("ChairPage")
 			end,
 		}),
 		BombCategory = ModularTextButtonUI({
@@ -143,8 +144,22 @@ local function InventoryFrameUI(props: InventoryFrameUIProps)
 				end
 				setChairPageOpened(false)
 				setBombPageOpened(true)
-				InventoryUIFunctions.OpenInventoryOf("bombs")
+				InventoryUIFunctions.OpenInventoryOf("BombPage")
 			end,
+		}),
+		ItemFilters = InventoryItemFiltersUI({
+			IsOpen = bombPageOpened or chairPageOpened,
+			Position = UDim2.fromScale(0.25, 0.23),
+			Size = UDim2.fromScale(1, 0.05),
+			AspectRatio = 12,
+			InventoryType = (function()
+				if chairPageOpened then
+					return "ChairPage"
+				elseif bombPageOpened then
+					return "BombPage"
+				end
+				return ""
+			end)(),
 		}),
 
 		-- pages

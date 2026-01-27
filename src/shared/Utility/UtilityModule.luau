@@ -5,6 +5,29 @@ local ChairPacksData = require(ReplicatedStorage.Config.ChairPacksData)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local UtilityModule = {}
 
+local RandomColors = {
+	"Really red",
+	"Bright orange",
+	"New Yeller",
+	"Gold",
+	"Bright green",
+	"Dark green",
+	"Sea green",
+	"Cyan",
+	"Bright blue",
+	"Navy blue",
+	"Royal purple",
+	"Lavender",
+	"Eggplant",
+	"Reddish brown",
+	"Cork",
+	"White",
+	"Light stone grey",
+	"Really black",
+}
+function UtilityModule.GetRandomColor()
+	return BrickColor.new(RandomColors[math.random(1, #RandomColors)])
+end
 function UtilityModule.Get(parent, ...)
 	local current = parent
 
@@ -111,17 +134,18 @@ function UtilityModule.GetRandomPackItem(packTable, packType: number?, packName:
 	end
 
 	-- roll a random item based on these weights
-	local roll = math.random() * totalWeight
+	local rng = Random.new()
+	local roll = rng:NextNumber(0, totalWeight)
 	local cumulative = 0
 	for name, itemChance in pairs(packTable.ItemList) do
 		cumulative += itemChance
 		if roll <= cumulative then
 			local material = UtilityModule.RollMaterial(name)
-			local color = BrickColor.random()
+			local color = UtilityModule.GetRandomColor()
 			return {
 				Name = name,
 				RarityChance = itemChance,
-				Material = material.Name,
+				Material = material.Name or "None",
 				Color = color.Name,
 			}
 		end

@@ -66,8 +66,6 @@ local function BombInputScreenGUI()
 			SetIsOpen = setShopOpen,
 			LootTableOpen = lootTableOpen,
 			SetLootTableOpen = setLootTableOpen,
-			PackBought = packBought,
-			SetPackBought = SetPackBought,
 		}),
 		Inventory = InventoryFrameUI({
 			Position = UDim2.fromScale(0.3, 0.55),

@@ -2,7 +2,7 @@
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
-	<Item class="MeshPart" referent="RBXF6547BF81B9A44CA924F7A4DE1121012">
+	<Item class="MeshPart" referent="RBX5A5AE7A3CF5B441B846C4BF87E4D5760">
 		<Properties>
 			<bool name="DoubleSided">false</bool>
 			<bool name="HasJointOffset">false</bool>
@@ -98,7 +98,7 @@
 				<R02>0</R02>
 				<R10>0</R10>
 				<R11>1</R11>
-				<R12>-0</R12>
+				<R12>0</R12>
 				<R20>0</R20>
 				<R21>0</R21>
 				<R22>1</R22>
@@ -136,7 +136,7 @@
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="Seat" referent="RBXC32E9F99A5034392909F819EE6C9F547">
+		<Item class="Seat" referent="RBXFD55BEB78F664B079DC1667A9E5A2348">
 			<Properties>
 				<bool name="Disabled">false</bool>
 				<token name="shape">1</token>
@@ -197,7 +197,7 @@
 					<R02>0</R02>
 					<R10>0</R10>
 					<R11>1</R11>
-					<R12>-0</R12>
+					<R12>0</R12>
 					<R20>0</R20>
 					<R21>0</R21>
 					<R22>1</R22>
@@ -217,7 +217,7 @@
 				<float name="TopParamB">0.5</float>
 				<token name="TopSurface">0</token>
 				<token name="TopSurfaceInput">0</token>
-				<float name="Transparency">0</float>
+				<float name="Transparency">1</float>
 				<Vector3 name="Velocity">
 					<X>0</X>
 					<Y>0</Y>

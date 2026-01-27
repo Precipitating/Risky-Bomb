@@ -2,7 +2,7 @@
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
-	<Item class="MeshPart" referent="RBX71BC84D128044E11910B833D2E327E22">
+	<Item class="MeshPart" referent="RBXF8FDB54476F34AD5AF48F986F2824AD2">
 		<Properties>
 			<bool name="DoubleSided">false</bool>
 			<bool name="HasJointOffset">false</bool>
@@ -136,9 +136,9 @@
 			<int64 name="SourceAssetId">-1</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="SurfaceAppearance" referent="RBX6DE52AA98C4646618BA86B3B9FD47B0C">
+		<Item class="SurfaceAppearance" referent="RBXD7F862E496DF4536BCA40FC4D274C1BA">
 			<Properties>
-				<token name="AlphaMode">0</token>
+				<token name="AlphaMode">2</token>
 				<Color3 name="Color">
 					<R>1</R>
 					<G>1</G>
@@ -157,7 +157,7 @@
 				<Content name="MetalnessMap"><url>rbxassetid://6843038389</url></Content>
 				<Content name="NormalMap"><url>rbxassetid://6843038199</url></Content>
 				<Content name="RoughnessMap"><null></null></Content>
-				<Content name="TexturePack"><url>rbxassetid://6887462976</url></Content>
+				<Content name="TexturePack"><url>rbxassetid://110872312493306</url></Content>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
 				<bool name="DefinesCapabilities">false</bool>
@@ -166,7 +166,7 @@
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
 		</Item>
-		<Item class="Seat" referent="RBXEDDDE7ECB0D640BD85B5C016B400DA46">
+		<Item class="Seat" referent="RBXC22FAC3A7FA04B23AA9A0DFE87A6C675">
 			<Properties>
 				<bool name="Disabled">true</bool>
 				<token name="shape">1</token>
@@ -265,7 +265,7 @@
 				<int64 name="SourceAssetId">-1</int64>
 				<BinaryString name="Tags"></BinaryString>
 			</Properties>
-			<Item class="ProximityPrompt" referent="RBXA320C793FC3445E0B8C1E9D31CBC344A">
+			<Item class="ProximityPrompt" referent="RBXB25F486D90BF44879BC7F94E8D5FAFC0">
 				<Properties>
 					<string name="ActionText">Join</string>
 					<bool name="AutoLocalize">true</bool>

@@ -26,5 +26,20 @@ return {
 			PlaneSA = Rarity.Legendary,
 			TungBombSA = Rarity.Legendary,
 		},
+		AlreadyOwnedPayment = 500,
+	},
+	RetroPack = {
+		Cost = 1500,
+		ItemList = {
+			UglyEggSA = Rarity.Common,
+			TixSA = Rarity.Common,
+			DuckSA = Rarity.Rare,
+			RetroBombSA = Rarity.Rare,
+			NoobSA = Rarity.Epic,
+			RetroTeapotBombSA = Rarity.Epic,
+			NecroBookSA = Rarity.Legendary,
+			PumpkinSA = Rarity.Legendary,
+		},
+		AlreadyOwnedPayment = 500,
 	},
 }

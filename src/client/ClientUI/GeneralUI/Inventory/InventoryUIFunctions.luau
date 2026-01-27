@@ -6,6 +6,7 @@ local CommonUIFunctions =
 local RarityColor = require(ReplicatedStorage.Config.RarityColor)
 local UICharms = require(ReplicatedStorage.Charms.UICharms)
 local ItemToDisplayName = require(ReplicatedStorage.Config.ItemToDisplayName)
+local Janitor = require(ReplicatedStorage.Packages.Janitor)
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local Networker = require(ReplicatedStorage.Packages.Networker).client
@@ -14,15 +15,19 @@ local DataService = require(ReplicatedStorage.Packages.DataService).client
 local InventoryUIFunctions = {}
 
 InventoryUIFunctions.networker = Networker.new("InventoryRemotes", InventoryUIFunctions)
+InventoryUIFunctions.janitor = Janitor.new()
 local spinTweenInfo = TweenInfo.new(4, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, -1)
+local FullItemList = {}
 
-local function SpawnViewportButton(category: string, object, item)
-	local parentPath =
-		PlayerContext.PlayerGui:FindFirstChild("GeneralGUI"):FindFirstChild("Inventory"):WaitForChild(category)
+local function GetScrollFrameOfCategory(category: string)
+	local parentPath = UtilityModule.Get(PlayerContext.PlayerGui, "GeneralGUI", "Inventory", `{category}`)
 	if not parentPath then
 		error(`UI Reference to {category} not found`)
 	end
-
+	return parentPath
+end
+local function SpawnViewportButton(category: string, object, item)
+	local parentPath = GetScrollFrameOfCategory(category)
 	local imageButton: ImageButton = Instance.new("ImageButton")
 	local viewPort: ViewportFrame = Instance.new("ViewportFrame")
 	local objectClone = object:Clone()
@@ -53,7 +58,6 @@ local function SpawnViewportButton(category: string, object, item)
 			return
 		end
 		surfaceAppearance.Color = BrickColor.new(item.Color).Color
-		print(BrickColor.new(item.Color).Color)
 	else
 		objectClone.Material = Enum.Material[item.Material]
 		objectClone.BrickColor = BrickColor.new(item.Color)
@@ -74,7 +78,6 @@ local function SpawnViewportButton(category: string, object, item)
 
 	-- tooltip visibility events
 	imageButton.MouseEnter:Connect(function()
-		print(item.Name)
 		UICharms.CurrentToolTipInfo({
 			ItemName = `<font color="{UtilityModule.RGBToHex(RarityColor[item.RarityChance])}">Name: {ItemToDisplayName[item.Name] or item.Name}</font>`,
 			ItemColor = `<font color="{UtilityModule.RGBToHex(BrickColor.new(item.Color).Color)}">Color: {item.Color}</font>`,
@@ -104,24 +107,53 @@ local function SpawnViewportButton(category: string, object, item)
 		SoundManager.PlayExistingSound(SoundManager.UISounds.Success)
 		return true
 	end)
+
+	InventoryUIFunctions.janitor:Add(imageButton)
 end
 
-function InventoryUIFunctions.OpenInventoryOf(category: string)
+-- -1 rarity filter means ALL
+-- this function similar to OpenInventoryOf, but uses FullItemList to stop having to repopulate itself again for efficiency.
+function InventoryUIFunctions:FilterRarity(category: string, rarityFilter: number)
+	if #FullItemList <= 0 then
+		error("Empty item list")
+	end
+	self.janitor:Cleanup()
+	local searchPath, _ = InventoryUIFunctions.GetCategoryData(category)
+	local scrollFrame = GetScrollFrameOfCategory(category)
+	for _, item in ipairs(FullItemList) do
+		if rarityFilter and rarityFilter ~= -1 and item.RarityChance ~= rarityFilter then
+			continue
+		end
+		local ownedObject = searchPath:FindFirstChild(item.Name, true)
+		if not ownedObject then
+			warn(`Can't find {item.Name} in ReplicatedStorage `)
+			continue
+		end
+		SpawnViewportButton(category, ownedObject, item)
+	end
+	scrollFrame.CanvasPosition = Vector2.new(0, 0)
+end
+
+function InventoryUIFunctions.GetCategoryData(category: string)
 	local inventoryList = nil
 	local searchPath = nil
-	if category == "chairs" then
+	if category == "ChairPage" then
 		inventoryList = DataService:get({ "chairsOwned" })
-		print(inventoryList)
 		searchPath = ReplicatedStorage.Chairs
-		category = "ChairPage"
-	elseif category == "bombs" then
+	elseif category == "BombPage" then
 		inventoryList = DataService:get({ "bombsOwned" })
 		searchPath = ReplicatedStorage.Bombs
-		category = "BombPage"
 	else
 		error(`Error, failed to get inventory of {category}`)
 	end
 
+	return searchPath, inventoryList
+end
+
+function InventoryUIFunctions.OpenInventoryOf(category: string)
+	table.clear(FullItemList)
+	InventoryUIFunctions.janitor:Cleanup()
+	local searchPath, inventoryList = InventoryUIFunctions.GetCategoryData(category)
 	for _, item in ipairs(inventoryList) do
 		local ownedObject = searchPath:FindFirstChild(item.Name, true)
 		if not ownedObject then
@@ -129,6 +161,7 @@ function InventoryUIFunctions.OpenInventoryOf(category: string)
 			continue
 		end
 		SpawnViewportButton(category, ownedObject, item)
+		table.insert(FullItemList, item)
 	end
 end
 
