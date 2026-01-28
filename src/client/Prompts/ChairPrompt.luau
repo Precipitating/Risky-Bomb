@@ -4,7 +4,6 @@ local StarterPlayer = game:GetService("StarterPlayer")
 local Networker = require(ReplicatedStorage.Packages.Networker).client
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
---local Remotes = ReplicatedStorage.Remotes
 
 local ChairPrompt = {}
 ChairPrompt.networker = Networker.new("ChairRemotes", ChairPrompt)

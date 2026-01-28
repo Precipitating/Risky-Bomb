@@ -39,8 +39,7 @@ local function GetEquippedObjectName(player: Player, equipKey: string)
 	return objectEquipped
 end
 
--- playerOrTable = if player then get the equipped object manually, if string then its already done, so skip ahead
-function InventoryEvents.SetEquippedSkin(equipKey: string, objectType: string, playerOrTable, object: MeshPart)
+local function GetObjectEquipped(playerOrTable, equipKey: string)
 	local objectEquipped = nil
 	if typeof(playerOrTable) == "table" then
 		objectEquipped = playerOrTable
@@ -49,10 +48,25 @@ function InventoryEvents.SetEquippedSkin(equipKey: string, objectType: string, p
 	else
 		error("Wrong input data submitted for objectEquipped")
 	end
+	return objectEquipped
+end
 
-	object.Transparency = 1
-	local skinMesh: MeshPart =
-		ReplicatedStorage:FindFirstChild(objectType):FindFirstChild(objectEquipped.Name, true):Clone()
+local function ApplyParticleIfExists(skinMesh: MeshPart, object)
+	local hasParticle = skinMesh:FindFirstChildOfClass("ParticleEmitter")
+	if hasParticle then
+		hasParticle.Parent = object
+	end
+end
+
+-- match the pivot offsets to the chair sat, will be reverted on unsit
+local function ApplyEquippedSkinOffsets(skinMesh: MeshPart, object)
+	object.PivotOffset = skinMesh.PivotOffset
+	skinMesh:PivotTo(object:GetPivot())
+	object.CFrame *= skinMesh.PivotOffset
+end
+-- match equipped skin's color on chair sat
+local function ApplyMaterialsAndColors(object, skinMesh: MeshPart, objectEquipped)
+	object.Size = skinMesh.Size
 
 	local hasSurfaceAppearance: SurfaceAppearance | nil = skinMesh:FindFirstChildOfClass("SurfaceAppearance")
 	if not skinMesh then
@@ -60,24 +74,6 @@ function InventoryEvents.SetEquippedSkin(equipKey: string, objectType: string, p
 		return
 	end
 
-	local hasParticle = skinMesh:FindFirstChildOfClass("ParticleEmitter")
-	if hasParticle then
-		hasParticle.Parent = object
-	end
-
-	object.PivotOffset = skinMesh.PivotOffset
-	skinMesh:PivotTo(object:GetPivot())
-	object.CFrame *= skinMesh.PivotOffset
-
-	local newMesh = AssetService:CreateMeshPartAsync(skinMesh.MeshId)
-	object:ApplyMesh(newMesh)
-	if objectEquipped.Name == "Default" then
-		object.TextureID = skinMesh.TextureID
-	end
-
-	-- update mesh's info to match equipped object
-
-	object.Size = skinMesh.Size
 	if hasSurfaceAppearance then
 		local surfaceAppearanceClone = hasSurfaceAppearance:Clone()
 		surfaceAppearanceClone.Color = BrickColor.new(objectEquipped.Color).Color
@@ -86,15 +82,44 @@ function InventoryEvents.SetEquippedSkin(equipKey: string, objectType: string, p
 		object.BrickColor = BrickColor.new(objectEquipped.Color)
 		object.Material = Enum.Material[objectEquipped.Material] :: Enum.Material
 	end
+end
 
-	-- set the new skin's object position - it may be different
+local function ReplaceChairMeshWithEquipped(skinMesh: MeshPart, object, objectEquipped)
+	local newMesh = AssetService:CreateMeshPartAsync(skinMesh.MeshId)
+	object:ApplyMesh(newMesh)
+	if objectEquipped.Name == "Default" then
+		object.TextureID = skinMesh.TextureID
+	end
+
+	newMesh:Destroy()
+end
+
+local function MatchEquippedSkinSeatPosition(equipKey: string, skinMesh: MeshPart, object)
+	-- set the new skin's seat position - it may be different
 	if equipKey == "chairEquipped" then
 		local chairSeat = object:FindFirstChildOfClass("Seat")
 		local skinMeshSeat = skinMesh:FindFirstChildOfClass("Seat")
 		chairSeat:PivotTo(skinMeshSeat:GetPivot())
 	end
+end
+-- playerOrTable = if player then get the equipped object manually, if string then its already done, so skip ahead
+function InventoryEvents.SetEquippedSkin(equipKey: string, objectType: string, playerOrTable, object: MeshPart)
+	local objectEquipped = GetObjectEquipped(playerOrTable, equipKey)
 
-	newMesh:Destroy()
+	-- hide so we dont see the mesh resize when setting a new ID
+	object.Transparency = 1
+
+	local skinMesh: MeshPart =
+		ReplicatedStorage:FindFirstChild(objectType):FindFirstChild(objectEquipped.Name, true):Clone()
+
+	ApplyParticleIfExists(skinMesh, object)
+	ApplyEquippedSkinOffsets(skinMesh, object)
+	ReplaceChairMeshWithEquipped(skinMesh, object, objectEquipped)
+
+	-- update mesh's info to match equipped object
+	ApplyMaterialsAndColors(object, skinMesh, objectEquipped)
+	MatchEquippedSkinSeatPosition(equipKey, skinMesh, object)
+
 	skinMesh:Destroy()
 	object.Transparency = 0
 end

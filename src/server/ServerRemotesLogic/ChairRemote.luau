@@ -45,6 +45,16 @@ local function StartCountDown(playerCountText: TextLabel, countdownText: TextLab
 	end)
 end
 
+local function UpdatePlayerJoined(playerCountText: TextLabel, sat: boolean)
+	local currentJoined = playerCountText:GetAttribute("JoinedCount")
+	print(currentJoined)
+
+	local newCurrentJoined = sat and math.clamp(currentJoined + 1, 0, 2) or math.clamp(currentJoined - 1, 0, 2)
+	playerCountText:SetAttribute("JoinedCount", newCurrentJoined)
+	playerCountText.Text = `<b>Players Joined: {newCurrentJoined}/2</b>`
+	return newCurrentJoined
+end
+
 function ChairRemote:ChairSat(player: Player, gameTable, chair: MeshPart, sat: boolean)
 	local bomb = gameTable:FindFirstChild("Bomb")
 	local playerCountText: TextLabel = bomb:FindFirstChild("PlayersJoinedBillboard")
@@ -54,15 +64,9 @@ function ChairRemote:ChairSat(player: Player, gameTable, chair: MeshPart, sat: b
 		gameTable:FindFirstChild("Bomb"):FindFirstChild("CountdownBillboard"):FindFirstChildOfClass("TextLabel", true)
 
 	-- modify players joined count
+	local newCurrentJoined = UpdatePlayerJoined(playerCountText, sat)
 
-	local currentJoined = playerCountText:GetAttribute("JoinedCount")
-	print(currentJoined)
-
-	local newCurrentJoined = sat and math.clamp(currentJoined + 1, 0, 2) or math.clamp(currentJoined - 1, 0, 2)
-	playerCountText:SetAttribute("JoinedCount", newCurrentJoined)
-	playerCountText.Text = `<b>Players Joined: {newCurrentJoined}/2</b>`
-
-	-- add player reference to ID dictionary
+	-- add player reference to ID dictionary & handle sat/unsat events
 	if sat then
 		BombGameStorage.AssignPlayerToTable(gameTable:GetAttribute("ID"), player)
 		InventoryEvents.SetEquippedSkin("chairEquipped", "Chairs", player, chair)

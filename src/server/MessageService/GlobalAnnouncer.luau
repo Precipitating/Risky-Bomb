@@ -13,7 +13,7 @@ function GlobalAnnouncer.Initialize()
 end
 
 function GlobalAnnouncer.FireGlobalMessage(text: string)
-	local success, result = pcall(function()
+	local success, _ = pcall(function()
 		GlobalAnnouncerDataStore:UpdateAsync("Message", function(_)
 			return text
 		end)

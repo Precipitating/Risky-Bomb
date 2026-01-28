@@ -26,32 +26,30 @@ local function GetScrollFrameOfCategory(category: string)
 	end
 	return parentPath
 end
-local function SpawnViewportButton(category: string, object, item)
-	local parentPath = GetScrollFrameOfCategory(category)
-	local imageButton: ImageButton = Instance.new("ImageButton")
-	local viewPort: ViewportFrame = Instance.new("ViewportFrame")
-	local objectClone = object:Clone()
-	local camera: Camera = Instance.new("Camera")
-	local corner: UICorner = Instance.new("UICorner")
-	local surfaceAppearance: SurfaceAppearance | nil = objectClone:FindFirstChildOfClass("SurfaceAppearance")
 
-	corner.CornerRadius = UDim.new(0.1, 0)
-	corner.Parent = viewPort
+local function EquipItem(imageButton: ImageButton, category: string, item)
+	-- equip item
+	imageButton.Activated:Connect(function()
+		local result = InventoryUIFunctions.networker:fetch("EquipItem", category, item.Name, item.Material, item.Color)
+		if not result then
+			warn("Failed to set inventory item")
+			SoundManager.PlayExistingSound(SoundManager.UISounds.Error)
+			return false
+		end
+		SoundManager.PlayExistingSound(SoundManager.UISounds.Success)
+		return true
+	end)
+end
 
-	imageButton.BackgroundTransparency = 1
-	imageButton.ImageTransparency = 1
-	imageButton.Name = item.Name
-	imageButton.AnchorPoint = Vector2.new(0.5, 0.5)
-
+local function SetItemLayoutOrder(imageButton: ImageButton, item)
 	if item.Name == "Default" then
 		imageButton.LayoutOrder = -999
 	else
 		imageButton.LayoutOrder = -item.RarityChance
 	end
+end
 
-	CommonUIFunctions.CameraLookAtObject(camera, objectClone)
-	objectClone.Parent = viewPort
-
+local function SetItemColorAndMaterial(objectClone, surfaceAppearance: SurfaceAppearance?, item)
 	if surfaceAppearance then
 		if not surfaceAppearance then
 			warn("VIEWPORT OBJECT HAS NO SURFACE APPERANCE?")
@@ -62,16 +60,10 @@ local function SpawnViewportButton(category: string, object, item)
 		objectClone.Material = Enum.Material[item.Material]
 		objectClone.BrickColor = BrickColor.new(item.Color)
 	end
+end
 
-	camera.Parent = viewPort
-
-	viewPort.BackgroundColor3 = RarityColor[item.RarityChance]
-	viewPort.Parent = imageButton
-	viewPort.CurrentCamera = camera
-	viewPort.Size = UDim2.fromScale(1, 1)
-
-	imageButton.Parent = parentPath
-
+-- interaction connections
+local function ImageButtonConnections(imageButton: ImageButton, category: string, objectClone, item)
 	-- spin
 	TweenService:Create(objectClone, spinTweenInfo, { Orientation = objectClone.Orientation + Vector3.new(0, 360, 0) })
 		:Play()
@@ -86,6 +78,7 @@ local function SpawnViewportButton(category: string, object, item)
 		UICharms.ToolTipOpen(true)
 	end)
 
+	-- reset info for tooltip when unhovered
 	imageButton.MouseLeave:Connect(function()
 		UICharms.CurrentToolTipInfo({
 			ItemName = "???",
@@ -96,17 +89,44 @@ local function SpawnViewportButton(category: string, object, item)
 		UICharms.ToolTipOpen(false)
 	end)
 
-	-- equip item
-	imageButton.Activated:Connect(function()
-		local result = InventoryUIFunctions.networker:fetch("EquipItem", category, item.Name, item.Material, item.Color)
-		if not result then
-			warn("Failed to set inventory item")
-			SoundManager.PlayExistingSound(SoundManager.UISounds.Error)
-			return false
-		end
-		SoundManager.PlayExistingSound(SoundManager.UISounds.Success)
-		return true
-	end)
+	EquipItem(imageButton, category, item)
+end
+
+local function SpawnViewportButton(category: string, object, item)
+	local parentPath = GetScrollFrameOfCategory(category)
+	local imageButton: ImageButton = Instance.new("ImageButton")
+	local viewPort: ViewportFrame = Instance.new("ViewportFrame")
+	local objectClone = object:Clone()
+	local camera: Camera = Instance.new("Camera")
+	local corner: UICorner = Instance.new("UICorner")
+	local surfaceAppearance: SurfaceAppearance? = objectClone:FindFirstChildOfClass("SurfaceAppearance")
+
+	-- set properties for required objects
+	corner.CornerRadius = UDim.new(0.1, 0)
+	corner.Parent = viewPort
+
+	imageButton.BackgroundTransparency = 1
+	imageButton.ImageTransparency = 1
+	imageButton.Name = item.Name
+	imageButton.AnchorPoint = Vector2.new(0.5, 0.5)
+
+	viewPort.BackgroundColor3 = RarityColor[item.RarityChance]
+	viewPort.Parent = imageButton
+	viewPort.CurrentCamera = camera
+	viewPort.Size = UDim2.fromScale(1, 1)
+
+	-- common -> legendary rarity ascending
+	SetItemLayoutOrder(imageButton, item)
+
+	-- make camera face the object, via its max dimensions, default skin will be first no matter what
+	CommonUIFunctions.CameraLookAtObject(camera, objectClone)
+
+	SetItemColorAndMaterial(objectClone, surfaceAppearance, item)
+	ImageButtonConnections(imageButton, category, objectClone, item)
+
+	objectClone.Parent = viewPort
+	camera.Parent = viewPort
+	imageButton.Parent = parentPath
 
 	InventoryUIFunctions.janitor:Add(imageButton)
 end
@@ -134,6 +154,7 @@ function InventoryUIFunctions:FilterRarity(category: string, rarityFilter: numbe
 	scrollFrame.CanvasPosition = Vector2.new(0, 0)
 end
 
+-- gets the inventory data store key depending on category input
 function InventoryUIFunctions.GetCategoryData(category: string)
 	local inventoryList = nil
 	local searchPath = nil
@@ -150,16 +171,21 @@ function InventoryUIFunctions.GetCategoryData(category: string)
 	return searchPath, inventoryList
 end
 
+-- goes through inventory datastore and spawn every item in the specified category
+-- also stores all the items in a table
 function InventoryUIFunctions.OpenInventoryOf(category: string)
 	table.clear(FullItemList)
 	InventoryUIFunctions.janitor:Cleanup()
+
 	local searchPath, inventoryList = InventoryUIFunctions.GetCategoryData(category)
 	for _, item in ipairs(inventoryList) do
 		local ownedObject = searchPath:FindFirstChild(item.Name, true)
+
 		if not ownedObject then
 			warn(`Can't find {item.Name} in ReplicatedStorage `)
 			continue
 		end
+
 		SpawnViewportButton(category, ownedObject, item)
 		table.insert(FullItemList, item)
 	end

@@ -76,7 +76,6 @@ end
 
 function LeaderboardHandler:Initialize()
 	-- leaderboardKey must match the leaderboard mesh part name
-
 	self:PopulateLeaderboard("DonationBoard", false, 10)
 	self:PopulateLeaderboard("WinsBoard", false, 10)
 	self:PopulateLeaderboard("IngameMoneyBoard", false, 10)
