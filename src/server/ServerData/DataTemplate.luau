@@ -12,9 +12,10 @@ return {
 	firstJoin = true,
 	currency = 0,
 	sessionJoinTime = 0,
+	canAwardDaily = false,
 	VIP = false,
 	VIPItemsAwarded = false,
-
+	consecutiveDay = 1,
 	chairsOwned = {
 		[1] = {
 			Name = "Default",

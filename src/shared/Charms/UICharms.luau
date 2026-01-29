@@ -12,4 +12,5 @@ return {
 	}),
 	SpinTweenHandle = Charm.atom({}),
 	PackBought = Charm.atom(false),
+	CanAwardDaily = Charm.atom(true),
 }
