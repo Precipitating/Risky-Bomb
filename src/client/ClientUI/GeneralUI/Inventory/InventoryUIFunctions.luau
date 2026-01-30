@@ -191,4 +191,10 @@ function InventoryUIFunctions.OpenInventoryOf(category: string)
 	end
 end
 
+function InventoryUIFunctions:RedeemCode(codeInputted: string)
+	local result = self.networker:fetch("RedeemCode", codeInputted)
+
+	return result
+end
+
 return InventoryUIFunctions

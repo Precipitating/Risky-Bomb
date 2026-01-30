@@ -16,6 +16,7 @@ return {
 	VIP = false,
 	VIPItemsAwarded = false,
 	consecutiveDay = 1,
+
 	chairsOwned = {
 		[1] = {
 			Name = "Default",
@@ -47,4 +48,5 @@ return {
 		Material = "SmoothPlastic",
 		Color = "Black",
 	},
+	codesRedeemed = {},
 }

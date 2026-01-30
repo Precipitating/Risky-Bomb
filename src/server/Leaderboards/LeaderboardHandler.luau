@@ -48,7 +48,9 @@ function LeaderboardHandler:PopulateLeaderboard(leaderboardKey: string, ascendin
 			if success then
 				local entries = pages:GetCurrentPage()
 				for rank, entry in pairs(entries) do
-					--leaderboard:RemoveAsync(entry.key)
+					if entry.key == "-1" or entry.key == "-2" then
+						leaderboard:RemoveAsync(entry.key)
+					end
 					local userId = tonumber(entry.key)
 					if userId <= 0 then
 						continue

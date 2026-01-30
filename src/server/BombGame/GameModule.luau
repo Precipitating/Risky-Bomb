@@ -47,6 +47,12 @@ local function SetInitialTurn(tableID: string)
 	local firstPlayerTurn = nil
 	print(PlayersPlayingList)
 	for player in pairs(PlayersPlayingList[tableID]) do
+		-- triple check player is actually sat down playing
+		local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+		if not humanoid or not humanoid.Sit then
+			BombGameStorage.UnAssignSinglePlayerFromTable(tableID, player)
+		end
+
 		-- initialize turn, one should be true and one should be false
 		if firstPlayerTurn == nil then
 			local randTurn = math.random() < 0.5

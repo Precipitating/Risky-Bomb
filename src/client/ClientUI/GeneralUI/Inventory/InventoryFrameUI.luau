@@ -1,5 +1,6 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local InventoryCodePageUI = require(script.Parent.InventoryCodePageUI)
 local InventoryItemFiltersUI = require(script.Parent.InventoryItemFiltersUI)
 local InventoryOwnedItemsUI = require(script.Parent.InventoryOwnedItemsUI)
 local InventoryUIFunctions = require(script.Parent.InventoryUIFunctions)
@@ -23,11 +24,13 @@ type InventoryFrameUIProps = {
 local function InventoryFrameUI(props: InventoryFrameUIProps)
 	local chairPageOpened, setChairPageOpened = React.useState(false)
 	local bombPageOpened, setBombPageOpened = React.useState(false)
+	local codePageOpened, setCodePageOpened = React.useState(false)
 
 	React.useEffect(function()
 		if props.IsOpen then
 			setChairPageOpened(false)
 			setBombPageOpened(false)
+			setCodePageOpened(false)
 		end
 	end, { props.IsOpen })
 
@@ -122,6 +125,7 @@ local function InventoryFrameUI(props: InventoryFrameUIProps)
 					return
 				end
 				setBombPageOpened(false)
+				setCodePageOpened(false)
 				setChairPageOpened(true)
 				InventoryUIFunctions.OpenInventoryOf("ChairPage")
 			end,
@@ -143,10 +147,33 @@ local function InventoryFrameUI(props: InventoryFrameUIProps)
 					return
 				end
 				setChairPageOpened(false)
+				setCodePageOpened(false)
 				setBombPageOpened(true)
 				InventoryUIFunctions.OpenInventoryOf("BombPage")
 			end,
 		}),
+		CodeCategory = ModularTextButtonUI({
+			Text = "Codes",
+			Position = UDim2.fromScale(0.05, 0.5),
+			Size = UDim2.fromScale(0.15, 0.15),
+			TextColor = Color3.fromRGB(255, 255, 255),
+			AspectRatio = 3,
+			isOpen = props.IsOpen,
+			TextXAlignment = Enum.TextXAlignment.Left,
+			BackgroundTransparency = 1,
+			StrokeThickness = 0,
+			CornerRadius = UDim.new(0.1, 0),
+			Font = Enum.Font.FredokaOne,
+			OnClick = function()
+				if codePageOpened then
+					return
+				end
+				setChairPageOpened(false)
+				setBombPageOpened(false)
+				setCodePageOpened(true)
+			end,
+		}),
+
 		ItemFilters = InventoryItemFiltersUI({
 			IsOpen = bombPageOpened or chairPageOpened,
 			Position = UDim2.fromScale(0.25, 0.23),
@@ -175,6 +202,11 @@ local function InventoryFrameUI(props: InventoryFrameUIProps)
 			Size = UDim2.fromScale(0.65, 0.5),
 			IsOpen = bombPageOpened,
 			SetIsOpen = setChairPageOpened,
+		}),
+		CodePage = InventoryCodePageUI({
+			Position = UDim2.fromScale(0.23, 0.3),
+			Size = UDim2.fromScale(0.65, 0.5),
+			IsOpen = codePageOpened,
 		}),
 	})
 end

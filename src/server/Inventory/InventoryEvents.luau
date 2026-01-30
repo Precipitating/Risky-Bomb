@@ -1,4 +1,7 @@
 local AssetService = game:GetService("AssetService")
+local ServerScriptService = game:GetService("ServerScriptService")
+
+local ValidRedeemCodes = require(ServerScriptService.Server.ServerData.ValidRedeemCodes)
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local DataService = require(ReplicatedStorage.Packages.DataService).server
 local Networker = require(ReplicatedStorage.Packages.Networker).server
@@ -147,6 +150,24 @@ function InventoryEvents:EquipItem(
 	print(DataService:get(player, itemType))
 	return true
 end
+local function Trim(s)
+	return s:match("^%s*(.-)%s*$")
+end
 
-InventoryEvents.networker = Networker.new("InventoryRemotes", InventoryEvents, { InventoryEvents.EquipItem })
+function InventoryEvents:RedeemCode(player: Player, codeInputted: string)
+	codeInputted = Trim(string.upper(codeInputted))
+	print(codeInputted)
+	if ValidRedeemCodes[codeInputted] ~= nil then
+		local codesRedeemed = DataService:get(player, { "codesRedeemed" })
+		if codesRedeemed[codeInputted] == nil then
+			ValidRedeemCodes[codeInputted](player)
+			codesRedeemed[codeInputted] = true
+			return true
+		end
+	end
+	return false
+end
+
+InventoryEvents.networker =
+	Networker.new("InventoryRemotes", InventoryEvents, { InventoryEvents.EquipItem, InventoryEvents.RedeemCode })
 return InventoryEvents
