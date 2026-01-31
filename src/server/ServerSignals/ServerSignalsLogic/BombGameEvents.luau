@@ -4,9 +4,12 @@ local ServerSignals = require(ServerScriptService.ServerSignals.Signals)
 local BombGameEvents = {}
 
 function BombGameEvents.Handle()
-	ServerSignals.GameFinished:Connect(function(gameTable: Model)
-		local id = gameTable:GetAttribute("ID")
-		GameModule:FinishGame(id)
+	ServerSignals.GameFinished:Connect(function(tableClass)
+		GameModule:FinishGame(tableClass)
+	end)
+
+	ServerSignals.BeginGame:Connect(function(tableClass)
+		GameModule.BeginGame(tableClass)
 	end)
 end
 

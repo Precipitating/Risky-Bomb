@@ -7,15 +7,14 @@ local PlayerModule = PlayerContext.Player:WaitForChild("PlayerScripts"):WaitForC
 
 local InputRemotes = {}
 
-function InputRemotes:SetGameCamera(enable: boolean, tableRef: Model)
+function InputRemotes:SetGameCamera(enable: boolean, cameraPos: Part)
 	if enable then
-		if not tableRef then
-			error("Table reference not found when setting camera to game table!")
+		if not cameraPos then
+			error("Camera part not found on SetGameCamera")
 			return
 		end
-		local pos: Part = tableRef:FindFirstChild("CameraPos") :: Part
 		workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
-		workspace.CurrentCamera:PivotTo(pos.CFrame)
+		workspace.CurrentCamera:PivotTo(cameraPos.CFrame)
 	else
 		print("Reset game camera pos")
 		workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
@@ -34,7 +33,7 @@ end
 
 function InputRemotes:SubmitBombTime(currentInput: number)
 	SoundManager.PlayExistingSound(SoundManager.UISounds.Submit)
-	self.networking:fire("SubmitBombTime", PlayerContext.Character:GetAttribute("AssignedTable"), currentInput)
+	self.networking:fire("SubmitBombTime", PlayerContext.Character:GetAttribute("ID"), currentInput)
 end
 
 function InputRemotes:Initialize()

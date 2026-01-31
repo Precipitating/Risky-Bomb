@@ -2,7 +2,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local ServerScriptService = game:GetService("ServerScriptService").Server
 local DataService = require(ReplicatedStorage.Packages.DataService).server
 local VIPHandler = require(ReplicatedStorage.VIP.VIPHandler)
-local BombGameStorage = require(ServerScriptService.BombGame.BombGameStorage)
 local LeaderboardHandler = require(ServerScriptService.Leaderboards.LeaderboardHandler)
 local PlayerEvents = {}
 
@@ -24,11 +23,12 @@ function PlayerEvents.Handle()
 
 			character.Humanoid.Died:Connect(function()
 				-- if died on table, unassign
-				local tableID = character:GetAttribute("AssignedTable")
-				if tableID then
-					print("Unassigned dead player from")
-					BombGameStorage.UnAssignSinglePlayerFromTable(tableID, player)
-				end
+				-- local tableID = character:GetAttribute("AssignedTable")
+				-- if tableID then
+				--print("Unassigned dead player from")
+				--GameTableManager.UnassignPlayerFromTable(tableID)
+				--BombGameStorage.UnAssignSinglePlayerFromTable(tableID, player)
+				--end
 			end)
 		end)
 	end)

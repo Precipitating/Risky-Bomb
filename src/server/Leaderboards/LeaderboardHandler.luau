@@ -71,7 +71,7 @@ function LeaderboardHandler:PopulateLeaderboard(leaderboardKey: string, ascendin
 					self.janitor:Add(leaderboardElement)
 				end
 			end
-			task.wait(60)
+			task.wait(300)
 		end
 	end)
 end

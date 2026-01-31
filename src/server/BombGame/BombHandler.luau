@@ -2,38 +2,36 @@ local ServerScriptService = game:GetService("ServerScriptService").Server
 local TweenService = game:GetService("TweenService")
 local SoundToClient = require(ServerScriptService.ServerRemotesLogic.SoundToClient)
 local ServerSignals = require(ServerScriptService.ServerSignals.Signals)
-local BombGameStorage = require(script.Parent.BombGameStorage)
 local BombServerConfig = require(script.Parent.BombServerConfig)
-
-local PlayersPlayingList = BombGameStorage.GetPlayerList()
 
 local BombHandler = {}
 
-local function PlayTickSound(bombRef: MeshPart, gameTable)
-	for player in pairs(PlayersPlayingList[gameTable:GetAttribute("ID")]) do
-		SoundToClient:PlayBombTickOnClient(player, bombRef)
+local function PlayTickSound(playersList, bomb: MeshPart)
+	for _, player in pairs(playersList) do
+		SoundToClient:PlayBombTickOnClient(player, bomb)
 	end
 end
 
-local function BombTween(bombRef: MeshPart, startTime: number, gameTable: Model)
-	while bombRef:GetAttribute("Active") do
-		local currTime = bombRef:GetAttribute("Time")
+local function BombTween(tableClass, startTime: number)
+	local bomb = tableClass.TableRefs.Bomb
+	if not bomb then
+		error("Missing bomb reference when tweening bomb!")
+	end
+	while tableClass.BombActive do
+		local currTime = tableClass.BombTimeLeft
 		local duration = math.max(BombServerConfig.MINIMUM_TWEEN_DURATION, currTime / startTime)
 		local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out, 0, true)
 
-		local tween = TweenService:Create(bombRef, tweenInfo, {
+		local tween = TweenService:Create(bomb, tweenInfo, {
 			Size = BombServerConfig.BOMB_SCALED_UP,
 		})
 
 		tween:Play()
-		PlayTickSound(bombRef, gameTable)
+		PlayTickSound(tableClass.PlayersAssigned, bomb)
 		tween.Completed:Wait()
 	end
 end
 
-local function StopBomb(bombRef: MeshPart)
-	bombRef:SetAttribute("Active", false)
-end
 local function SpawnExplosionEffect(bombRef: MeshPart)
 	local explosion = Instance.new("Explosion")
 	explosion.Position = bombRef.Position
@@ -43,58 +41,61 @@ local function SpawnExplosionEffect(bombRef: MeshPart)
 	explosion.Parent = game.Workspace -- Add the explosion to the workspace to trigger it
 end
 
-local function DetonateBomb(bombRef: MeshPart, gameTable: Model)
-	StopBomb(bombRef)
+local function DetonateBomb(tableClass, bombRef: MeshPart)
+	tableClass.BombActive = false
 	SpawnExplosionEffect(bombRef)
 	bombRef.Transparency = 1
-	ServerSignals.GameFinished:Fire(gameTable)
+	ServerSignals.GameFinished:Fire(tableClass)
 end
 
-local function StartTicking(bombRef: MeshPart, gameTable: Model)
+local function StartTicking(tableClass)
+	local bomb = tableClass.TableRefs.Bomb
 	-- count down
 	task.spawn(function()
-		while bombRef:GetAttribute("Active") do
-			local timeLeft = bombRef:GetAttribute("Time")
+		while tableClass.BombActive do
+			print(tableClass.BombTimeLeft) -- debugging, delete later
+			local timeLeft = tableClass.BombTimeLeft
 
 			if timeLeft <= 0 then
-				DetonateBomb(bombRef, gameTable)
+				DetonateBomb(tableClass, bomb)
 				return
 			end
 
-			bombRef:SetAttribute("Time", timeLeft - 1)
+			tableClass.BombTimeLeft -= 1
 			task.wait(1)
 		end
 	end)
 end
 
-local function StartScaleLerping(bombRef: MeshPart, startTime: number, gameTable)
+local function StartScaleLerping(tableClass, startTime: number)
 	task.spawn(function()
-		BombTween(bombRef, startTime, gameTable)
+		BombTween(tableClass, startTime)
 	end)
 end
 
 -- returns true if bomb time is <= 0
-function BombHandler.ReduceBombTime(bombRef: MeshPart, reductionTime: number)
-	if not bombRef:GetAttribute("Active") then
+function BombHandler.ReduceBombTime(tableClass, reductionTime: number)
+	if not tableClass.BombActive then
 		return nil
 	end
-	local currentTime = bombRef:GetAttribute("Time")
+	local currentTime = tableClass.BombTimeLeft
 	local result = currentTime - reductionTime
-	bombRef:SetAttribute("Time", result)
+	tableClass.BombTimeLeft = result
 
 	return result
 end
 
-local function StartBomb(bombRef: MeshPart, startTime: number, gameTable: Model)
-	bombRef:SetAttribute("Active", true)
-	StartTicking(bombRef, gameTable)
-	StartScaleLerping(bombRef, startTime, gameTable)
+local function StartBomb(tableClass, startTime: number)
+	tableClass.BombActive = true
+	StartTicking(tableClass)
+	StartScaleLerping(tableClass, startTime)
 end
 
-function BombHandler.InitializeBomb(bombRef: MeshPart, gameTable: Model)
+function BombHandler.InitializeBomb(tableClass)
 	local startTime = math.random(BombServerConfig.MIN_BOMB_TIME, BombServerConfig.MAX_BOMB_TIME)
-	bombRef:SetAttribute("Time", startTime)
-	StartBomb(bombRef, startTime, gameTable)
+	tableClass.BombTimeLeft = startTime
+	--bombRef:SetAttribute("Time", startTime)
+	StartBomb(tableClass, startTime)
 end
 
 return BombHandler
