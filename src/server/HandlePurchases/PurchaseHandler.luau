@@ -27,19 +27,27 @@ ProductFunctions[3512408744] = function(_, player)
 end
 ProductFunctions[3512408743] = function(_, player)
 	DataService:update(player, { "currency" }, function(currentCash)
-		return currentCash + 2500
+		return currentCash + 2300
 	end)
 	return true
 end
 ProductFunctions[3512408742] = function(_, player)
 	DataService:update(player, { "currency" }, function(currentCash)
-		return currentCash + 5250
+		return currentCash + 6200
 	end)
 	return true
 end
 ProductFunctions[3512408741] = function(_, player)
 	DataService:update(player, { "currency" }, function(currentCash)
-		return currentCash + 11500
+		return currentCash + 14000
+	end)
+
+	return true
+end
+
+ProductFunctions[3526966512] = function(_, player)
+	DataService:update(player, { "currency" }, function(currentCash)
+		return currentCash + 32000
 	end)
 
 	return true

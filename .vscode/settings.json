@@ -7,6 +7,10 @@
         {
             "folderPath": "Risky Bomb\\src\\shared\\",
             "color": "foldercolorizer.color_ff00ff"
+        },
+        {
+            "folderPath": "Risky Bomb\\src\\server\\ServerData\\",
+            "color": "foldercolorizer.color_0066cc"
         }
     ]
 }

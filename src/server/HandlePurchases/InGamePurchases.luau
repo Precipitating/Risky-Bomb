@@ -118,6 +118,7 @@ function InGamePurchases:AttemptBuy(player: Player, packType: number, packName: 
 	print(`Attempting to buy a {packType} of name {packName}...`)
 
 	local playerCash = DataService:get(player, { "currency" })
+
 	local objectOwnedKey = GetItemsOwnedDatastoreKey(packType)
 
 	local packTable = UtilityModule.GetPackList(packType, packName)

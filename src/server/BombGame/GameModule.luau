@@ -3,6 +3,7 @@ local ServerScriptService = game:GetService("ServerScriptService").Server
 local ServerStorage = game:GetService("ServerStorage")
 local InventoryEvents = require(ServerScriptService.Inventory.InventoryEvents)
 local LeaderboardHandler = require(ServerScriptService.Leaderboards.LeaderboardHandler)
+local Signals = require(ServerScriptService.ServerSignals.Signals)
 local GUIRemotes = require(ServerScriptService.ServerRemotesLogic.GUIRemotes)
 local OrderedDataStores = require(ServerScriptService.ServerData.OrderedDataStores)
 local SoundToClient = require(ServerScriptService.ServerRemotesLogic.SoundToClient)
@@ -14,19 +15,23 @@ local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local BombHandler = require(script.Parent.BombHandler)
 local BombServerConfig = require(script.Parent.BombServerConfig)
 local GameTableManager = require(script.Parent.GameTableManager)
+local Table = require(script.Parent.Table)
 local Remotes = ReplicatedStorage.Remotes
 local GUINetwork = GUIRemotes.networker
 
-local WIN_REWARD = 100
+local WIN_REWARD = 300
+local AI_REWARD = 100
 local LOSE_REWARD = 50
+local ABRUPT_REWARD = 10
 
 local GameModule = {}
 
 function GameModule:DisablePlayerControlsOnTable(playersList, cameraPart: Part)
 	print("disable controls called")
 	for _, player in pairs(playersList) do
-		print(player)
-		print(cameraPart)
+		if not player then
+			continue
+		end
 		self.inputNetworker:fire(player, "DisableControls", true)
 		self.inputNetworker:fire(player, "SetGameCamera", true, cameraPart)
 	end
@@ -34,6 +39,10 @@ end
 
 function GameModule:PlayAudioForTablePlayers(playersList, audioID: string, oneShot: boolean)
 	for _, player in pairs(playersList) do
+		if not player then
+			warn("One player ref missing setting audio for players, ignore if AI mode")
+			continue
+		end
 		if oneShot then
 			SoundToClient:PlaySoundOnClient(player, audioID, nil, false, nil)
 		else
@@ -42,11 +51,28 @@ function GameModule:PlayAudioForTablePlayers(playersList, audioID: string, oneSh
 	end
 end
 local function SetInitialTurn(tableClass)
+	local playerList = tableClass.PlayersAssigned
+	-- AI
+	if tableClass.AIConfig.AIMode then
+		local playerID = (tableClass.PlayersAssigned[1] and 1) or (tableClass.PlayersAssigned[2] and 2)
+		tableClass.AIConfig.PlayerID = playerID
+		local random = math.random()
+		if random >= 0.5 then
+			tableClass.AIConfig.AITurn = true
+			Signals.AITurn:Fire(tableClass)
+		else
+			GUINetwork:fire(playerList[playerID], "SyncTurn", true)
+			GameModule.StartCountdown(tableClass, playerID)
+		end
+		return
+	end
+
+	-- normal 1v1
+
 	if not tableClass.PlayersAssigned[1] or not tableClass.PlayersAssigned[2] then
 		error("PlayersAssigned not populated correctly")
 	end
 
-	local playerList = tableClass.PlayersAssigned
 	print(tableClass)
 	local randomPlayerID = math.random(1, 2)
 	tableClass.CurrentTurn = randomPlayerID
@@ -86,19 +112,47 @@ local function HandleLoser(loser)
 	SoundToClient:PlaySoundOnClient(loser, SoundManager.GameSounds.Lose, nil, false, nil)
 end
 
-local function HandleWinner(winner: Player)
+local function HandleWinner(winner: Player, abruptEnd: boolean?, isAI: boolean?)
 	if not winner then
 		print("Winner player ref is nil!")
 	end
 
 	-- update to store
-	DataService:update(winner, { "currency" }, function(currentCash)
-		return currentCash + VIPHandler.DoubleRewardsIfVIP(winner, WIN_REWARD)
-	end)
+	if not abruptEnd then
+		if isAI then
+			DataService:update(winner, { "currency" }, function(currentCash)
+				return currentCash + VIPHandler.DoubleRewardsIfVIP(winner, AI_REWARD)
+			end)
+		else
+			DataService:update(winner, { "currency" }, function(currentCash)
+				return currentCash + VIPHandler.DoubleRewardsIfVIP(winner, WIN_REWARD)
+			end)
+		end
+	else
+		DataService:update(winner, { "currency" }, function(currentCash)
+			return currentCash + VIPHandler.DoubleRewardsIfVIP(winner, ABRUPT_REWARD)
+		end)
+	end
 	LeaderboardHandler.AddValueToDataStore(OrderedDataStores.WinStore, winner, 1)
 
 	SoundToClient:PlaySoundOnClient(winner, SoundManager.GameSounds.Win, nil, false, nil)
 	print(`Winner: {winner.DisplayName}`)
+end
+
+-- if player leaves or somehow dies unnaturally we should call this instead of FinishGame
+function GameModule:AbruptEnd(tableClass, winner: Player)
+	tableClass.GameActive = false
+	tableClass.BombActive = false
+	if not winner then
+		GameModule.RespawnTable(tableClass)
+		return
+	end
+	GameModule:PlayAudioForTablePlayers(tableClass.PlayersAssigned, SoundManager.GetRandomMainSound(), false)
+	self.inputNetworker:fire(winner, "DisableControls", false)
+	self.inputNetworker:fire(winner, "SetGameCamera", false, nil)
+	GUIRemotes.networker:fire(winner, "BombGUIDisconnect")
+	HandleWinner(winner, true)
+	GameModule.RespawnTable(tableClass)
 end
 
 function GameModule:FinishGame(tableClass)
@@ -108,9 +162,23 @@ function GameModule:FinishGame(tableClass)
 	tableClass.GameActive = false
 	GameModule:PlayAudioForTablePlayers(playerList, SoundManager.GetRandomMainSound(), false)
 	for _, player in pairs(playerList) do
+		if not player then
+			continue
+		end
 		self.inputNetworker:fire(player, "DisableControls", false)
 		self.inputNetworker:fire(player, "SetGameCamera", false, nil)
 		GUIRemotes.networker:fire(player, "BombGUIDisconnect")
+	end
+
+	if tableClass.AIConfig.AIMode then
+		local playerID = tableClass.AIConfig.PlayerID
+		if tableClass.AIConfig.AITurn then
+			HandleWinner(tableClass.PlayersAssigned[playerID], true)
+		else
+			HandleLoser(tableClass.PlayersAssigned[playerID])
+		end
+		GameModule.RespawnTable(tableClass)
+		return
 	end
 
 	local currentTurnID = tableClass.CurrentTurn
@@ -136,6 +204,21 @@ function ExceededCountdown(tableClass, targetPlayer: Player)
 	end
 end
 
+local function CanStillCountdownBar(tableClass, targetPlayerID: number)
+	local aiConfig = tableClass.AIConfig
+	if not aiConfig or not aiConfig.AIMode then
+		if tableClass.CurrentTurn ~= targetPlayerID then
+			warn("id doesn't match, not countin down")
+			return false
+		end
+	else
+		if tableClass.AIConfig.AITurn then
+			return false
+		end
+	end
+	return true
+end
+
 -- moves the countdown bar when called
 function GameModule.StartCountdown(tableClass, targetPlayerID: number)
 	local targetPlayer = tableClass.PlayersAssigned[targetPlayerID]
@@ -148,24 +231,42 @@ function GameModule.StartCountdown(tableClass, targetPlayerID: number)
 				return
 			end
 
-			if tableClass.CurrentTurn ~= targetPlayerID then
-				warn("id doesn't match, not countin down")
+			if not CanStillCountdownBar(tableClass, targetPlayer) then
 				return
 			end
 
 			GUINetwork:fire(targetPlayer, "UpdateCountdownBar", timeLeft)
 			task.wait(1)
 		end
-
 		-- one more check (if they input at 0, it still assumes its your turn)
-		if tableClass.CurrentTurn ~= targetPlayerID then
+		if not CanStillCountdownBar(tableClass, targetPlayer) then
 			return
 		end
+
 		ExceededCountdown(tableClass, targetPlayer)
 	end)
 end
 function GameModule.NextTurn(tableClass)
 	local playerList = tableClass.PlayersAssigned
+
+	-- AI Mode
+	if tableClass.AIConfig.AIMode then
+		local config = tableClass.AIConfig
+		local playerID = tableClass.AIConfig.PlayerID
+		local player = playerList[playerID]
+		if config.AITurn then
+			config.AITurn = false
+			GUINetwork:fire(player, "SyncTurn", true)
+			GameModule.StartCountdown(tableClass, playerID)
+		else
+			config.AITurn = true
+			GUINetwork:fire(player, "SyncTurn", false)
+			Signals.AITurn:Fire(tableClass)
+		end
+		return
+	end
+
+	-- normal mode
 	local whosTurnCurrently = tableClass.CurrentTurn
 	print(`current {whosTurnCurrently} `)
 	local nextTurn = 3 - whosTurnCurrently
@@ -192,6 +293,10 @@ function GameModule.SetBombSkin(tableClass)
 
 	local equippedBombs = {}
 	for _, playerRef in ipairs(tableClass.PlayersAssigned) do
+		if not playerRef then
+			warn("One player ref missing setting bomb skin, ignore if AI mode")
+			continue
+		end
 		local objectEquipped = DataService:get(playerRef, { "bombEquipped" })
 		table.insert(equippedBombs, objectEquipped)
 	end
@@ -201,12 +306,11 @@ function GameModule.SetBombSkin(tableClass)
 end
 
 function GameModule.BeginGame(tableClass)
-	print(tableClass)
+	GameModule:DisablePlayerControlsOnTable(tableClass.PlayersAssigned, tableClass.TableRefs.CameraPos)
 	GameModule.SetBombSkin(tableClass)
 	tableClass.GameActive = true
-
 	GameModule:PlayAudioForTablePlayers(tableClass.PlayersAssigned, SoundManager.GetRandomBombThemeSound(), false)
-	GameModule:DisablePlayerControlsOnTable(tableClass.PlayersAssigned, tableClass.TableRefs.CameraPos)
+
 	BombHandler.InitializeBomb(tableClass)
 	SetInitialTurn(tableClass)
 end

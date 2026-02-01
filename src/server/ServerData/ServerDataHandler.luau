@@ -8,9 +8,7 @@ local ServerDataHandler = {}
 
 local Options = {
 	template = DataTemplate,
-	profileStoreIndex = "Testing",
-	useMock = true,
-	resetData = true,
+	profileStoreIndex = "Public",
 }
 
 local function SetAwardDailyIf24Hours(data, firstJoin: boolean)
@@ -46,7 +44,7 @@ function DataService:onPlayerInit(player: Player, data): ()
 
 	if firstJoin == true then
 		data.firstJoin = false
-		data.currency = 999999999
+		data.currency = 0
 		data.chairEquipped = { Name = "Default", Material = "SmoothPlastic", Color = "White" }
 		data.bombEquipped = { Name = "Default", Material = "SmoothPlastic", Color = "White" }
 		data.chairsOwned = {

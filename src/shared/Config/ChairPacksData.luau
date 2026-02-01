@@ -1,7 +1,7 @@
 local Rarity = require(script.Parent.Rarity)
 return {
 	NineToFivePack = {
-		Cost = 1500,
+		Cost = 1200,
 		ItemList = {
 			FoldingChair = Rarity.Common,
 			PlasticStool = Rarity.Common,
@@ -12,10 +12,10 @@ return {
 			EvilChair = Rarity.Legendary,
 			Beanbag = Rarity.Legendary,
 		},
-		AlreadyOwnedPayment = 500,
+		AlreadyOwnedPayment = 360,
 	},
 	BrainrotPack = {
-		Cost = 2000,
+		Cost = 1800,
 		ItemList = {
 			GiraffeChair = Rarity.Common,
 			ClippyChair = Rarity.Common,
@@ -26,10 +26,10 @@ return {
 			OwlChair = Rarity.Legendary,
 			TungChairSA = Rarity.Legendary,
 		},
-		AlreadyOwnedPayment = 500,
+		AlreadyOwnedPayment = 720,
 	},
 	RetroPack = {
-		Cost = 2000,
+		Cost = 1800,
 		ItemList = {
 			RetroHalloweenChair = Rarity.Common,
 			RetroSofa = Rarity.Common,
@@ -40,6 +40,6 @@ return {
 			RetroNoobHead = Rarity.Legendary,
 			RetroTeapotTurret = Rarity.Legendary,
 		},
-		AlreadyOwnedPayment = 500,
+		AlreadyOwnedPayment = 720,
 	},
 }

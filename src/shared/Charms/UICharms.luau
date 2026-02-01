@@ -13,4 +13,5 @@ return {
 	SpinTweenHandle = Charm.atom({}),
 	PackBought = Charm.atom(false),
 	CanAwardDaily = Charm.atom(true),
+	SingleplayerButtonVisible = Charm.atom(false),
 }

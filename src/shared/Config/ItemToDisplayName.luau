@@ -49,8 +49,7 @@ return {
 
 	DuckSA = "Ducky",
 	RetroTeapotBombSA = "Retro Teapot Turret",
-	RetroBombSA = "Retro Bomb",
-	ScrambledEggSA = "2013 Scrambled Egg",
+	RetroBomb = "Retro Bomb",
 	NoobSA = "Noob Bomb",
 	UglyEggSA = "Agonizingly Ugly Bomb",
 	TixSA = "Tix",

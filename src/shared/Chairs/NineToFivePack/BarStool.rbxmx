@@ -2,7 +2,7 @@
 	<Meta name="ExplicitAutoJoints">true</Meta>
 	<External>null</External>
 	<External>nil</External>
-	<Item class="MeshPart" referent="RBX96BD52391B5A4662AFB1B3838B6703DC">
+	<Item class="MeshPart" referent="RBX6CECF21D96E64ADCA4A53C39DB7473AD">
 		<Properties>
 			<bool name="DoubleSided">false</bool>
 			<bool name="HasJointOffset">false</bool>
@@ -91,15 +91,15 @@
 			<string name="MaterialVariantSerialized"></string>
 			<CoordinateFrame name="PivotOffset">
 				<X>0</X>
-				<Y>0</Y>
+				<Y>-1</Y>
 				<Z>0</Z>
 				<R00>1</R00>
-				<R01>0</R01>
+				<R01>-0</R01>
 				<R02>0</R02>
 				<R10>0</R10>
 				<R11>1</R11>
 				<R12>0</R12>
-				<R20>0</R20>
+				<R20>-0</R20>
 				<R21>0</R21>
 				<R22>1</R22>
 			</CoordinateFrame>
@@ -136,7 +136,7 @@
 			<int64 name="SourceAssetId">2545464786</int64>
 			<BinaryString name="Tags"></BinaryString>
 		</Properties>
-		<Item class="Seat" referent="RBXBDA0E5662D5C4A8BBC2110987DABD6F1">
+		<Item class="Seat" referent="RBX4BC11F7D1B1B4ECE93F31DF444F7EB3C">
 			<Properties>
 				<bool name="Disabled">true</bool>
 				<token name="shape">1</token>
@@ -190,15 +190,15 @@
 				<string name="MaterialVariantSerialized"></string>
 				<CoordinateFrame name="PivotOffset">
 					<X>0</X>
-					<Y>0</Y>
+					<Y>-1</Y>
 					<Z>0</Z>
 					<R00>1</R00>
-					<R01>0</R01>
+					<R01>-0</R01>
 					<R02>0</R02>
 					<R10>0</R10>
 					<R11>1</R11>
 					<R12>0</R12>
-					<R20>0</R20>
+					<R20>-0</R20>
 					<R21>0</R21>
 					<R22>1</R22>
 				</CoordinateFrame>

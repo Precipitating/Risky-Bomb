@@ -32,45 +32,61 @@ local function ShopRobuxUI(props: ShopRobuxUIProps)
 		UIList = e("UIListLayout", {
 			Padding = UDim.new(0.02, 0),
 			HorizontalAlignment = Enum.HorizontalAlignment.Left,
+			SortOrder = Enum.SortOrder.LayoutOrder,
 		}),
 		_1000Button = ModularImageButtonUI({
-			Position = UDim2.fromScale(0, 0),
+			Position = UDim2.fromScale(0, 0.1),
 			IsOpen = props.IsOpen,
-			Size = UDim2.fromScale(1, 0.3),
+			Size = UDim2.fromScale(1, 0.25),
+			LayoutOrder = 1,
 			BackgroundTransparency = 1,
-			ImageID = "rbxassetid://129002561266142",
+			ImageID = "rbxassetid://93126331373791",
 			OnClick = function()
 				MarketplaceService:PromptProductPurchase(PlayerContext.Player, 3512408744)
 			end,
 		}),
-		_2500Button = ModularImageButtonUI({
+		_2700Button = ModularImageButtonUI({
 			Position = UDim2.fromScale(0, 0),
-			Size = UDim2.fromScale(1, 0.3),
+			Size = UDim2.fromScale(1, 0.25),
 			IsOpen = props.IsOpen,
 			BackgroundTransparency = 1,
-			ImageID = "rbxassetid://123110515723057",
+			LayoutOrder = 2,
+			ImageID = "rbxassetid://92919378138222",
 			OnClick = function()
 				MarketplaceService:PromptProductPurchase(PlayerContext.Player, 3512408743)
 			end,
 		}),
-		_5250Button = ModularImageButtonUI({
+		_6200Button = ModularImageButtonUI({
 			Position = UDim2.fromScale(0, 0),
-			Size = UDim2.fromScale(1, 0.3),
+			Size = UDim2.fromScale(1, 0.25),
 			IsOpen = props.IsOpen,
 			BackgroundTransparency = 1,
-			ImageID = "rbxassetid://72380522066348",
+			LayoutOrder = 3,
+			ImageID = "rbxassetid://71293299227927",
 			OnClick = function()
 				MarketplaceService:PromptProductPurchase(PlayerContext.Player, 3512408742)
 			end,
 		}),
-		_5Button = ModularImageButtonUI({
+		_14000Button = ModularImageButtonUI({
 			Position = UDim2.fromScale(0, 0),
-			Size = UDim2.fromScale(1, 0.3),
+			Size = UDim2.fromScale(1, 0.25),
 			IsOpen = props.IsOpen,
 			BackgroundTransparency = 1,
-			ImageID = "rbxassetid://102258412586491",
+			LayoutOrder = 4,
+			ImageID = "rbxassetid://80512945610152",
 			OnClick = function()
 				MarketplaceService:PromptProductPurchase(PlayerContext.Player, 3512408741)
+			end,
+		}),
+		_32000Button = ModularImageButtonUI({
+			Position = UDim2.fromScale(0, 0),
+			Size = UDim2.fromScale(1, 0.25),
+			IsOpen = props.IsOpen,
+			BackgroundTransparency = 1,
+			LayoutOrder = 5,
+			ImageID = "rbxassetid://90286951028944",
+			OnClick = function()
+				MarketplaceService:PromptProductPurchase(PlayerContext.Player, 3526966512)
 			end,
 		}),
 	})

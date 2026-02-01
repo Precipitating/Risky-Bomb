@@ -94,7 +94,7 @@ end
 function BombHandler.InitializeBomb(tableClass)
 	local startTime = math.random(BombServerConfig.MIN_BOMB_TIME, BombServerConfig.MAX_BOMB_TIME)
 	tableClass.BombTimeLeft = startTime
-	--bombRef:SetAttribute("Time", startTime)
+
 	StartBomb(tableClass, startTime)
 end
 

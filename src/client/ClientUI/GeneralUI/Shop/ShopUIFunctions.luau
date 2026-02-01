@@ -129,7 +129,6 @@ local function CreateViewportFrame(
 
 	SetupViewportCamera(viewport, obj)
 	StartSpinning(obj)
-	print(mesh.Name)
 	SetViewportRarityColor(viewport, packTable, mesh.Name)
 	viewport.Name = mesh.Name
 
