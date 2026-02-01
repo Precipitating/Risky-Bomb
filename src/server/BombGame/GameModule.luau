@@ -54,8 +54,8 @@ local function SetInitialTurn(tableClass)
 	local playerList = tableClass.PlayersAssigned
 	-- AI
 	if tableClass.AIConfig.AIMode then
-		local playerID = (tableClass.PlayersAssigned[1] and 1) or (tableClass.PlayersAssigned[2] and 2)
-		tableClass.AIConfig.PlayerID = playerID
+		local playerID = tableClass.AIConfig.PlayerID
+		print(tableClass.AIConfig.PlayerID)
 		local random = math.random()
 		if random >= 0.5 then
 			tableClass.AIConfig.AITurn = true
@@ -289,8 +289,17 @@ function GameModule:SubmitBombTime(_: Player, tableID: string, timeToReduce: num
 end
 
 function GameModule.SetBombSkin(tableClass)
-	-- pick random bomb skin
+	-- AI
+	if tableClass.AIConfig.AIMode then
+		tableClass.AIConfig.PlayerID = (tableClass.PlayersAssigned[1] and 1) or (tableClass.PlayersAssigned[2] and 2)
+		local player = tableClass.PlayersAssigned[tableClass.AIConfig.PlayerID]
+		local objectEquipped = DataService:get(player, { "bombEquipped" })
+		InventoryEvents.SetEquippedSkin("bombEquipped", "Bombs", objectEquipped, tableClass.TableRefs.Bomb)
+		return
+	end
 
+	-- pick random bomb skin from plr1 or plr2
+	-- normal
 	local equippedBombs = {}
 	for _, playerRef in ipairs(tableClass.PlayersAssigned) do
 		if not playerRef then
@@ -301,7 +310,7 @@ function GameModule.SetBombSkin(tableClass)
 		table.insert(equippedBombs, objectEquipped)
 	end
 
-	local chosenBombName = equippedBombs[math.random(#equippedBombs)]
+	local chosenBombName = equippedBombs[math.random(1, #equippedBombs)]
 	InventoryEvents.SetEquippedSkin("bombEquipped", "Bombs", chosenBombName, tableClass.TableRefs.Bomb)
 end
 
