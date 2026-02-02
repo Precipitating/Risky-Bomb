@@ -6,6 +6,7 @@ local ServerStorage = game:GetService("ServerStorage")
 local GlobalAnnouncer = require(ServerScriptService.MessageService.GlobalAnnouncer)
 local SoundToClient = require(ServerScriptService.ServerRemotesLogic.SoundToClient)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
+local RandomModule = require(ReplicatedStorage.RandomModule)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local LeaderboardTemplate = ServerStorage.Templates.LeaderboardElement
@@ -71,7 +72,7 @@ function LeaderboardHandler:PopulateLeaderboard(leaderboardKey: string, ascendin
 					self.janitor:Add(leaderboardElement)
 				end
 			end
-			task.wait(300)
+			task.wait(300 + RandomModule.GetRandomNumberBetween(1, 10))
 		end
 	end)
 end

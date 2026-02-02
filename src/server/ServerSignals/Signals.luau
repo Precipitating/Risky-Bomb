@@ -7,4 +7,5 @@ return {
 	AbruptEnd = Signal.new(),
 	SinglePlayerNetworkFire = Signal.new(),
 	AITurn = Signal.new(),
+	SetCardForPlayer = Signal.new(),
 }

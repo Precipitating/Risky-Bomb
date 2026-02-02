@@ -2,6 +2,7 @@ local Players = game:GetService("Players")
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local BombInputScreenGUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.BombInputUI.BombInputScreenGUI)
+local CardsUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.CardsUI.CardsUI)
 local DailyRewardUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.DailyRewardUI.DailyRewardUI)
 local GeneralScreenGUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.GeneralUI.GeneralScreenGUI)
 local ToolTipUI = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.GeneralUI.HoverDisplay.ToolTipUI)
@@ -33,4 +34,5 @@ return function()
 	CreateScreenGUI("GlobalMessageBar", MessageBarUI)
 	CreateScreenGUI("ToolTipGUI", ToolTipUI)
 	CreateScreenGUI("DailyRewards", DailyRewardUI)
+	CreateScreenGUI("CardsGUI", CardsUI)
 end

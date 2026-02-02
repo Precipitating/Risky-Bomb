@@ -7,10 +7,10 @@ type ModularImageLabelProps = {
 	Size: UDim2,
 	AnchorPoint: Vector2?,
 	BackgroundColor: Color3?,
-	ImageID: string,
+	ImageID: string?,
 	BackgroundTransparency: number?,
 	ZIndex: number?,
-	CornerRadius: UDim?,
+	CornerRadius: number?,
 	AspectRatio: number?,
 	Rotation: number?,
 }
@@ -21,13 +21,16 @@ local function ModularImageLabel(props: ModularImageLabelProps)
 		AnchorPoint = props.AnchorPoint,
 		ScaleType = Enum.ScaleType.Fit,
 		Rotation = props.Rotation,
-		Image = props.ImageID,
+		Image = props.ImageID or "",
 		ZIndex = props.ZIndex,
 		BackgroundColor3 = props.BackgroundColor,
 		BackgroundTransparency = props.BackgroundTransparency,
 	}, {
 		AspectRatio = e("UIAspectRatioConstraint", {
 			AspectRatio = props.AspectRatio,
+		}),
+		Corner = e("UICorner", {
+			CornerRadius = UDim.new(props.CornerRadius or 0, 0),
 		}),
 	})
 end

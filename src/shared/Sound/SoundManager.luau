@@ -1,5 +1,7 @@
 local SoundService = game:GetService("SoundService")
 local Debris = game:GetService("Debris")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RandomModule = require(ReplicatedStorage.Shared.RandomModule)
 local ThemeSoundHandle = SoundService.Background
 
 local MainSounds = {
@@ -30,13 +32,18 @@ local SoundManager = {
 		Rare = "rbxassetid://4612386064",
 		Epic = "rbxassetid://4612386227",
 		Legendary = "rbxassetid://4612383790",
+
+		AIWin = "rbxassetid://17620645740",
+		AILose = "rbxassetid://128504700405137",
+
+		CardUse = "rbxassetid://128706455708345",
 	},
 	PromptSounds = {
 		ChairSit = "rbxassetid://12222152",
 		ChairLeave = "rbxassetid://12221967",
 	},
 	GameSounds = {
-		Win = "rbxassetid://12222253",
+		Win = "rbxassetid://125552754635730",
 		Lose = "rbxassetid://91020679481479",
 	},
 }
@@ -51,11 +58,12 @@ local function LoadSoundsFromTable(parent: Instance, folderName: string, tableTo
 		sound.Name = key
 		sound.SoundId = uiSoundID
 		sound.Volume = 3
+		-- this turns the sound IDs in the table to actual sound instances
 		tableToModify[key] = sound
 	end
 end
 
-function SoundManager.PlayExistingSound(sound: Sound)
+function SoundManager.PlayExistingSound(sound: Sound | string)
 	if typeof(sound) == "string" then
 		warn("Sound is a string, ignore if using UI Labs")
 		return
@@ -77,11 +85,11 @@ function SoundManager.Initialize()
 end
 
 function SoundManager.GetRandomMainSound()
-	return MainSounds[math.random(1, #MainSounds)]
+	return MainSounds[RandomModule.GetRandomNumberBetween(1, #MainSounds)]
 end
 
 function SoundManager.GetRandomBombThemeSound()
-	return BombGameThemes[math.random(1, #BombGameThemes)]
+	return BombGameThemes[RandomModule.GetRandomNumberBetween(1, #BombGameThemes)]
 end
 
 function SoundManager.PlayTheme(id: string, config)

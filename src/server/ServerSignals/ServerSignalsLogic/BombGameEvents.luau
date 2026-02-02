@@ -1,5 +1,6 @@
 local ServerScriptService = game:GetService("ServerScriptService").Server
 local GameModule = require(ServerScriptService.BombGame.GameModule)
+local CardHandler = require(ServerScriptService.Cards.CardHandler)
 local SinglePlayerAI = require(ServerScriptService.Singleplayer.SinglePlayerAI)
 local SinglePlayerHandler = require(ServerScriptService.Singleplayer.SinglePlayerHandler)
 local ServerSignals = require(ServerScriptService.ServerSignals.Signals)
@@ -21,8 +22,12 @@ function BombGameEvents.Handle()
 		return SinglePlayerHandler.networker:fire(player, methodName, ...)
 	end)
 
-	ServerSignals.AITurn:Connect(function(tableClass, difficultyConfig)
-		SinglePlayerAI.ThinkAndChoose(tableClass, difficultyConfig)
+	ServerSignals.AITurn:Connect(function(tableClass)
+		SinglePlayerAI.ThinkAndChoose(tableClass)
+	end)
+
+	ServerSignals.SetCardForPlayer:Connect(function(player: Player)
+		CardHandler:SetRandomCardForPlayer(player)
 	end)
 end
 

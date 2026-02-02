@@ -13,7 +13,7 @@ type ModularImageButtonProps = {
 	ZIndex: number?,
 	IsOpen: boolean,
 	LayoutOrder: number?,
-	CornerRadius: UDim?,
+	CornerRadius: number?,
 	AspectRatio: number?,
 	Rotation: number?,
 	OnClick: () -> ()?,
@@ -44,6 +44,10 @@ local function ModularImageButton(props: ModularImageButtonProps)
 				end
 			end
 		end,
+	}, {
+		Corner = e("UICorner", {
+			CornerRadius = UDim.new(props.CornerRadius or 0, 0),
+		}),
 	})
 end
 

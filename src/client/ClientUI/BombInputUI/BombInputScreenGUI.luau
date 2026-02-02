@@ -1,6 +1,7 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local InputRemotes = require(StarterPlayer.StarterPlayerScripts.Client.ClientRemotes.ClientRemotesLogic.InputRemotes)
+local CardsFunctions = require(StarterPlayer.StarterPlayerScripts.Client.ClientUI.CardsUI.CardsFunctions)
 local BombCountdownFrame = require(script.Parent.BombCountdownFrame)
 local BombTextButton = require(script.Parent.BombTextButton)
 local BombTextFrame = require(script.Parent.BombTextFrame)
@@ -9,6 +10,7 @@ local BombGameCharms = require(ReplicatedStorage.Charms.BombGameCharms)
 local ReactCharm = require(ReplicatedStorage.Packages.ReactCharm)
 local BombConfig = require(ReplicatedStorage.Config.BombSharedConfig)
 local UIConfig = require(ReplicatedStorage.Config.UIConfig)
+local CardUseType = require(ReplicatedStorage.Config.CardUseType)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 
 local e = React.createElement
@@ -25,6 +27,10 @@ local function CurrentInput()
 	return ReactCharm.useAtom(BombGameCharms.CurrentBombInput)
 end
 
+local function CardData()
+	return ReactCharm.useAtom(BombGameCharms.CurrentCard)
+end
+
 local function SetCurrentInput(val: number)
 	BombGameCharms.CurrentBombInput(math.max(1, val))
 end
@@ -32,6 +38,7 @@ local function BombInputScreenGUI()
 	local isVisible = IsYourTurn()
 	local currentInput = CurrentInput()
 	local countdownValue = CountdownValue()
+	local cardData = CardData()
 
 	if not isVisible then
 		return nil
@@ -149,6 +156,10 @@ local function BombInputScreenGUI()
 			AspectRatio = 3,
 			AnchorPoint = Vector2.new(0.5, 0.5),
 			ButtonClickedFunc = function()
+				if cardData and cardData.UseType == CardUseType.Enum.ActivateOnInput then
+					print("Activate on input card activated!")
+					CardsFunctions:UseCard()
+				end
 				InputRemotes:SubmitBombTime(currentInput)
 				SetCurrentInput(1)
 			end,

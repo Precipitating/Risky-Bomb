@@ -25,6 +25,8 @@ local function SetAwardDailyIf24Hours(data, firstJoin: boolean)
 		end
 
 		data.canAwardDaily = true
+
+		print("should award daily")
 	end
 
 	if data.canAwardDaily then

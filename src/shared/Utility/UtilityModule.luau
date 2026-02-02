@@ -2,6 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local RunService = game:GetService("RunService")
 local BombPacksData = require(ReplicatedStorage.Config.BombPacksData)
 local ChairPacksData = require(ReplicatedStorage.Config.ChairPacksData)
+local RandomModule = require(ReplicatedStorage.RandomModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local UtilityModule = {}
 
@@ -26,7 +27,7 @@ local RandomColors = {
 	"Really black",
 }
 function UtilityModule.GetRandomColor()
-	return BrickColor.new(RandomColors[math.random(1, #RandomColors)])
+	return BrickColor.new(RandomColors[RandomModule.GetRandomNumberBetween(1, #RandomColors)])
 end
 function UtilityModule.Get(parent, ...)
 	local current = parent
@@ -50,7 +51,7 @@ function UtilityModule.GetRandomMaterial()
 	local materialList = Enum.Material:GetEnumItems()
 	local material = nil
 	repeat
-		material = materialList[math.random(#materialList)]
+		material = materialList[RandomModule.GetRandomNumberBetween(1, #materialList)]
 	until material ~= Enum.Material.Air and material ~= Enum.Material.Water and material ~= Enum.Material.ForceField
 
 	return material
@@ -134,8 +135,7 @@ function UtilityModule.GetRandomPackItem(packTable, packType: number?, packName:
 	end
 
 	-- roll a random item based on these weights
-	local rng = Random.new()
-	local roll = rng:NextNumber(0, totalWeight)
+	local roll = RandomModule.GetRandomNumberBetween(0, totalWeight)
 	local cumulative = 0
 	for name, itemChance in pairs(packTable.ItemList) do
 		cumulative += itemChance

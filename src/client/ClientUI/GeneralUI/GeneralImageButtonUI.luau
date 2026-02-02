@@ -8,8 +8,10 @@ type GeneralImageButtonUIProps = {
 	Position: UDim2,
 	Size: UDim2,
 	ImageID: string,
-	AspectRatio: number,
-	AnchorPoint: Vector2,
+	AspectRatio: number?,
+	BackgroundTransparency: number?,
+	AnchorPoint: Vector2?,
+	Visible: boolean?,
 	OnClick: () -> (),
 }
 local function GeneralImageButtonUI(props: GeneralImageButtonUIProps)
@@ -20,8 +22,9 @@ local function GeneralImageButtonUI(props: GeneralImageButtonUIProps)
 			return UDim2.fromScale(props.Size.X.Scale * s, props.Size.Y.Scale * s)
 		end),
 		Image = props.ImageID,
-		BackgroundTransparency = 1,
-		AnchorPoint = props.AnchorPoint,
+		Visible = props.Visible or true,
+		BackgroundTransparency = props.BackgroundTransparency or 1,
+		AnchorPoint = props.AnchorPoint or Vector2.new(0, 0),
 		[React.Change.GuiState] = function(rbx: ImageButton)
 			if rbx.GuiState == Enum.GuiState.Hover then
 				spring:setGoal(1.1)
@@ -35,7 +38,7 @@ local function GeneralImageButtonUI(props: GeneralImageButtonUIProps)
 		end,
 	}, {
 		AspectRatioConstraint = e("UIAspectRatioConstraint", {
-			AspectRatio = props.AspectRatio,
+			AspectRatio = props.AspectRatio or 1,
 		}),
 	})
 end

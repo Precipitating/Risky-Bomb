@@ -8,6 +8,7 @@ local GUIRemotes = require(ServerScriptService.ServerRemotesLogic.GUIRemotes)
 local OrderedDataStores = require(ServerScriptService.ServerData.OrderedDataStores)
 local SoundToClient = require(ServerScriptService.ServerRemotesLogic.SoundToClient)
 local BombConfig = require(ReplicatedStorage.Config.BombSharedConfig)
+local RandomModule = require(ReplicatedStorage.RandomModule)
 local VIPHandler = require(ReplicatedStorage.VIP.VIPHandler)
 local DataService = require(ReplicatedStorage.Packages.DataService).server
 local Networker = require(ReplicatedStorage.Packages.Networker).server
@@ -15,7 +16,6 @@ local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local BombHandler = require(script.Parent.BombHandler)
 local BombServerConfig = require(script.Parent.BombServerConfig)
 local GameTableManager = require(script.Parent.GameTableManager)
-local Table = require(script.Parent.Table)
 local Remotes = ReplicatedStorage.Remotes
 local GUINetwork = GUIRemotes.networker
 
@@ -56,7 +56,7 @@ local function SetInitialTurn(tableClass)
 	if tableClass.AIConfig.AIMode then
 		local playerID = tableClass.AIConfig.PlayerID
 		print(tableClass.AIConfig.PlayerID)
-		local random = math.random()
+		local random = RandomModule.GetRandomDecimalBetween(0, 1)
 		if random >= 0.5 then
 			tableClass.AIConfig.AITurn = true
 			Signals.AITurn:Fire(tableClass)
@@ -74,7 +74,7 @@ local function SetInitialTurn(tableClass)
 	end
 
 	print(tableClass)
-	local randomPlayerID = math.random(1, 2)
+	local randomPlayerID = RandomModule.GetRandomNumberBetween(1, 2)
 	tableClass.CurrentTurn = randomPlayerID
 
 	print(`current {randomPlayerID} `)
@@ -170,17 +170,26 @@ function GameModule:FinishGame(tableClass)
 		GUIRemotes.networker:fire(player, "BombGUIDisconnect")
 	end
 
+	-- AI mode
 	if tableClass.AIConfig.AIMode then
 		local playerID = tableClass.AIConfig.PlayerID
 		if tableClass.AIConfig.AITurn then
+			SoundToClient.networker:fire(
+				tableClass.PlayersAssigned[playerID],
+				"PlayExistingSound",
+				"UISounds",
+				"AILose"
+			)
 			HandleWinner(tableClass.PlayersAssigned[playerID], true)
 		else
+			SoundToClient.networker:fire(tableClass.PlayersAssigned[playerID], "PlayExistingSound", "UISounds", "AIWin")
 			HandleLoser(tableClass.PlayersAssigned[playerID])
 		end
 		GameModule.RespawnTable(tableClass)
 		return
 	end
 
+	-- normal mode
 	local currentTurnID = tableClass.CurrentTurn
 	local currentTurnPlayer = playerList[currentTurnID]
 	loser = currentTurnPlayer
@@ -208,7 +217,6 @@ local function CanStillCountdownBar(tableClass, targetPlayerID: number)
 	local aiConfig = tableClass.AIConfig
 	if not aiConfig or not aiConfig.AIMode then
 		if tableClass.CurrentTurn ~= targetPlayerID then
-			warn("id doesn't match, not countin down")
 			return false
 		end
 	else
@@ -222,7 +230,6 @@ end
 -- moves the countdown bar when called
 function GameModule.StartCountdown(tableClass, targetPlayerID: number)
 	local targetPlayer = tableClass.PlayersAssigned[targetPlayerID]
-	print(targetPlayer)
 	print("start countdown called")
 	task.spawn(function()
 		for timeLeft = BombConfig.MAX_TURN_TIME, 0, -1 do
@@ -310,13 +317,23 @@ function GameModule.SetBombSkin(tableClass)
 		table.insert(equippedBombs, objectEquipped)
 	end
 
-	local chosenBombName = equippedBombs[math.random(1, #equippedBombs)]
+	local chosenBombName = equippedBombs[RandomModule.GetRandomNumberBetween(1, #equippedBombs)]
 	InventoryEvents.SetEquippedSkin("bombEquipped", "Bombs", chosenBombName, tableClass.TableRefs.Bomb)
+end
+function GameModule.SetRandomCardPerPlayer(tableClass)
+	for _, playerRef in ipairs(tableClass.PlayersAssigned) do
+		if not playerRef then
+			warn("One player ref missing setting card, ignore if AI mode")
+			continue
+		end
+		Signals.SetCardForPlayer:Fire(playerRef)
+	end
 end
 
 function GameModule.BeginGame(tableClass)
 	GameModule:DisablePlayerControlsOnTable(tableClass.PlayersAssigned, tableClass.TableRefs.CameraPos)
 	GameModule.SetBombSkin(tableClass)
+	GameModule.SetRandomCardPerPlayer(tableClass)
 	tableClass.GameActive = true
 	GameModule:PlayAudioForTablePlayers(tableClass.PlayersAssigned, SoundManager.GetRandomBombThemeSound(), false)
 

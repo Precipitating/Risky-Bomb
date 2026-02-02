@@ -1,4 +1,6 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService").Server
+local RandomModule = require(ReplicatedStorage.Shared.RandomModule)
 local GameModule = require(ServerScriptService.BombGame.GameModule)
 local BombHandler = require(ServerScriptService.BombGame.BombHandler)
 local AIDifficultyConfig = require(script.Parent.AIDifficultyConfig)
@@ -18,8 +20,8 @@ local function TimeDeductCalculate(config: AIDifficulty, timeLeft: number)
 		reduction = config.minReduction
 	else
 		-- normal
-		local rng = Random.new()
-		local randomFactor = rng:NextNumber(0, 1)
+
+		local randomFactor = RandomModule.GetRandomNumberBetween(0, 1)
 
 		local percentageReduction = math.lerp(config.timePercentageMin, config.timePercentageMax, randomFactor)
 		reduction = timeLeft * percentageReduction
@@ -30,7 +32,7 @@ local function TimeDeductCalculate(config: AIDifficulty, timeLeft: number)
 	-- must reduce at least minReduction
 	reduction = math.max(config.minReduction, reduction)
 
-	print(`ai reducing {reduction}`)
+	print(`ai reducing {math.floor(reduction)}`)
 	return math.floor(reduction)
 end
 
@@ -43,7 +45,7 @@ function SinglePlayerAI.ThinkAndChoose(tableClass)
 	end
 	local deductionTime = TimeDeductCalculate(difficultyConfig, tableClass.BombTimeLeft)
 
-	task.delay(math.random(1, difficultyConfig.decisionDelay), function()
+	task.delay(RandomModule.GetRandomNumberBetween(1, difficultyConfig.decisionDelay), function()
 		if not tableClass.GameActive then
 			return
 		end

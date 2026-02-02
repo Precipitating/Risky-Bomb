@@ -1,3 +1,5 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RandomModule = require(ReplicatedStorage.Shared.RandomModule)
 export type AIDifficulty = {
 	minReduction: number,
 	maxReduction: number,
@@ -17,7 +19,7 @@ local difficultyList = {
 
 return {
 	GetRandomDifficulty = function()
-		local randomDiff = math.random(1, #difficultyList)
+		local randomDiff = RandomModule.GetRandomNumberBetween(1, #difficultyList)
 		print(`AI difficulty ={randomDiff}`)
 		return difficultyList[randomDiff]
 	end,

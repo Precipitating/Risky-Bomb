@@ -1,5 +1,7 @@
 local ServerScriptService = game:GetService("ServerScriptService").Server
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
+local RandomModule = require(ReplicatedStorage.Shared.RandomModule)
 local SoundToClient = require(ServerScriptService.ServerRemotesLogic.SoundToClient)
 local ServerSignals = require(ServerScriptService.ServerSignals.Signals)
 local BombServerConfig = require(script.Parent.BombServerConfig)
@@ -92,7 +94,8 @@ local function StartBomb(tableClass, startTime: number)
 end
 
 function BombHandler.InitializeBomb(tableClass)
-	local startTime = math.random(BombServerConfig.MIN_BOMB_TIME, BombServerConfig.MAX_BOMB_TIME)
+	local startTime =
+		RandomModule.GetRandomNumberBetween(BombServerConfig.MIN_BOMB_TIME, BombServerConfig.MAX_BOMB_TIME)
 	tableClass.BombTimeLeft = startTime
 
 	StartBomb(tableClass, startTime)
