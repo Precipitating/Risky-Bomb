@@ -341,11 +341,13 @@ function GameModule.SetBombSkin(tableClass)
 	InventoryEvents.SetEquippedSkin("bombEquipped", "Bombs", chosenBombName, tableClass.TableRefs.Bomb)
 end
 function GameModule.SetRandomCardPerPlayer(tableClass)
-	for _, playerRef in ipairs(tableClass.PlayersAssigned) do
+	print(tableClass.PlayersAssigned)
+	for _, playerRef in pairs(tableClass.PlayersAssigned) do
 		if not playerRef then
 			warn("One player ref missing setting card, ignore if AI mode")
 			continue
 		end
+
 		Signals.SetCardForPlayer:Fire(playerRef)
 	end
 end
