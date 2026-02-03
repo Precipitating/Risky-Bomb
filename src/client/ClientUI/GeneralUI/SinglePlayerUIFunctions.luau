@@ -1,5 +1,6 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local InputRemotes = require(StarterPlayer.StarterPlayerScripts.Client.ClientRemotes.ClientRemotesLogic.InputRemotes)
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local UICharms = require(ReplicatedStorage.Charms.UICharms)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)

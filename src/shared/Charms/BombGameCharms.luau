@@ -11,4 +11,6 @@ return {
 	JumpscareImage = Charm.atom(""),
 	CurrentCashValue = Charm.atom(0),
 	CurrentCard = Charm.atom({}),
+	GameActive = Charm.atom(false),
+	IsSat = Charm.atom(false),
 }

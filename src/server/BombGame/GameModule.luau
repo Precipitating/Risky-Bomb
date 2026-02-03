@@ -32,6 +32,7 @@ function GameModule:DisablePlayerControlsOnTable(playersList, cameraPart: Part)
 		if not player then
 			continue
 		end
+		GUIRemotes.networker:fire(player, "UpdateGameActive", true)
 		self.inputNetworker:fire(player, "DisableControls", true)
 		self.inputNetworker:fire(player, "SetGameCamera", true, cameraPart)
 	end
@@ -98,7 +99,7 @@ function GameModule.RespawnTable(tableClass)
 	print("Table respawned!")
 end
 
-local function HandleLoser(loser)
+local function HandleLoser(loser, isAI: boolean)
 	if not loser then
 		print("Loser player ref is nil!")
 	end
@@ -109,7 +110,12 @@ local function HandleLoser(loser)
 
 	local humanoid = loser.Character.Humanoid
 	humanoid.Health = 0
-	SoundToClient:PlaySoundOnClient(loser, SoundManager.GameSounds.Lose, nil, false, nil)
+
+	if not isAI then
+		SoundToClient.networker:fire(loser, "PlayExistingSound", "UISounds", "Lose")
+	else
+		SoundToClient.networker:fire(loser, "PlayExistingSound", "UISounds", "AIWin")
+	end
 end
 
 local function HandleWinner(winner: Player, abruptEnd: boolean?, isAI: boolean?)
@@ -133,9 +139,15 @@ local function HandleWinner(winner: Player, abruptEnd: boolean?, isAI: boolean?)
 			return currentCash + VIPHandler.DoubleRewardsIfVIP(winner, ABRUPT_REWARD)
 		end)
 	end
-	LeaderboardHandler.AddValueToDataStore(OrderedDataStores.WinStore, winner, 1)
 
-	SoundToClient:PlaySoundOnClient(winner, SoundManager.GameSounds.Win, nil, false, nil)
+	LeaderboardHandler.AddValueToDataStore(OrderedDataStores.WinStore, winner, 1)
+	-- sound
+	if not isAI then
+		SoundToClient.networker:fire(winner, "PlayExistingSound", "UISounds", "Win")
+	else
+		SoundToClient.networker:fire(winner, "PlayExistingSound", "UISounds", "AILose")
+	end
+
 	print(`Winner: {winner.DisplayName}`)
 end
 
@@ -151,6 +163,7 @@ function GameModule:AbruptEnd(tableClass, winner: Player)
 	self.inputNetworker:fire(winner, "DisableControls", false)
 	self.inputNetworker:fire(winner, "SetGameCamera", false, nil)
 	GUIRemotes.networker:fire(winner, "BombGUIDisconnect")
+
 	HandleWinner(winner, true)
 	GameModule.RespawnTable(tableClass)
 end
@@ -165,6 +178,8 @@ function GameModule:FinishGame(tableClass)
 		if not player then
 			continue
 		end
+		player.Character:SetAttribute("ID", nil)
+		GUIRemotes.networker:fire(player, "UpdateGameActive", false)
 		self.inputNetworker:fire(player, "DisableControls", false)
 		self.inputNetworker:fire(player, "SetGameCamera", false, nil)
 		GUIRemotes.networker:fire(player, "BombGUIDisconnect")
@@ -174,16 +189,9 @@ function GameModule:FinishGame(tableClass)
 	if tableClass.AIConfig.AIMode then
 		local playerID = tableClass.AIConfig.PlayerID
 		if tableClass.AIConfig.AITurn then
-			SoundToClient.networker:fire(
-				tableClass.PlayersAssigned[playerID],
-				"PlayExistingSound",
-				"UISounds",
-				"AILose"
-			)
 			HandleWinner(tableClass.PlayersAssigned[playerID], true)
 		else
-			SoundToClient.networker:fire(tableClass.PlayersAssigned[playerID], "PlayExistingSound", "UISounds", "AIWin")
-			HandleLoser(tableClass.PlayersAssigned[playerID])
+			HandleLoser(tableClass.PlayersAssigned[playerID], true)
 		end
 		GameModule.RespawnTable(tableClass)
 		return
@@ -195,12 +203,15 @@ function GameModule:FinishGame(tableClass)
 	loser = currentTurnPlayer
 	winner = playerList[3 - currentTurnID]
 
-	HandleLoser(loser)
+	HandleLoser(loser, false)
 	HandleWinner(winner)
 	GameModule.RespawnTable(tableClass)
 end
 
 function ExceededCountdown(tableClass, targetPlayer: Player)
+	if not targetPlayer then
+		error("Exceeded countdown but player ref is nil")
+	end
 	-- countdown finished
 	local playerInputOnExceed = Remotes.GetBombInput:InvokeClient(targetPlayer)
 
@@ -217,6 +228,7 @@ local function CanStillCountdownBar(tableClass, targetPlayerID: number)
 	local aiConfig = tableClass.AIConfig
 	if not aiConfig or not aiConfig.AIMode then
 		if tableClass.CurrentTurn ~= targetPlayerID then
+			print("Stop counting down for this client, turn switched")
 			return false
 		end
 	else
@@ -238,7 +250,7 @@ function GameModule.StartCountdown(tableClass, targetPlayerID: number)
 				return
 			end
 
-			if not CanStillCountdownBar(tableClass, targetPlayer) then
+			if not CanStillCountdownBar(tableClass, targetPlayerID) then
 				return
 			end
 
@@ -246,15 +258,19 @@ function GameModule.StartCountdown(tableClass, targetPlayerID: number)
 			task.wait(1)
 		end
 		-- one more check (if they input at 0, it still assumes its your turn)
-		if not CanStillCountdownBar(tableClass, targetPlayer) then
+		if not CanStillCountdownBar(tableClass, targetPlayerID) then
 			return
 		end
 
 		ExceededCountdown(tableClass, targetPlayer)
 	end)
 end
+
 function GameModule.NextTurn(tableClass)
 	local playerList = tableClass.PlayersAssigned
+
+	tableClass.TurnCounter += 1
+	tableClass:ReduceBombEffectTurns()
 
 	-- AI Mode
 	if tableClass.AIConfig.AIMode then
@@ -287,6 +303,10 @@ end
 
 function GameModule:SubmitBombTime(_: Player, tableID: string, timeToReduce: number)
 	local tableRef = GameTableManager.GetTableFromID(tableID)
+	if tableRef.BombTimeLeft <= 0 or not tableRef.BombActive then
+		warn("Cannot reduce time, bomb time is 0")
+		return
+	end
 	timeToReduce = math.clamp(timeToReduce, 1, BombServerConfig.MAX_BOMB_TIME)
 	local newTime = BombHandler.ReduceBombTime(tableRef, timeToReduce)
 

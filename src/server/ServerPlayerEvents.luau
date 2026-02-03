@@ -21,15 +21,7 @@ function PlayerEvents.Handle()
 				VIPHandler.SetVIPGUI(player)
 			end
 
-			character.Humanoid.Died:Connect(function()
-				-- if died on table, unassign
-				-- local tableID = character:GetAttribute("AssignedTable")
-				-- if tableID then
-				--print("Unassigned dead player from")
-				--GameTableManager.UnassignPlayerFromTable(tableID)
-				--BombGameStorage.UnAssignSinglePlayerFromTable(tableID, player)
-				--end
-			end)
+			character.Humanoid.Died:Connect(function() end)
 		end)
 	end)
 end

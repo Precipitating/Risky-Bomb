@@ -54,6 +54,7 @@ local function CardsUI(props: CardsUIProps)
 				SoundManager.PlayExistingSound(SoundManager.UISounds.CardUse)
 				spring:setGoal(0.50, { impulse = -10 })
 				task.delay(0.1, function()
+					CardsFunctions.CardActivated = true
 					if cardData.UseType == CardUseType.Enum.InstantActivation then
 						print("Instant activation card used!")
 						CardsFunctions:UseCard()
@@ -97,16 +98,30 @@ local function CardsUI(props: CardsUIProps)
 			Text = cardData.Name or "???",
 		}),
 
-		Image = ModularImageLabelUI({
-			Position = UDim2.fromScale(0.5, 0.1),
+		ImageFrame = e("Frame", {
+			Position = UDim2.fromScale(0.5, 0.16),
 			AnchorPoint = Vector2.new(0.5, 0),
-			Size = UDim2.fromScale(1, 1),
-
+			Size = UDim2.fromScale(0.9, 0.53),
 			BackgroundTransparency = 1,
-			AspectRatio = 1,
-			ScaleType = Enum.ScaleType.Crop,
-			ImageID = cardData.ImageID or "",
-			CornerRadius = 0.5,
+		}, {
+			Image = ModularImageLabelUI(
+				{
+					Position = UDim2.fromScale(0.5, 0.05),
+					AnchorPoint = Vector2.new(0.5, 0),
+					Size = UDim2.fromScale(0.9, 0.9),
+
+					BackgroundTransparency = 1,
+					AspectRatio = 1,
+					ScaleType = Enum.ScaleType.Crop,
+					ImageID = cardData.ImageID or "",
+					CornerRadius = 0.5,
+				},
+				e("UIStroke", {
+					Thickness = 2,
+					Color = Color3.fromRGB(255, 255, 255),
+					Transparency = 0.5,
+				})
+			),
 		}),
 
 		TitleLine = e("Frame", {

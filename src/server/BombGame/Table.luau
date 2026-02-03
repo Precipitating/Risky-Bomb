@@ -43,6 +43,8 @@ function Table.new(table: Model)
 	self.CountdownActive = false
 	self.PlayerCount = 0
 	self.CurrentTurn = -1
+	self.TurnCounter = 1
+	self.BombEffectsActive = {}
 
 	self.PlayersAssigned = {
 		[1] = nil,
@@ -90,6 +92,17 @@ local function TableClear(table)
 	end
 end
 
+function Table:ReduceBombEffectTurns()
+	for key, data in pairs(self.BombEffectsActive) do
+		if data.TurnsLeft ~= nil and data.TurnsLeft <= 0 then
+			self.BombEffectsActive[key] = nil
+			warn(`{key} removed from bomb effects`)
+		else
+			data.TurnsLeft -= 1
+		end
+	end
+end
+
 function Table:Cleanup()
 	-- ensure the singleplayer buttons are disabled before deletion
 	if self.PlayersAssigned[1] then
@@ -107,10 +120,14 @@ function Table:Cleanup()
 	self.CurrentTurn = nil
 	self.GameActive = nil
 	self.ID = nil
+	self.TurnCounter = nil
+
 	TableClear(self.AIConfig)
 	TableClear(self.PlayersAssigned)
 	TableClear(self.TableRefs)
+	TableClear(self.BombEffectsActive)
 	self.PlayersAssigned = nil
+	self.BombEffectsActive = nil
 	self.TableRefs = nil
 	self.AIConfig = nil
 
@@ -173,6 +190,7 @@ function Table:PlayerSatDown(humanoid: Humanoid, seatNumber: number)
 
 	-- set table's ID to player's model
 	self.PlayersAssigned[seatNumber] = player
+	print(self.PlayersAssigned[seatNumber])
 	character:SetAttribute("ID", self.ID)
 	self.PlayerCount = math.clamp(self.PlayerCount + 1, 0, 2)
 

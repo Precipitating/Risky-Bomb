@@ -3,7 +3,7 @@ local StarterPlayer = game:GetService("StarterPlayer")
 local Networker = require(ReplicatedStorage.Packages.Networker).client
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
-local PlayerModule = PlayerContext.Player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule")
+local PlayerModule = nil
 
 local InputRemotes = {}
 
@@ -37,6 +37,7 @@ function InputRemotes:SubmitBombTime(currentInput: number)
 end
 
 function InputRemotes:Initialize()
+	PlayerModule = PlayerContext.Player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule")
 	self.networking = Networker.new("InputRemotes", self)
 end
 

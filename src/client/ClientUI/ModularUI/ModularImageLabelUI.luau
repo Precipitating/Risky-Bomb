@@ -14,7 +14,7 @@ type ModularImageLabelProps = {
 	AspectRatio: number?,
 	Rotation: number?,
 }
-local function ModularImageLabel(props: ModularImageLabelProps)
+local function ModularImageLabel(props: ModularImageLabelProps, children)
 	return e("ImageLabel", {
 		Position = props.Position,
 		Size = props.Size,
@@ -32,6 +32,7 @@ local function ModularImageLabel(props: ModularImageLabelProps)
 		Corner = e("UICorner", {
 			CornerRadius = UDim.new(props.CornerRadius or 0, 0),
 		}),
+		OptionalChildren = children,
 	})
 end
 

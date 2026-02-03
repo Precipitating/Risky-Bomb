@@ -15,6 +15,9 @@ local MainSounds = {
 
 local BombGameThemes = {
 	"rbxassetid://72995265072887",
+	"rbxassetid://1836708140",
+	"rbxassetid://1837434816",
+	"rbxassetid://1847493122",
 }
 
 local SoundManager = {
@@ -35,6 +38,8 @@ local SoundManager = {
 
 		AIWin = "rbxassetid://17620645740",
 		AILose = "rbxassetid://128504700405137",
+		Win = "rbxassetid://125552754635730",
+		Lose = "rbxassetid://91020679481479",
 
 		CardUse = "rbxassetid://128706455708345",
 	},
@@ -42,10 +47,7 @@ local SoundManager = {
 		ChairSit = "rbxassetid://12222152",
 		ChairLeave = "rbxassetid://12221967",
 	},
-	GameSounds = {
-		Win = "rbxassetid://125552754635730",
-		Lose = "rbxassetid://91020679481479",
-	},
+	GameSounds = {},
 }
 
 local function LoadSoundsFromTable(parent: Instance, folderName: string, tableToModify: {})

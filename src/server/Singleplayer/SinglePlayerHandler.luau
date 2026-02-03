@@ -1,11 +1,10 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local ServerStorage = game:GetService("ServerStorage")
 local ServerScriptService = game:GetService("ServerScriptService").Server
-local RandomModule = require(ReplicatedStorage.Shared.RandomModule)
+local RandomModule = require(ReplicatedStorage.RandomModule)
 local AIDifficultyConfig = require(script.Parent.AIDifficultyConfig)
 local GameTableManager = require(ServerScriptService.BombGame.GameTableManager)
 local GameModule = require(ServerScriptService.BombGame.GameModule)
-local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local Networker = require(ReplicatedStorage.Packages.Networker).server
 local AIFolder = ServerStorage.Models.AI:GetChildren()
 

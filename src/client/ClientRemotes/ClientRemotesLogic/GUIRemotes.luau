@@ -6,36 +6,8 @@ local Networker = require(ReplicatedStorage.Packages.Networker).client
 
 local Remotes = ReplicatedStorage.Remotes
 
-local Connections = {}
 local GUIRemotes = {}
 GUIRemotes.networker = Networker.new("GUIRemotes", GUIRemotes)
-
-function GUIRemotes.DisconnectAll(key)
-	if not Connections[key] then
-		warn("Disconnect failed, key doesn't exist")
-		return
-	end
-	for _, conn in pairs(Connections[key]) do
-		if typeof(conn) == "RBXScriptConnection" then
-			conn:Disconnect()
-		end
-	end
-
-	table.clear(Connections[key])
-
-	print(`Disconnected {key}!`)
-end
-
-function GUIRemotes.StoreConnection(key, signal, callback)
-	-- initialize table for this key
-	if not Connections[key] then
-		Connections[key] = {}
-	end
-
-	local conn = signal:Connect(callback)
-	table.insert(Connections[key], conn)
-	return conn
-end
 
 function GUIRemotes:BombGUIDisconnect()
 	BombGameCharms.BombInputVisible(false)
@@ -58,6 +30,11 @@ end
 -- content accessible via Data.Message due to global messaging
 function GUIRemotes:UpdateDonationText(receiveTable)
 	UICharms.CurrentDonationText(receiveTable.Data.Message)
+end
+
+function GUIRemotes:UpdateGameActive(state: boolean)
+	print(`Game active = {state}`)
+	BombGameCharms.GameActive(state)
 end
 
 function GUIRemotes:SetLastDonationMessage()

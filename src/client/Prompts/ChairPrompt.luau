@@ -1,7 +1,8 @@
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local StarterPlayer = game:GetService("StarterPlayer")
-local Networker = require(ReplicatedStorage.Packages.Networker).client
+local BombGameCharms = require(ReplicatedStorage.Charms.BombGameCharms)
+local InputRemotes = require(StarterPlayer.StarterPlayerScripts.Client.ClientRemotes.ClientRemotesLogic.InputRemotes)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 
@@ -38,12 +39,21 @@ local function PromptVisibilityConnection(prompt: ProximityPrompt, seat: Seat)
 			if seatHumanoid then
 				prompt.Enabled = false
 				SoundManager.PlayExistingSound(SoundManager.PromptSounds.ChairSit)
+				BombGameCharms.IsSat(true)
+
+				InputRemotes:DisableControls(true)
 			else
 				prompt.Enabled = true
+				BombGameCharms.IsSat(false)
 				SoundManager.PlayExistingSound(SoundManager.PromptSounds.ChairLeave)
 			end
 		end)
 		prompt:AddTag("Set")
+
+		seat.Destroying:Connect(function()
+			BombGameCharms.IsSat(false)
+			SoundManager.PlayExistingSound(SoundManager.PromptSounds.ChairLeave)
+		end)
 	end
 end
 

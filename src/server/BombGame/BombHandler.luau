@@ -14,14 +14,27 @@ local function PlayTickSound(playersList, bomb: MeshPart)
 	end
 end
 
+local function GetBombTweenDuration(tableClass, startTime: number)
+	local duration = nil
+
+	if tableClass.BombEffectsActive["LeTrolleCard"] then
+		print("fake bomb tween")
+		duration = 0.8
+	else
+		duration = math.max(BombServerConfig.MINIMUM_TWEEN_DURATION, tableClass.BombTimeLeft / startTime)
+	end
+
+	return duration
+end
+
 local function BombTween(tableClass, startTime: number)
 	local bomb = tableClass.TableRefs.Bomb
 	if not bomb then
 		error("Missing bomb reference when tweening bomb!")
 	end
+
 	while tableClass.BombActive do
-		local currTime = tableClass.BombTimeLeft
-		local duration = math.max(BombServerConfig.MINIMUM_TWEEN_DURATION, currTime / startTime)
+		local duration = GetBombTweenDuration(tableClass, startTime)
 		local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out, 0, true)
 
 		local tween = TweenService:Create(bomb, tweenInfo, {
@@ -85,6 +98,13 @@ function BombHandler.ReduceBombTime(tableClass, reductionTime: number)
 	tableClass.BombTimeLeft = result
 
 	return result
+end
+
+function BombHandler.AddBombTime(tableClass, numberToAdd: number)
+	if not tableClass.BombActive then
+		return
+	end
+	tableClass.BombTimeLeft += numberToAdd
 end
 
 local function StartBomb(tableClass, startTime: number)
