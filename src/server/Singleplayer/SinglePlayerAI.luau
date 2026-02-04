@@ -32,7 +32,6 @@ local function TimeDeductCalculate(config: AIDifficulty, timeLeft: number)
 	-- must reduce at least minReduction
 	reduction = math.max(config.minReduction, reduction)
 
-	print(`ai reducing {math.floor(reduction)}`)
 	return math.floor(reduction)
 end
 
@@ -49,6 +48,7 @@ function SinglePlayerAI.ThinkAndChoose(tableClass)
 		if not tableClass.GameActive then
 			return
 		end
+		print(`ai currently reducing {deductionTime}`)
 		local resultingTime = BombHandler.ReduceBombTime(tableClass, deductionTime)
 
 		if resultingTime > 0 then

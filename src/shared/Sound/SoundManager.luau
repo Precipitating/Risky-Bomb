@@ -30,7 +30,6 @@ local SoundManager = {
 		Success = "rbxassetid://12221990",
 		Thanks = "rbxassetid://101848247153533",
 		Arigato = "rbxassetid://88955287410162",
-
 		Common = "rbxassetid://4612386679",
 		Rare = "rbxassetid://4612386064",
 		Epic = "rbxassetid://4612386227",
@@ -42,6 +41,9 @@ local SoundManager = {
 		Lose = "rbxassetid://91020679481479",
 
 		CardUse = "rbxassetid://128706455708345",
+		DoubleTrouble = "rbxassetid://111782832643483",
+		Dont = "rbxassetid://93579169785878",
+		Yes = "rbxassetid://78773035296315",
 	},
 	PromptSounds = {
 		ChairSit = "rbxassetid://12222152",

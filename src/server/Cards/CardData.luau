@@ -5,6 +5,7 @@ local CardUseType = require(ReplicatedStorage.Shared.Config.CardUseType)
 local RandomModule = require(ReplicatedStorage.Shared.RandomModule)
 local GameModule = require(ServerScriptService.Server.BombGame.GameModule)
 local GameTableManager = require(ServerScriptService.Server.BombGame.GameTableManager)
+local SoundToClient = require(ServerScriptService.Server.ServerRemotesLogic.SoundToClient)
 
 export type CardData = {
 	KeyName: string,
@@ -19,6 +20,8 @@ local CardsList = {
 	[1] = "SafeCard",
 	[2] = "HoldUpCard",
 	[3] = "LeTrolleCard",
+	[4] = "DoubleTroubleCard",
+	[5] = "SkipTurnCard",
 }
 
 local function GetTableFromPlayer(player: Player)
@@ -50,7 +53,7 @@ return {
 		Description = "Use this card to apply a random 1 time 'safe' input (unless the timer is 1)",
 		ImageID = "rbxassetid://76671018220570",
 		UseType = CardUseType.Enum.InstantActivation,
-		Use = function(player: Player)
+		Use = function(player: Player, _)
 			local tableClass, tableID = GetTableFromPlayer(player)
 			local safeBombTime = RandomModule.GetRandomNumberBetween(1, tableClass.BombTimeLeft - 1)
 
@@ -79,12 +82,62 @@ return {
 		UseType = CardUseType.Enum.InstantActivation,
 		Use = function(player: Player)
 			local tableClass, _ = GetTableFromPlayer(player)
-			if not tableClass.BombEffectsActive["LeTrolleCard"] then
-				tableClass.BombEffectsActive["LeTrolleCard"] = { TurnsLeft = 3 }
-			else
-				tableClass.BombEffectsActive["LeTrolleCard"].TurnsLeft += 3
+
+			tableClass.BombEffectsActive["LeTrolleCard"] = { Target = true }
+		end,
+	} :: CardData,
+
+	DoubleTroubleCard = {
+		KeyName = "DoubleTroubleCard",
+		Name = "Double Trouble",
+		Description = "Force the opponent's input to be DOUBLED unknowingly to them",
+		ImageID = "rbxassetid://138957508838982",
+		UseType = CardUseType.Enum.InstantActivation,
+		Use = function(player: Player, _)
+			local tableClass, _ = GetTableFromPlayer(player)
+			local oppositePlayer = tableClass:GetOppositePlayer()
+
+			if not oppositePlayer and not tableClass.AIConfig.AIMode then
+				error("Opposite player not set properly!")
 			end
-			print(`turns added to le troll = {tableClass.BombEffectsActive["LeTrolleCard"].TurnsLeft}`)
+			tableClass.BombEffectsActive["DoubleTroubleCard"] = tableClass.BombEffectsActive["DoubleTroubleCard"] or {}
+
+			if tableClass.AIConfig.AIMode then
+				tableClass.BombEffectsActive["DoubleTroubleCard"]["AIMode"] = true
+			else
+				tableClass.BombEffectsActive["DoubleTroubleCard"][oppositePlayer] = true
+				print(`Double trouble applied to {oppositePlayer.DisplayName}`)
+			end
+		end,
+	} :: CardData,
+
+	DoubleCheckCard = {
+		KeyName = "DoubleCheckCard",
+		Name = "Double Check",
+		Description = "Use to check if the current input is safe by over 10 seconds via audio cues",
+		ImageID = "rbxassetid://71353406346530",
+		UseType = CardUseType.Enum.InstantActivation,
+		Use = function(player: Player, bombInput: number)
+			local tableClass, _ = GetTableFromPlayer(player)
+			local bombTime = tableClass.BombTimeLeft
+
+			if (bombTime - bombInput) > 10 then
+				SoundToClient.networker:fire(player, "PlayExistingSound", "UISounds", "Yes")
+			else
+				SoundToClient.networker:fire(player, "PlayExistingSound", "UISounds", "Dont")
+			end
+		end,
+	} :: CardData,
+
+	SkipTurnCard = {
+		KeyName = "SkipTurnCard",
+		Name = "Skip",
+		Description = "Skip a turn",
+		ImageID = "rbxassetid://135885419597915",
+		UseType = CardUseType.Enum.InstantActivation,
+		Use = function(player: Player, _: number)
+			local _, tableID = GetTableFromPlayer(player)
+			GameModule:SubmitBombTime(player, tableID, 0)
 		end,
 	} :: CardData,
 }

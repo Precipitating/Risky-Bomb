@@ -94,11 +94,13 @@ end
 
 function Table:ReduceBombEffectTurns()
 	for key, data in pairs(self.BombEffectsActive) do
-		if data.TurnsLeft ~= nil and data.TurnsLeft <= 0 then
-			self.BombEffectsActive[key] = nil
-			warn(`{key} removed from bomb effects`)
-		else
-			data.TurnsLeft -= 1
+		if data.TurnsLeft ~= nil then
+			if data.TurnsLeft <= 0 then
+				self.BombEffectsActive[key] = nil
+				warn(`{key} removed from bomb effects`)
+			else
+				data.TurnsLeft -= 1
+			end
 		end
 	end
 end
@@ -144,6 +146,22 @@ function Table:AddReferencesToJanitor()
 			self.Janitor:Add(ref)
 		end
 	end
+end
+
+function Table:GetOppositePlayer()
+	if self.CurrentTurn ~= 1 and self.CurrentTurn ~= 2 then
+		return nil
+	end
+
+	return self.PlayersAssigned[3 - self.CurrentTurn]
+end
+
+function Table:GetCurrentTurnPlayer()
+	if self.CurrentTurn ~= 1 and self.CurrentTurn ~= 2 then
+		return nil
+	end
+
+	return self.PlayersAssigned[self.CurrentTurn]
 end
 
 function Table:PlayerStoodUp(seatNumber: number)

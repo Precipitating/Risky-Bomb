@@ -88,12 +88,39 @@ local function StartScaleLerping(tableClass, startTime: number)
 	end)
 end
 
+-- double the input if current person is affected by Double Trouble card
+local function DoubleTrouble(tableClass, reductionTime: number)
+	local newTime = reductionTime
+	local isDoubleTroubled = tableClass.BombEffectsActive["DoubleTroubleCard"]
+
+	if isDoubleTroubled then
+		if isDoubleTroubled[tableClass:GetCurrentTurnPlayer()] then
+			local player = tableClass:GetCurrentTurnPlayer()
+			newTime *= 2
+			SoundToClient.networker:fire(player, "PlayExistingSound", "UISounds", "DoubleTrouble")
+			isDoubleTroubled[player] = nil
+			print(`Player's input was {reductionTime}, now it's {newTime}`)
+		elseif isDoubleTroubled["AIMode"] and tableClass.AIConfig.AITurn then
+			newTime *= 2
+			isDoubleTroubled["AIMode"] = nil
+			print(`AI Input was {reductionTime}, now it's {newTime}`)
+		end
+	end
+
+	print(`FINAL REDUCTION: {newTime}`)
+	return newTime
+end
+
 -- returns true if bomb time is <= 0
 function BombHandler.ReduceBombTime(tableClass, reductionTime: number)
 	if not tableClass.BombActive then
 		return nil
 	end
+
+	reductionTime = DoubleTrouble(tableClass, reductionTime)
+
 	local currentTime = tableClass.BombTimeLeft
+
 	local result = currentTime - reductionTime
 	tableClass.BombTimeLeft = result
 

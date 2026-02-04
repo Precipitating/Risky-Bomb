@@ -34,6 +34,13 @@ local function SetAwardDailyIf24Hours(data, firstJoin: boolean)
 	end
 end
 
+function ServerDataHandler.GetData(player: Player, path: {})
+	return DataService:get(player, path)
+end
+function ServerDataHandler.UpdateData(player: Player, path: {}, updateCallback: (currData: any) -> ())
+	return DataService:update(player, path, updateCallback)
+end
+
 function ServerDataHandler:AwardDaily(data)
 	local consecutiveDay = data.consecutiveDay
 	data.currency += consecutiveDay * DailyRewardsData.AwardPerDay
@@ -69,6 +76,8 @@ function DataService:onPlayerInit(player: Player, data): ()
 		data.sessionJoinTime = os.time()
 		data.consecutiveDay = 1
 		data.canAwardDaily = false
+		data.codesRedeemed = {}
+		data.rewardsRedeemed = {}
 	end
 
 	-- update cash store to update leaderboard

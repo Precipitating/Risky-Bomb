@@ -49,4 +49,5 @@ return {
 		Color = "Black",
 	},
 	codesRedeemed = {},
+	rewardsRedeemed = {},
 }

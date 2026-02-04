@@ -60,6 +60,7 @@ local function CardsUI(props: CardsUIProps)
 						CardsFunctions:UseCard()
 					end
 					BombGameCharms.CardUsed(true)
+					spring:setGoal(1)
 				end)
 			else
 				spring:setGoal(1)

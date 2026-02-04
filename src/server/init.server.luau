@@ -2,6 +2,7 @@ require(script.BombGame.GameModule)
 require(script.HandlePurchases.PurchaseHandler)
 require(script.HandlePurchases.InGamePurchases)
 require(script.Inventory.InventoryEvents)
+require(script.ProximityPromptHandler)
 local GameTableManager = require(script.BombGame.GameTableManager)
 local GlobalAnnouncer = require(script.MessageService.GlobalAnnouncer)
 local ServerDataHandler = require(script.ServerData.ServerDataHandler)
@@ -13,7 +14,6 @@ local function ServerInit()
 	ServerPlayerEvents.Handle()
 	ServerSignalsInitializer.HandleEvents()
 	GameTableManager:Initialize()
-
 	GlobalAnnouncer.Initialize()
 end
 

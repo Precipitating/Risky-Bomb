@@ -26,7 +26,7 @@ function CardsFunctions:UseCard()
 		warn("Can't use card from client, AssignCard is nil")
 	end
 
-	self.networker:fire("UseCard", card.KeyName)
+	self.networker:fire("UseCard", card.KeyName, BombGameCharms.CurrentBombInput())
 	print("Card used!")
 
 	BombGameCharms.CurrentCard({})

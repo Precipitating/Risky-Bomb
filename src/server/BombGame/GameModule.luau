@@ -302,16 +302,17 @@ function GameModule.NextTurn(tableClass)
 end
 
 function GameModule:SubmitBombTime(_: Player, tableID: string, timeToReduce: number)
-	local tableRef = GameTableManager.GetTableFromID(tableID)
-	if tableRef.BombTimeLeft <= 0 or not tableRef.BombActive then
+	local tableClass = GameTableManager.GetTableFromID(tableID)
+	if tableClass.BombTimeLeft <= 0 or not tableClass.BombActive then
 		warn("Cannot reduce time, bomb time is 0")
 		return
 	end
-	timeToReduce = math.clamp(timeToReduce, 1, BombServerConfig.MAX_BOMB_TIME)
-	local newTime = BombHandler.ReduceBombTime(tableRef, timeToReduce)
+	timeToReduce = math.clamp(timeToReduce, 0, BombServerConfig.MAX_BOMB_TIME)
+
+	local newTime = BombHandler.ReduceBombTime(tableClass, timeToReduce)
 
 	if newTime > 0 then
-		GameModule.NextTurn(tableRef)
+		GameModule.NextTurn(tableClass)
 	end
 end
 
