@@ -7,7 +7,6 @@ local React = require(ReplicatedStorage.Packages.React)
 local ReactRipple = require(ReplicatedStorage.Packages.ReactRipple)
 local ReactCharm = require(ReplicatedStorage.Packages.ReactCharm)
 local BombGameCharms = require(ReplicatedStorage.Charms.BombGameCharms)
-local CardUseType = require(ReplicatedStorage.Config.CardUseType)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 
 local e = React.createElement
@@ -55,10 +54,7 @@ local function CardsUI(props: CardsUIProps)
 				spring:setGoal(0.50, { impulse = -10 })
 				task.delay(0.1, function()
 					CardsFunctions.CardActivated = true
-					if cardData.UseType == CardUseType.Enum.InstantActivation then
-						print("Instant activation card used!")
-						CardsFunctions:UseCard()
-					end
+					CardsFunctions:UseCard()
 					BombGameCharms.CardUsed(true)
 					spring:setGoal(1)
 				end)

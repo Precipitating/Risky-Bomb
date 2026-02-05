@@ -1,10 +1,14 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local ServerScriptService = game:GetService("ServerScriptService").Server
-local RandomModule = require(ReplicatedStorage.Shared.RandomModule)
+local RandomModule = require(ReplicatedStorage.RandomModule)
+local CardUseType = require(ReplicatedStorage.Config.CardUseType)
 local GameModule = require(ServerScriptService.BombGame.GameModule)
-local BombHandler = require(ServerScriptService.BombGame.BombHandler)
-local AIDifficultyConfig = require(script.Parent.AIDifficultyConfig)
-type AIDifficulty = AIDifficultyConfig.AIDifficulty
+
+local CardHandler = require(ServerScriptService.Cards.CardHandler)
+local CardTypes = require(ServerScriptService.ServerTypes.CardTypes)
+local AITypes = require(ServerScriptService.ServerTypes.AITypes)
+type AIDifficulty = AITypes.AIDifficulty
+type CardData = CardTypes.CardData
 
 local SinglePlayerAI = {}
 
@@ -38,6 +42,9 @@ end
 -- returns the value to deduct from bomb after x seconds
 function SinglePlayerAI.ThinkAndChoose(tableClass)
 	local difficultyConfig = tableClass.AIConfig.AIDifficultyConfig
+	local aiCard: CardData? = tableClass.AIConfig.AICard
+	local shouldUseCard = RandomModule.GetRandomDecimalBetween(0, 1) <= 0.25
+	local singlePlayerID = tableClass.AIConfig.PlayerID
 	if not tableClass.AIConfig.AITurn then
 		warn("Not AI's turn?")
 		return
@@ -48,11 +55,27 @@ function SinglePlayerAI.ThinkAndChoose(tableClass)
 		if not tableClass.GameActive then
 			return
 		end
-		print(`ai currently reducing {deductionTime}`)
-		local resultingTime = BombHandler.ReduceBombTime(tableClass, deductionTime)
 
-		if resultingTime > 0 then
-			GameModule.NextTurn(tableClass)
+		local usedInstantCard = false
+
+		if aiCard and shouldUseCard then
+			CardHandler:UseCard(tableClass.PlayersAssigned[singlePlayerID], aiCard.KeyName, deductionTime)
+
+			usedInstantCard = (aiCard.UseType == CardUseType.Enum.InstantActivation)
+
+			tableClass.AIConfig.AICard = nil
+		end
+
+		-- resolve turn
+		if usedInstantCard then
+			warn("AI used an instant activation card, so no reduction.")
+
+			if tableClass.BombTimeLeft > 0 then
+				GameModule.NextTurn(tableClass)
+			end
+		else
+			warn(`AI chooses to reduce {deductionTime}`)
+			GameModule:SubmitBombTime(nil, tableClass.ID, deductionTime)
 		end
 	end)
 end

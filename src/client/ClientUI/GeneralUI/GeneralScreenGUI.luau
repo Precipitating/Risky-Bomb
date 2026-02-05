@@ -43,6 +43,7 @@ local function GeneralScreenGUI()
 			Position = UDim2.fromScale(0, 0.5),
 			Size = UDim2.fromScale(0.2, 0.2),
 			AspectRatio = 1,
+			Visible = not isGameActive,
 			ImageID = "rbxassetid://124449779482452",
 			AnchorPoint = Vector2.new(0, 0.5),
 			OnClick = function()
@@ -59,6 +60,7 @@ local function GeneralScreenGUI()
 			Position = UDim2.fromScale(0, 0.7),
 			Size = UDim2.fromScale(0.2, 0.2),
 			AspectRatio = 1,
+			Visible = not isGameActive,
 			ImageID = "rbxassetid://93355381110569",
 			AnchorPoint = Vector2.new(0, 0.5),
 			OnClick = function()
@@ -75,6 +77,7 @@ local function GeneralScreenGUI()
 			Position = UDim2.fromScale(0.01, 0.3),
 			Size = UDim2.fromScale(0.2, 0.2),
 			AspectRatio = 0.8,
+			Visible = not isGameActive,
 			ImageID = "rbxassetid://116545774107407",
 			AnchorPoint = Vector2.new(0, 0.5),
 			OnClick = function()
@@ -94,7 +97,7 @@ local function GeneralScreenGUI()
 			AnchorPoint = Vector2.new(0, 0.5),
 			StrokeColor = Color3.fromRGB(0, 0, 0),
 			AspectRatio = 1,
-			IsOpen = shopOpen,
+			IsOpen = shopOpen and not isGameActive,
 			SetIsOpen = setShopOpen,
 			LootTableOpen = lootTableOpen,
 			SetLootTableOpen = setLootTableOpen,
@@ -105,7 +108,7 @@ local function GeneralScreenGUI()
 			AnchorPoint = Vector2.new(0, 0.5),
 			StrokeColor = Color3.fromRGB(0, 0, 0),
 			AspectRatio = 1,
-			IsOpen = inventoryOpen,
+			IsOpen = inventoryOpen and not isGameActive,
 			SetIsOpen = setInventoryOpen,
 		}),
 

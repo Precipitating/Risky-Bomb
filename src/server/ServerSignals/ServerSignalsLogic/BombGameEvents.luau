@@ -1,6 +1,7 @@
 local ServerScriptService = game:GetService("ServerScriptService").Server
 local GameModule = require(ServerScriptService.BombGame.GameModule)
 local CardHandler = require(ServerScriptService.Cards.CardHandler)
+local CardData = require(ServerScriptService.Cards.CardData)
 local SinglePlayerAI = require(ServerScriptService.Singleplayer.SinglePlayerAI)
 local SinglePlayerHandler = require(ServerScriptService.Singleplayer.SinglePlayerHandler)
 local ServerSignals = require(ServerScriptService.ServerSignals.Signals)
@@ -28,6 +29,10 @@ function BombGameEvents.Handle()
 
 	ServerSignals.SetCardForPlayer:Connect(function(player: Player)
 		CardHandler:SetRandomCardForPlayer(player)
+	end)
+	ServerSignals.SetCardForAI:Connect(function(tableClass)
+		local cardChosen = CardData[CardData.GetRandomCardAI()]
+		tableClass.AIConfig.AICard = cardChosen
 	end)
 end
 

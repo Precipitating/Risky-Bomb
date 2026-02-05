@@ -1,22 +1,25 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local ServerScriptService = game:GetService("ServerScriptService")
-local BombHandler = require(ServerScriptService.Server.BombGame.BombHandler)
-local CardUseType = require(ReplicatedStorage.Shared.Config.CardUseType)
-local RandomModule = require(ReplicatedStorage.Shared.RandomModule)
-local GameModule = require(ServerScriptService.Server.BombGame.GameModule)
-local GameTableManager = require(ServerScriptService.Server.BombGame.GameTableManager)
-local SoundToClient = require(ServerScriptService.Server.ServerRemotesLogic.SoundToClient)
+local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local ServerScriptService = game:GetService("ServerScriptService").Server
+local BombHandler = require(ServerScriptService.BombGame.BombHandler)
+local CardUseType = require(ReplicatedStorage.Config.CardUseType)
+local RandomModule = require(ReplicatedStorage.RandomModule)
+local GameModule = require(ServerScriptService.BombGame.GameModule)
+local GameTableManager = require(ServerScriptService.BombGame.GameTableManager)
+local SoundToClient = require(ServerScriptService.ServerRemotesLogic.SoundToClient)
+local CardTypes = require(ServerScriptService.ServerTypes.CardTypes)
 
-export type CardData = {
-	KeyName: string,
-	Name: string,
-	Description: string,
-	ImageID: string,
-	UseType: number,
-	Use: (Player) -> (),
-}
+type CardData = CardTypes.CardData
 
 local CardsList = {
+	[1] = "SafeCard",
+	[2] = "HoldUpCard",
+	[3] = "LeTrolleCard",
+	[4] = "DoubleTroubleCard",
+	[5] = "DoubleCheckCard",
+	[6] = "SkipTurnCard",
+}
+
+local AICompatibleCards = {
 	[1] = "SafeCard",
 	[2] = "HoldUpCard",
 	[3] = "LeTrolleCard",
@@ -46,6 +49,9 @@ return {
 	GetRandomCard = function()
 		return CardsList[RandomModule.GetRandomNumberBetween(1, #CardsList)]
 	end,
+	GetRandomCardAI = function()
+		return AICompatibleCards[RandomModule.GetRandomNumberBetween(1, #AICompatibleCards)]
+	end,
 
 	SafeCard = {
 		KeyName = "SafeCard",
@@ -53,10 +59,10 @@ return {
 		Description = "Use this card to apply a random 1 time 'safe' input (unless the timer is 1)",
 		ImageID = "rbxassetid://76671018220570",
 		UseType = CardUseType.Enum.InstantActivation,
-		Use = function(player: Player, _)
+		Use = function(player: Player, _: number)
 			local tableClass, tableID = GetTableFromPlayer(player)
 			local safeBombTime = RandomModule.GetRandomNumberBetween(1, tableClass.BombTimeLeft - 1)
-
+			warn(`Safety card number chosen is {safeBombTime} `)
 			GameModule:SubmitBombTime(player, tableID, safeBombTime)
 		end,
 	} :: CardData,
@@ -66,8 +72,8 @@ return {
 		Name = "Hold up!",
 		Description = "Add a random number between 50-200 to the current time!",
 		ImageID = "rbxassetid://109484338496545",
-		UseType = CardUseType.Enum.InstantActivation,
-		Use = function(player: Player)
+		UseType = CardUseType.Enum.CanInputAfterActivation,
+		Use = function(player: Player, _: number)
 			local tableClass, _ = GetTableFromPlayer(player)
 			local numToAdd = RandomModule.GetRandomNumberBetween(50, 200)
 			BombHandler.AddBombTime(tableClass, numToAdd)
@@ -79,11 +85,10 @@ return {
 		Name = "Le Trolle",
 		Description = "Make the bomb falsely tick slower for 3 turns, REMEMBER THAT TIME WILL NOT CHANGE!",
 		ImageID = "rbxassetid://97593773796651",
-		UseType = CardUseType.Enum.InstantActivation,
-		Use = function(player: Player)
+		UseType = CardUseType.Enum.CanInputAfterActivation,
+		Use = function(player: Player, _: number)
 			local tableClass, _ = GetTableFromPlayer(player)
-
-			tableClass.BombEffectsActive["LeTrolleCard"] = { Target = true }
+			tableClass.BombEffectsActive["LeTrolleCard"] = { TurnsLeft = 3 }
 		end,
 	} :: CardData,
 
@@ -92,8 +97,8 @@ return {
 		Name = "Double Trouble",
 		Description = "Force the opponent's input to be DOUBLED unknowingly to them",
 		ImageID = "rbxassetid://138957508838982",
-		UseType = CardUseType.Enum.InstantActivation,
-		Use = function(player: Player, _)
+		UseType = CardUseType.Enum.CanInputAfterActivation,
+		Use = function(player: Player, _: number)
 			local tableClass, _ = GetTableFromPlayer(player)
 			local oppositePlayer = tableClass:GetOppositePlayer()
 
@@ -103,7 +108,12 @@ return {
 			tableClass.BombEffectsActive["DoubleTroubleCard"] = tableClass.BombEffectsActive["DoubleTroubleCard"] or {}
 
 			if tableClass.AIConfig.AIMode then
-				tableClass.BombEffectsActive["DoubleTroubleCard"]["AIMode"] = true
+				if not tableClass.AIConfig.AITurn then
+					tableClass.BombEffectsActive["DoubleTroubleCard"]["AIMode"] = true
+				else
+					tableClass.BombEffectsActive["DoubleTroubleCard"][player] = true
+					print(`Double trouble applied to {player}`)
+				end
 			else
 				tableClass.BombEffectsActive["DoubleTroubleCard"][oppositePlayer] = true
 				print(`Double trouble applied to {oppositePlayer.DisplayName}`)
@@ -116,7 +126,7 @@ return {
 		Name = "Double Check",
 		Description = "Use to check if the current input is safe by over 10 seconds via audio cues",
 		ImageID = "rbxassetid://71353406346530",
-		UseType = CardUseType.Enum.InstantActivation,
+		UseType = CardUseType.Enum.CanInputAfterActivation,
 		Use = function(player: Player, bombInput: number)
 			local tableClass, _ = GetTableFromPlayer(player)
 			local bombTime = tableClass.BombTimeLeft
@@ -136,8 +146,9 @@ return {
 		ImageID = "rbxassetid://135885419597915",
 		UseType = CardUseType.Enum.InstantActivation,
 		Use = function(player: Player, _: number)
-			local _, tableID = GetTableFromPlayer(player)
-			GameModule:SubmitBombTime(player, tableID, 0)
+			local tableClass, _ = GetTableFromPlayer(player)
+			GameModule.NextTurn(tableClass)
+			print("Turn skipped!")
 		end,
 	} :: CardData,
 }

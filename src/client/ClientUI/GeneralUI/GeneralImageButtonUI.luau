@@ -22,7 +22,7 @@ local function GeneralImageButtonUI(props: GeneralImageButtonUIProps)
 			return UDim2.fromScale(props.Size.X.Scale * s, props.Size.Y.Scale * s)
 		end),
 		Image = props.ImageID,
-		Visible = props.Visible or true,
+		Visible = if props.Visible ~= nil then props.Visible else true,
 		BackgroundTransparency = props.BackgroundTransparency or 1,
 		AnchorPoint = props.AnchorPoint or Vector2.new(0, 0),
 		[React.Change.GuiState] = function(rbx: ImageButton)

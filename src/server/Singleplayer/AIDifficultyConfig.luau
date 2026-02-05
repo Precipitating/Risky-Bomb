@@ -1,21 +1,14 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local RandomModule = require(ReplicatedStorage.Shared.RandomModule)
-export type AIDifficulty = {
-	minReduction: number,
-	maxReduction: number,
-	dangerThreshold: number,
-	panicModeThreshold: number,
-	riskTolerance: number,
-	timePercentageMin: number,
-	timePercentageMax: number,
-	decisionDelay: number,
-	panicReduction: number,
-}
+local ServerScriptService = game:GetService("ServerScriptService").Server
+local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local AITypes = require(ServerScriptService.ServerTypes.AITypes)
+local RandomModule = require(ReplicatedStorage.RandomModule)
 local difficultyList = {
 	[1] = "Easy",
 	[2] = "Normal",
 	[3] = "Hard",
 }
+
+type AIDifficulty = AITypes.AIDifficulty
 
 return {
 	GetRandomDifficulty = function()

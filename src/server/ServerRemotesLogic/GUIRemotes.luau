@@ -6,7 +6,7 @@ local GUIRemotes = {}
 
 function GUIRemotes.GetLastDonationMessage()
 	local msg = ""
-	local success, err = pcall(function()
+	local _, err = pcall(function()
 		msg = DonationStore:GetAsync("Message")
 	end)
 

@@ -21,7 +21,9 @@ local function GetBombTweenDuration(tableClass, startTime: number)
 		print("fake bomb tween")
 		duration = 0.8
 	else
-		duration = math.max(BombServerConfig.MINIMUM_TWEEN_DURATION, tableClass.BombTimeLeft / startTime)
+		local alpha = math.clamp(tableClass.BombTimeLeft / startTime, 0, 1)
+
+		duration = math.lerp(BombServerConfig.MINIMUM_TWEEN_DURATION, BombServerConfig.MAX_TWEEN_DURATION, alpha)
 	end
 
 	return duration
@@ -89,13 +91,15 @@ local function StartScaleLerping(tableClass, startTime: number)
 end
 
 -- double the input if current person is affected by Double Trouble card
-local function DoubleTrouble(tableClass, reductionTime: number)
+function BombHandler.DoubleTrouble(tableClass, reductionTime: number)
 	local newTime = reductionTime
 	local isDoubleTroubled = tableClass.BombEffectsActive["DoubleTroubleCard"]
 
 	if isDoubleTroubled then
+		print(tableClass:GetCurrentTurnPlayer())
 		if isDoubleTroubled[tableClass:GetCurrentTurnPlayer()] then
 			local player = tableClass:GetCurrentTurnPlayer()
+			print(player)
 			newTime *= 2
 			SoundToClient.networker:fire(player, "PlayExistingSound", "UISounds", "DoubleTrouble")
 			isDoubleTroubled[player] = nil
@@ -116,8 +120,6 @@ function BombHandler.ReduceBombTime(tableClass, reductionTime: number)
 	if not tableClass.BombActive then
 		return nil
 	end
-
-	reductionTime = DoubleTrouble(tableClass, reductionTime)
 
 	local currentTime = tableClass.BombTimeLeft
 

@@ -267,6 +267,11 @@ function GameModule.StartCountdown(tableClass, targetPlayerID: number)
 end
 
 function GameModule.NextTurn(tableClass)
+	if tableClass.BombTimeLeft <= 0 then
+		warn("Not switching turn, bomb time is 0")
+		return
+	end
+
 	local playerList = tableClass.PlayersAssigned
 
 	tableClass.TurnCounter += 1
@@ -301,19 +306,22 @@ function GameModule.NextTurn(tableClass)
 	GameModule.StartCountdown(tableClass, nextTurn)
 end
 
-function GameModule:SubmitBombTime(_: Player, tableID: string, timeToReduce: number)
+function GameModule:SubmitBombTime(_: Player?, tableID: string, timeToReduce: number)
 	local tableClass = GameTableManager.GetTableFromID(tableID)
+	if not tableClass then
+		error("tableClass invalid when submitting bomb!")
+	end
 	if tableClass.BombTimeLeft <= 0 or not tableClass.BombActive then
 		warn("Cannot reduce time, bomb time is 0")
 		return
 	end
+
+	timeToReduce = BombHandler.DoubleTrouble(tableClass, timeToReduce)
 	timeToReduce = math.clamp(timeToReduce, 0, BombServerConfig.MAX_BOMB_TIME)
 
-	local newTime = BombHandler.ReduceBombTime(tableClass, timeToReduce)
+	BombHandler.ReduceBombTime(tableClass, timeToReduce)
 
-	if newTime > 0 then
-		GameModule.NextTurn(tableClass)
-	end
+	GameModule.NextTurn(tableClass)
 end
 
 function GameModule.SetBombSkin(tableClass)
@@ -350,6 +358,11 @@ function GameModule.SetRandomCardPerPlayer(tableClass)
 		end
 
 		Signals.SetCardForPlayer:Fire(playerRef)
+	end
+
+	-- set AI's card if AI mode
+	if tableClass.AIConfig.AIMode then
+		Signals.SetCardForAI:Fire(tableClass)
 	end
 end
 

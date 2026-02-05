@@ -3,7 +3,8 @@ local Players = game:GetService("Players")
 local ServerScriptService = game:GetService("ServerScriptService").Server
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local InventoryEvents = require(ServerScriptService.Inventory.InventoryEvents)
-local AIDifficultyConfig = require(ServerScriptService.Singleplayer.AIDifficultyConfig)
+local CardTypes = require(ServerScriptService.ServerTypes.CardTypes)
+local AITypes = require(ServerScriptService.ServerTypes.AITypes)
 local Signals = require(ServerScriptService.ServerSignals.Signals)
 local GUIRemotes = require(ServerScriptService.ServerRemotesLogic.GUIRemotes)
 local Janitor = require(ReplicatedStorage.Packages.Janitor)
@@ -11,7 +12,7 @@ local Table = {}
 local COUNTDOWN_TIME = 5
 Table.__index = Table
 
-type AIDifficulty = AIDifficultyConfig.AIDifficulty
+type AIDifficulty = AITypes.AIDifficulty
 export type TableReferences = {
 	Parent: Model?,
 	Chair1: MeshPart?,
@@ -25,12 +26,13 @@ export type TableReferences = {
 	CountdownBillboard: BillboardGui?,
 }
 
-type AIMode = {
+type AIType = {
 	AIMode: boolean,
 	AITurn: boolean,
 	AIDifficultyChosen: AIDifficulty?,
 	AIModel: Model | MeshPart | Part | nil,
 	PlayerID: number?,
+	AICard: CardTypes.CardData,
 }
 
 function Table.new(table: Model)
@@ -51,13 +53,16 @@ function Table.new(table: Model)
 		[2] = nil,
 	}
 
-	self.AIConfig = {
-		AIMode = false,
-		AITurn = false,
-		AIDifficultyConfig = nil,
-		AIModel = nil,
-		PlayerID = nil,
-	}
+	self.AIConfig = (
+		{
+			AIMode = false,
+			AITurn = false,
+			AIDifficultyConfig = nil,
+			AIModel = nil,
+			PlayerID = nil,
+			AICard = nil,
+		}
+	) :: AIType
 
 	self.TableRefs = {
 		Parent = table,
@@ -157,6 +162,10 @@ function Table:GetOppositePlayer()
 end
 
 function Table:GetCurrentTurnPlayer()
+	if self.AIConfig.AIMode and not self.AIConfig.AITurn then
+		return self.PlayersAssigned[self.AIConfig.PlayerID]
+	end
+
 	if self.CurrentTurn ~= 1 and self.CurrentTurn ~= 2 then
 		return nil
 	end
