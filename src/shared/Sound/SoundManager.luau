@@ -25,6 +25,7 @@ local SoundManager = {
 		ButtonClick = "rbxassetid://452267918",
 		Error = "rbxassetid://3779045779",
 		Submit = "rbxassetid://9118819937",
+
 		Tick = "rbxassetid://4621722813",
 		Cash = "rbxassetid://14621507602",
 		Success = "rbxassetid://12221990",
@@ -49,7 +50,9 @@ local SoundManager = {
 		ChairSit = "rbxassetid://12222152",
 		ChairLeave = "rbxassetid://12221967",
 	},
-	GameSounds = {},
+	GameSounds = {
+		BombTick = "rbxassetid://112335105705854",
+	},
 }
 
 local function LoadSoundsFromTable(parent: Instance, folderName: string, tableToModify: {})
@@ -84,6 +87,7 @@ function SoundManager.Initialize()
 	local soundService = game.SoundService
 	LoadSoundsFromTable(soundService, "UISounds", SoundManager.UISounds)
 	LoadSoundsFromTable(soundService, "PromptSounds", SoundManager.PromptSounds)
+	LoadSoundsFromTable(soundService, "GameSounds", SoundManager.GameSounds)
 
 	SoundManager.PlayTheme(SoundManager.GetRandomMainSound())
 end

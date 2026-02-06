@@ -21,13 +21,17 @@ function SoundRemotes:PlayExistingSound(folderName: string, soundName: string)
 	SoundManager.PlayExistingSound(sound)
 end
 
-function SoundRemotes:PlayBombTickSound(bombRef: MeshPart)
-	local tickSound: Sound = bombRef:WaitForChild("Tick") :: Sound
+function SoundRemotes:PlayBombTickSound()
+	local tickSound: Sound = SoundManager.GameSounds.BombTick
 	if not tickSound.IsPlaying then
 		tickSound:Play()
 	else
 		tickSound.TimePosition = 0
 	end
 end
+
+ReplicatedStorage.Remotes.PlayBombTick.OnClientEvent:Connect(function()
+	SoundRemotes:PlayBombTickSound()
+end)
 
 return SoundRemotes

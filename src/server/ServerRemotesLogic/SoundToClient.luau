@@ -1,4 +1,5 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local UnreliableTickRemote = ReplicatedStorage.Remotes.PlayBombTick
 local Networker = require(ReplicatedStorage.Packages.Networker).server
 local SoundToClient = {}
 SoundToClient.networker = Networker.new("SoundRemotes", {})
@@ -13,8 +14,8 @@ function SoundToClient:PlaySoundOnClient(
 	self.networker:fire(player, "PlaySoundOnClient", audioID, parent, isTheme, config)
 end
 
-function SoundToClient:PlayBombTickOnClient(player: Player, bombRef: MeshPart)
-	self.networker:fire(player, "PlayBombTickSound", bombRef)
+function SoundToClient:PlayBombTickOnClient(player: Player)
+	UnreliableTickRemote:FireClient(player)
 end
 
 return SoundToClient

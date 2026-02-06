@@ -14,9 +14,9 @@ end
 -- should be used via client -> server remote call
 function CardHandler:UseCard(player: Player, cardKeyName: string, bombInput: number)
 	if not cardKeyName then
-		error("cardOwned is nil!")
+		warn("cardOwned is nil!, not using card!")
+		return
 	end
-	warn(`{cardKeyName} used!`)
 	CardData[cardKeyName].Use(player, bombInput)
 end
 

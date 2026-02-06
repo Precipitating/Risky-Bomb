@@ -1,10 +1,10 @@
 local StarterPlayer = game:GetService("StarterPlayer")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
-local InputRemotes = require(StarterPlayer.StarterPlayerScripts.Client.ClientRemotes.ClientRemotesLogic.InputRemotes)
 local PlayerContext = require(StarterPlayer.StarterPlayerScripts.Client.PlayerContext)
 local UICharms = require(ReplicatedStorage.Charms.UICharms)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local Networker = require(ReplicatedStorage.Packages.Networker).client
+local SinglePlayerButtonDebounce = false
 local SinglePlayerUIFunctions = {}
 SinglePlayerUIFunctions.networker = Networker.new("SingleplayerNetwork", SinglePlayerUIFunctions)
 
@@ -14,7 +14,25 @@ function SinglePlayerUIFunctions:ToggleButtonVisibility(enable: boolean)
 end
 
 function SinglePlayerUIFunctions:TrySinglePlayer()
-	local success = self.networker:fetch("CanSinglePlayer", PlayerContext.Character:GetAttribute("ID"))
+	if SinglePlayerButtonDebounce then
+		return
+	end
+	SinglePlayerButtonDebounce = true
+
+	local id: string? = PlayerContext.Character:GetAttribute("ID")
+
+	task.delay(1, function()
+		SinglePlayerButtonDebounce = false
+	end)
+
+	if not id then
+		return
+	end
+	if not PlayerContext.Humanoid.SeatPart then
+		return
+	end
+
+	local success = self.networker:fetch("CanSinglePlayer", id)
 
 	if not success then
 		SoundManager.PlayExistingSound(SoundManager.UISounds.Error)
@@ -22,7 +40,9 @@ function SinglePlayerUIFunctions:TrySinglePlayer()
 	end
 
 	UICharms.SingleplayerButtonVisible(false)
-	self.networker:fire("StartSinglePlayer", PlayerContext.Character:GetAttribute("ID"))
+	print(id)
+
+	self.networker:fire("StartSinglePlayer", id)
 end
 
 return SinglePlayerUIFunctions

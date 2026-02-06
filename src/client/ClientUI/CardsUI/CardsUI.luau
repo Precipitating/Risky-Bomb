@@ -33,6 +33,7 @@ local function CardsUI(props: CardsUIProps)
 	local cardUsed = CardActivated()
 	local cardData = CardData()
 	local binding, spring = ReactRipple.useSpring(1, ReactRipple.config.figmaQuick)
+	local debounce = false
 
 	if not isYourTurn or cardUsed then
 		return nil
@@ -53,10 +54,15 @@ local function CardsUI(props: CardsUIProps)
 				SoundManager.PlayExistingSound(SoundManager.UISounds.CardUse)
 				spring:setGoal(0.50, { impulse = -10 })
 				task.delay(0.1, function()
+					if debounce then
+						return
+					end
+					debounce = true
 					CardsFunctions.CardActivated = true
 					CardsFunctions:UseCard()
 					BombGameCharms.CardUsed(true)
 					spring:setGoal(1)
+					debounce = false
 				end)
 			else
 				spring:setGoal(1)

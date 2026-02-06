@@ -28,7 +28,15 @@ local PoolCount = 45
 -- the layout order of where the actual reward will appear
 local WonItemLayoutOrder = 40
 
+local Purchasing = false
+
 function ShopUIFunctions.AttemptPurchase(packType: number, packName: string)
+	if Purchasing then
+		warn("IN MIDST OF PURCHASING ALREADY")
+		SoundManager.PlayExistingSound(SoundManager.UISounds.Error)
+		return nil
+	end
+
 	local isDuplicate, itemWon = ShopUIFunctions.networker:fetch("AttemptBuy", packType, packName)
 	if not isDuplicate and not itemWon then
 		SoundManager.PlayExistingSound(SoundManager.UISounds.Error)
@@ -346,10 +354,11 @@ local function LootSpin(itemWon, folder, packTable, scrollFrameRef)
 	ShopUIFunctions.janitor:Add(SetupTickSound(scrollFrameRef, markerPassPositions))
 
 	-- 5. completion logic
-	local completeConn = tween.Completed:Connect(function()
+	local completeConn = tween.Completed:Once(function()
 		PlayRewardSound(itemWon.RarityChance)
 		UICharms.PackBought(false)
 		ShopUIFunctions:RemoveOldViewports()
+		ShopUIFunctions.networker:fire("IsRollingItem", false)
 	end)
 
 	UICharms.SpinTweenHandle({
@@ -405,10 +414,11 @@ function ShopUIFunctions.SkipSpin()
 		TweenService:Create(scrollFrameRef, skipTweenInfo, { CanvasPosition = Vector2.new(currentSpinInfo.Target, 0) })
 
 	tween:Play()
-	tween.Completed:Connect(function()
+	tween.Completed:Once(function()
 		PlayRewardSound(itemRarity)
 		UICharms.PackBought(false)
 		ShopUIFunctions:RemoveOldViewports()
+		ShopUIFunctions.networker:fire("IsRollingItem", false)
 	end)
 
 	-- shouldn't need the previous tween info anymore.

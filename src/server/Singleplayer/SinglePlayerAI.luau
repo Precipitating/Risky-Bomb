@@ -39,7 +39,10 @@ local function TimeDeductCalculate(config: AIDifficulty, timeLeft: number)
 	return math.floor(reduction)
 end
 
--- returns the value to deduct from bomb after x seconds
+local function ApplyLeTrolleConfusion(currentDecidedTime: number)
+	return math.floor(currentDecidedTime * RandomModule.GetRandomDecimalBetween(1, 2))
+end
+
 function SinglePlayerAI.ThinkAndChoose(tableClass)
 	local difficultyConfig = tableClass.AIConfig.AIDifficultyConfig
 	local aiCard: CardData? = tableClass.AIConfig.AICard
@@ -49,6 +52,7 @@ function SinglePlayerAI.ThinkAndChoose(tableClass)
 		warn("Not AI's turn?")
 		return
 	end
+
 	local deductionTime = TimeDeductCalculate(difficultyConfig, tableClass.BombTimeLeft)
 
 	task.delay(RandomModule.GetRandomNumberBetween(1, difficultyConfig.decisionDelay), function()
@@ -59,6 +63,7 @@ function SinglePlayerAI.ThinkAndChoose(tableClass)
 		local usedInstantCard = false
 
 		if aiCard and shouldUseCard then
+			warn(`AI used a card {aiCard.Name}`)
 			CardHandler:UseCard(tableClass.PlayersAssigned[singlePlayerID], aiCard.KeyName, deductionTime)
 
 			usedInstantCard = (aiCard.UseType == CardUseType.Enum.InstantActivation)
@@ -67,15 +72,18 @@ function SinglePlayerAI.ThinkAndChoose(tableClass)
 		end
 
 		-- resolve turn
-		if usedInstantCard then
-			warn("AI used an instant activation card, so no reduction.")
-
-			if tableClass.BombTimeLeft > 0 then
-				GameModule.NextTurn(tableClass)
+		if not usedInstantCard then
+			warn(`AI currently choosing to reduce {deductionTime}`)
+			if
+				tableClass.BombEffectsActive["LeTrolleCard"]
+				and tableClass.BombEffectsActive["LeTrolleCard"].Initiator ~= "AI"
+			then
+				deductionTime = ApplyLeTrolleConfusion(deductionTime)
+				warn(`AI confused due to double trouble, new time to reduce is{deductionTime} `)
 			end
-		else
-			warn(`AI chooses to reduce {deductionTime}`)
 			GameModule:SubmitBombTime(nil, tableClass.ID, deductionTime)
+		else
+			warn("AI used an instant activation card, so no reduction.")
 		end
 	end)
 end

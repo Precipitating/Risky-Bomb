@@ -7,6 +7,7 @@ local DataService = require(ReplicatedStorage.Packages.DataService).server
 local Networker = require(ReplicatedStorage.Packages.Networker).server
 local DISCOUNT_MULTIPLIER: number = 0.2
 local InGamePurchases = {}
+local PlayerRollingItem = {}
 
 local function CanPlayerBuyCrates(player: Player)
 	local success, result = pcall(function()
@@ -27,9 +28,6 @@ local function IsAlreadyOwned(itemWon, player: Player, dataKey: string)
 	local inventory = DataService:get(player, { dataKey })
 
 	for _, ownedItemName in ipairs(inventory) do
-		print(
-			`{itemWon.Name} -> {ownedItemName.Name}, {itemWon.Material} -> {ownedItemName.Material}, {itemWon.Color} -> {ownedItemName.Color}`
-		)
 		if
 			itemWon.Name == ownedItemName.Name
 			and itemWon.Material == ownedItemName.Material
@@ -115,6 +113,17 @@ function InGamePurchases:AttemptBuy(player: Player, packType: number, packName: 
 	if not CanPlayerBuyCrates(player) then
 		return false
 	end
+
+	if PlayerRollingItem[player] == nil then
+		PlayerRollingItem[player] = {}
+	else
+		if PlayerRollingItem[player] == true then
+			warn("Already purchasing pack, wait")
+			return
+		end
+	end
+	PlayerRollingItem[player] = true
+
 	print(`Attempting to buy a {packType} of name {packName}...`)
 
 	local playerCash = DataService:get(player, { "currency" })
@@ -123,11 +132,18 @@ function InGamePurchases:AttemptBuy(player: Player, packType: number, packName: 
 
 	local packTable = UtilityModule.GetPackList(packType, packName)
 
-	return BuyAndRoll(packTable, objectOwnedKey, player, playerCash)
+	local isDuplicate, randomItemFromPack = BuyAndRoll(packTable, objectOwnedKey, player, playerCash)
+
+	return isDuplicate, randomItemFromPack
+end
+
+function InGamePurchases:IsRollingItem(player: Player, state: boolean)
+	PlayerRollingItem[player] = state
 end
 
 InGamePurchases.networker = Networker.new("InGamePurchaseRemotes", InGamePurchases, {
 	InGamePurchases.AttemptBuy,
+	InGamePurchases.IsRollingItem,
 })
 
 return InGamePurchases

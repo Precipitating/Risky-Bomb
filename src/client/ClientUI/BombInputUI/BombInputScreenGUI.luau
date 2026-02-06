@@ -10,7 +10,7 @@ local ReactCharm = require(ReplicatedStorage.Packages.ReactCharm)
 local BombConfig = require(ReplicatedStorage.Config.BombSharedConfig)
 local UIConfig = require(ReplicatedStorage.Config.UIConfig)
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
-
+local Debounce = false
 local e = React.createElement
 
 local function IsYourTurn()
@@ -26,7 +26,7 @@ local function CurrentInput()
 end
 
 local function SetCurrentInput(val: number)
-	BombGameCharms.CurrentBombInput(math.max(1, val))
+	BombGameCharms.CurrentBombInput(math.clamp(val, 1, 50))
 end
 local function BombInputScreenGUI()
 	local isVisible = IsYourTurn()
@@ -149,8 +149,17 @@ local function BombInputScreenGUI()
 			AspectRatio = 3,
 			AnchorPoint = Vector2.new(0.5, 0.5),
 			ButtonClickedFunc = function()
+				if Debounce then
+					warn("DEBOUNCE")
+					return
+				end
+				Debounce = true
+				isVisible = false
 				InputRemotes:SubmitBombTime(currentInput)
 				SetCurrentInput(1)
+				task.delay(1, function()
+					Debounce = false
+				end)
 			end,
 		}),
 	})

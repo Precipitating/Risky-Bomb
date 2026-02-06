@@ -15,7 +15,7 @@ local Networker = require(ReplicatedStorage.Packages.Networker).server
 local SoundManager = require(ReplicatedStorage.Sound.SoundManager)
 local BombHandler = require(script.Parent.BombHandler)
 local BombServerConfig = require(script.Parent.BombServerConfig)
-local GameTableManager = require(script.Parent.GameTableManager)
+local GameTableAssigner = require(script.Parent.GameTableAssigner)
 local Remotes = ReplicatedStorage.Remotes
 local GUINetwork = GUIRemotes.networker
 
@@ -160,6 +160,7 @@ function GameModule:AbruptEnd(tableClass, winner: Player)
 		return
 	end
 	GameModule:PlayAudioForTablePlayers(tableClass.PlayersAssigned, SoundManager.GetRandomMainSound(), false)
+	GUIRemotes.networker:fire(winner, "UpdateGameActive", false)
 	self.inputNetworker:fire(winner, "DisableControls", false)
 	self.inputNetworker:fire(winner, "SetGameCamera", false, nil)
 	GUIRemotes.networker:fire(winner, "BombGUIDisconnect")
@@ -208,6 +209,7 @@ function GameModule:FinishGame(tableClass)
 	GameModule.RespawnTable(tableClass)
 end
 
+-- AI wont ever hit this, as they will randomly wait within limits
 function ExceededCountdown(tableClass, targetPlayer: Player)
 	if not targetPlayer then
 		error("Exceeded countdown but player ref is nil")
@@ -218,6 +220,7 @@ function ExceededCountdown(tableClass, targetPlayer: Player)
 	-- clamp for anti input exploitation
 	playerInputOnExceed = math.clamp(playerInputOnExceed, 1, 600)
 	local resultingTime = BombHandler.ReduceBombTime(tableClass, playerInputOnExceed)
+	warn(`{targetPlayer.DisplayName} exceeded countdown, reducing {resultingTime}`)
 
 	if resultingTime and resultingTime > 0 then
 		GameModule.NextTurn(tableClass)
@@ -286,10 +289,12 @@ function GameModule.NextTurn(tableClass)
 			config.AITurn = false
 			GUINetwork:fire(player, "SyncTurn", true)
 			GameModule.StartCountdown(tableClass, playerID)
+			warn("Player's turn")
 		else
 			config.AITurn = true
 			GUINetwork:fire(player, "SyncTurn", false)
 			Signals.AITurn:Fire(tableClass)
+			warn("AI's turn")
 		end
 		return
 	end
@@ -307,7 +312,7 @@ function GameModule.NextTurn(tableClass)
 end
 
 function GameModule:SubmitBombTime(_: Player?, tableID: string, timeToReduce: number)
-	local tableClass = GameTableManager.GetTableFromID(tableID)
+	local tableClass = GameTableAssigner.GetTableFromID(tableID)
 	if not tableClass then
 		error("tableClass invalid when submitting bomb!")
 	end
@@ -320,7 +325,6 @@ function GameModule:SubmitBombTime(_: Player?, tableID: string, timeToReduce: nu
 	timeToReduce = math.clamp(timeToReduce, 0, BombServerConfig.MAX_BOMB_TIME)
 
 	BombHandler.ReduceBombTime(tableClass, timeToReduce)
-
 	GameModule.NextTurn(tableClass)
 end
 
@@ -366,7 +370,30 @@ function GameModule.SetRandomCardPerPlayer(tableClass)
 	end
 end
 
+function GameModule.CanStartGame(tableClass)
+	local refs = tableClass.TableRefs
+	if not refs then
+		return false
+	end
+
+	local seat1Occupied = refs.Seat1 and refs.Seat1.Occupant ~= nil
+	local seat2Occupied = refs.Seat2 and refs.Seat2.Occupant ~= nil
+
+	if tableClass.AIConfig.AIMode then
+		-- AI mode: at least one seat occupied
+		return seat1Occupied or seat2Occupied
+	else
+		-- Multiplayer: both seats occupied
+		return seat1Occupied and seat2Occupied
+	end
+end
+
 function GameModule.BeginGame(tableClass)
+	if not GameModule.CanStartGame(tableClass) then
+		warn("Can't start game, player's missing from seat or requirements not met")
+		return
+	end
+
 	GameModule:DisablePlayerControlsOnTable(tableClass.PlayersAssigned, tableClass.TableRefs.CameraPos)
 	GameModule.SetBombSkin(tableClass)
 	GameModule.SetRandomCardPerPlayer(tableClass)

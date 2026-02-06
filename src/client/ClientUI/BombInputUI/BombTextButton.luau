@@ -20,7 +20,6 @@ type BombTextButtonProps = {
 
 local function BombTextButton(props: BombTextButtonProps)
 	local binding, spring = ReactRipple.useSpring(1, ReactRipple.config.stiff)
-
 	return e("Frame", {
 		Position = props.Position,
 		Size = props.Size,

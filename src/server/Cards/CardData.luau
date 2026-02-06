@@ -4,7 +4,7 @@ local BombHandler = require(ServerScriptService.BombGame.BombHandler)
 local CardUseType = require(ReplicatedStorage.Config.CardUseType)
 local RandomModule = require(ReplicatedStorage.RandomModule)
 local GameModule = require(ServerScriptService.BombGame.GameModule)
-local GameTableManager = require(ServerScriptService.BombGame.GameTableManager)
+local GameTableAssigner = require(ServerScriptService.BombGame.GameTableAssigner)
 local SoundToClient = require(ServerScriptService.ServerRemotesLogic.SoundToClient)
 local CardTypes = require(ServerScriptService.ServerTypes.CardTypes)
 
@@ -35,7 +35,7 @@ local function GetTableFromPlayer(player: Player)
 
 	local tableID = character:GetAttribute("ID")
 	-- get table
-	local tableClass = GameTableManager.GetTableFromID(tableID)
+	local tableClass = GameTableAssigner.GetTableFromID(tableID)
 
 	if not tableClass then
 		error("Table not found when activating SafeCard")
@@ -76,6 +76,7 @@ return {
 		Use = function(player: Player, _: number)
 			local tableClass, _ = GetTableFromPlayer(player)
 			local numToAdd = RandomModule.GetRandomNumberBetween(50, 200)
+			warn(`Hold up card used! time added = {numToAdd}`)
 			BombHandler.AddBombTime(tableClass, numToAdd)
 		end,
 	} :: CardData,
@@ -88,7 +89,15 @@ return {
 		UseType = CardUseType.Enum.CanInputAfterActivation,
 		Use = function(player: Player, _: number)
 			local tableClass, _ = GetTableFromPlayer(player)
-			tableClass.BombEffectsActive["LeTrolleCard"] = { TurnsLeft = 3 }
+			local initiator = nil
+
+			if tableClass.AIConfig.AITurn then
+				initiator = "AI"
+			else
+				initiator = player
+			end
+
+			tableClass.BombEffectsActive["LeTrolleCard"] = { TurnsLeft = 3, Initiator = initiator }
 		end,
 	} :: CardData,
 
@@ -110,6 +119,7 @@ return {
 			if tableClass.AIConfig.AIMode then
 				if not tableClass.AIConfig.AITurn then
 					tableClass.BombEffectsActive["DoubleTroubleCard"]["AIMode"] = true
+					print(`Double trouble applied to AI`)
 				else
 					tableClass.BombEffectsActive["DoubleTroubleCard"][player] = true
 					print(`Double trouble applied to {player}`)
@@ -146,8 +156,8 @@ return {
 		ImageID = "rbxassetid://135885419597915",
 		UseType = CardUseType.Enum.InstantActivation,
 		Use = function(player: Player, _: number)
-			local tableClass, _ = GetTableFromPlayer(player)
-			GameModule.NextTurn(tableClass)
+			local _, tableID = GetTableFromPlayer(player)
+			GameModule:SubmitBombTime(player, tableID, 0)
 			print("Turn skipped!")
 		end,
 	} :: CardData,

@@ -8,9 +8,9 @@ local BombServerConfig = require(script.Parent.BombServerConfig)
 
 local BombHandler = {}
 
-local function PlayTickSound(playersList, bomb: MeshPart)
+local function PlayTickSound(playersList)
 	for _, player in pairs(playersList) do
-		SoundToClient:PlayBombTickOnClient(player, bomb)
+		SoundToClient:PlayBombTickOnClient(player)
 	end
 end
 
@@ -44,7 +44,7 @@ local function BombTween(tableClass, startTime: number)
 		})
 
 		tween:Play()
-		PlayTickSound(tableClass.PlayersAssigned, bomb)
+		PlayTickSound(tableClass.PlayersAssigned)
 		tween.Completed:Wait()
 	end
 end
@@ -96,10 +96,9 @@ function BombHandler.DoubleTrouble(tableClass, reductionTime: number)
 	local isDoubleTroubled = tableClass.BombEffectsActive["DoubleTroubleCard"]
 
 	if isDoubleTroubled then
-		print(tableClass:GetCurrentTurnPlayer())
-		if isDoubleTroubled[tableClass:GetCurrentTurnPlayer()] then
-			local player = tableClass:GetCurrentTurnPlayer()
-			print(player)
+		local player = tableClass:GetCurrentTurnPlayer()
+		if isDoubleTroubled[player] then
+			print(`Double trouble should be applied to {player}`)
 			newTime *= 2
 			SoundToClient.networker:fire(player, "PlayExistingSound", "UISounds", "DoubleTrouble")
 			isDoubleTroubled[player] = nil
@@ -111,7 +110,7 @@ function BombHandler.DoubleTrouble(tableClass, reductionTime: number)
 		end
 	end
 
-	print(`FINAL REDUCTION: {newTime}`)
+	warn(`FINAL REDUCTION: {newTime}`)
 	return newTime
 end
 
