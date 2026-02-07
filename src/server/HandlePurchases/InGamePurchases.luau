@@ -1,11 +1,13 @@
 local PolicyService = game:GetService("PolicyService")
+local ServerScriptService = game:GetService("ServerScriptService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
+local ServerConstants = require(ServerScriptService.Server.ServerData.ServerConstants)
 local VIPHandler = require(ReplicatedStorage.VIP.VIPHandler)
 local UtilityModule = require(ReplicatedStorage.Utility.UtilityModule)
 local PackType = require(ReplicatedStorage.Types.PackType)
 local DataService = require(ReplicatedStorage.Packages.DataService).server
 local Networker = require(ReplicatedStorage.Packages.Networker).server
-local DISCOUNT_MULTIPLIER: number = 0.2
+
 local InGamePurchases = {}
 local PlayerRollingItem = {}
 
@@ -73,7 +75,7 @@ end
 function InGamePurchases.AttemptToApplyDiscount(player: Player, packTable: { ItemsList: {}, Cost: number })
 	local inputPrice = packTable.Cost
 	if VIPHandler.IsVIP(player) then
-		inputPrice -= (packTable.Cost * DISCOUNT_MULTIPLIER)
+		inputPrice -= (packTable.Cost * ServerConstants.DISCOUNT_MULTIPLIER)
 	end
 
 	return inputPrice

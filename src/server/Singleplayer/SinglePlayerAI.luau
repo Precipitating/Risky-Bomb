@@ -5,6 +5,9 @@ local CardUseType = require(ReplicatedStorage.Config.CardUseType)
 local GameModule = require(ServerScriptService.BombGame.GameModule)
 
 local CardHandler = require(ServerScriptService.Cards.CardHandler)
+local GUIRemotes = require(ServerScriptService.ServerRemotesLogic.GUIRemotes)
+local GUINetwork = GUIRemotes.networker
+local Signals = require(ServerScriptService.ServerSignals.Signals)
 local CardTypes = require(ServerScriptService.ServerTypes.CardTypes)
 local AITypes = require(ServerScriptService.ServerTypes.AITypes)
 type AIDifficulty = AITypes.AIDifficulty
@@ -21,10 +24,9 @@ local function TimeDeductCalculate(config: AIDifficulty, timeLeft: number)
 	local reduction = 0
 	-- in danger zone - be more conservative
 	if timeLeft <= config.dangerThreshold then
-		reduction = config.minReduction
+		reduction = RandomModule.GetRandomNumberBetween(1, config.minReduction)
 	else
 		-- normal
-
 		local randomFactor = RandomModule.GetRandomNumberBetween(0, 1)
 
 		local percentageReduction = math.lerp(config.timePercentageMin, config.timePercentageMax, randomFactor)
@@ -41,6 +43,47 @@ end
 
 local function ApplyLeTrolleConfusion(currentDecidedTime: number)
 	return math.floor(currentDecidedTime * RandomModule.GetRandomDecimalBetween(1, 2))
+end
+
+function SinglePlayerAI.AIGameFinish(tableClass)
+	local playerID = tableClass.AIConfig.PlayerID
+	if tableClass.AIConfig.AITurn then
+		GameModule:HandleWinner(tableClass.PlayersAssigned[playerID], true)
+	else
+		GameModule:HandleLoser(tableClass.PlayersAssigned[playerID], true)
+	end
+	GameModule.RespawnTable(tableClass)
+end
+
+function SinglePlayerAI.AISetInitialTurn(playerList, tableClass)
+	local playerID = tableClass.AIConfig.PlayerID
+	print(tableClass.AIConfig.PlayerID)
+	local random = RandomModule.GetRandomDecimalBetween(0, 1)
+	if random >= 0.5 then
+		tableClass.AIConfig.AITurn = true
+		Signals.AITurn:Fire(tableClass)
+	else
+		GUINetwork:fire(playerList[playerID], "SyncTurn", true)
+		GameModule.StartCountdown(tableClass, playerID)
+	end
+end
+
+function SinglePlayerAI.AIModeNextTurn(playerList, tableClass)
+	local config = tableClass.AIConfig
+	local playerID = tableClass.AIConfig.PlayerID
+	local player = playerList[playerID]
+	if config.AITurn then
+		config.AITurn = false
+		GUINetwork:fire(player, "SyncTurn", true)
+		GameModule.StartCountdown(tableClass, playerID)
+		warn("Player's turn")
+	else
+		config.AITurn = true
+		GUINetwork:fire(player, "SyncTurn", false)
+
+		Signals.AITurn:Fire(tableClass)
+		warn("AI's turn")
+	end
 end
 
 function SinglePlayerAI.ThinkAndChoose(tableClass)

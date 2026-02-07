@@ -3,6 +3,8 @@ local ServerScriptService = game:GetService("ServerScriptService").Server
 local ServerStorage = game:GetService("ServerStorage")
 local InventoryEvents = require(ServerScriptService.Inventory.InventoryEvents)
 local LeaderboardHandler = require(ServerScriptService.Leaderboards.LeaderboardHandler)
+local ServerConstants = require(ServerScriptService.ServerData.ServerConstants)
+local ServerDataHandler = require(ServerScriptService.ServerData.ServerDataHandler)
 local Signals = require(ServerScriptService.ServerSignals.Signals)
 local GUIRemotes = require(ServerScriptService.ServerRemotesLogic.GUIRemotes)
 local OrderedDataStores = require(ServerScriptService.ServerData.OrderedDataStores)
@@ -18,11 +20,6 @@ local BombServerConfig = require(script.Parent.BombServerConfig)
 local GameTableAssigner = require(script.Parent.GameTableAssigner)
 local Remotes = ReplicatedStorage.Remotes
 local GUINetwork = GUIRemotes.networker
-
-local WIN_REWARD = 300
-local AI_REWARD = 100
-local LOSE_REWARD = 50
-local ABRUPT_REWARD = 10
 
 local GameModule = {}
 
@@ -55,21 +52,11 @@ local function SetInitialTurn(tableClass)
 	local playerList = tableClass.PlayersAssigned
 	-- AI
 	if tableClass.AIConfig.AIMode then
-		local playerID = tableClass.AIConfig.PlayerID
-		print(tableClass.AIConfig.PlayerID)
-		local random = RandomModule.GetRandomDecimalBetween(0, 1)
-		if random >= 0.5 then
-			tableClass.AIConfig.AITurn = true
-			Signals.AITurn:Fire(tableClass)
-		else
-			GUINetwork:fire(playerList[playerID], "SyncTurn", true)
-			GameModule.StartCountdown(tableClass, playerID)
-		end
+		Signals.AISetInitialTurn:Fire(playerList, tableClass)
 		return
 	end
 
-	-- normal 1v1
-
+	-- Player v Player
 	if not tableClass.PlayersAssigned[1] or not tableClass.PlayersAssigned[2] then
 		error("PlayersAssigned not populated correctly")
 	end
@@ -99,13 +86,13 @@ function GameModule.RespawnTable(tableClass)
 	print("Table respawned!")
 end
 
-local function HandleLoser(loser, isAI: boolean)
+function GameModule:HandleLoser(loser, isAI: boolean)
 	if not loser then
 		print("Loser player ref is nil!")
 	end
 
 	DataService:update(loser, { "currency" }, function(currentCash)
-		return currentCash + VIPHandler.DoubleRewardsIfVIP(loser, LOSE_REWARD)
+		return currentCash + VIPHandler.DoubleRewardsIfVIP(loser, ServerConstants.LOSE_REWARD)
 	end)
 
 	local humanoid = loser.Character.Humanoid
@@ -118,35 +105,21 @@ local function HandleLoser(loser, isAI: boolean)
 	end
 end
 
-local function HandleWinner(winner: Player, abruptEnd: boolean?, isAI: boolean?)
+local function PlayWinSound(winner: Player, isAI: boolean?)
+	local soundName = isAI and "AILose" or "Win"
+	SoundToClient.networker:fire(winner, "PlayExistingSound", "UISounds", soundName)
+end
+
+function GameModule:HandleWinner(winner: Player, abruptEnd: boolean?, isAI: boolean?)
 	if not winner then
 		print("Winner player ref is nil!")
 	end
 
-	-- update to store
-	if not abruptEnd then
-		if isAI then
-			DataService:update(winner, { "currency" }, function(currentCash)
-				return currentCash + VIPHandler.DoubleRewardsIfVIP(winner, AI_REWARD)
-			end)
-		else
-			DataService:update(winner, { "currency" }, function(currentCash)
-				return currentCash + VIPHandler.DoubleRewardsIfVIP(winner, WIN_REWARD)
-			end)
-		end
-	else
-		DataService:update(winner, { "currency" }, function(currentCash)
-			return currentCash + VIPHandler.DoubleRewardsIfVIP(winner, ABRUPT_REWARD)
-		end)
-	end
-
+	local reward = ServerDataHandler.GetRewardAmount(abruptEnd, isAI)
+	ServerDataHandler.AwardCurrency(winner, reward)
+	-- update win count + 1
 	LeaderboardHandler.AddValueToDataStore(OrderedDataStores.WinStore, winner, 1)
-	-- sound
-	if not isAI then
-		SoundToClient.networker:fire(winner, "PlayExistingSound", "UISounds", "Win")
-	else
-		SoundToClient.networker:fire(winner, "PlayExistingSound", "UISounds", "AILose")
-	end
+	PlayWinSound(winner, isAI)
 
 	print(`Winner: {winner.DisplayName}`)
 end
@@ -165,16 +138,11 @@ function GameModule:AbruptEnd(tableClass, winner: Player)
 	self.inputNetworker:fire(winner, "SetGameCamera", false, nil)
 	GUIRemotes.networker:fire(winner, "BombGUIDisconnect")
 
-	HandleWinner(winner, true)
+	self.HandleWinner(winner, true)
 	GameModule.RespawnTable(tableClass)
 end
 
-function GameModule:FinishGame(tableClass)
-	local loser: Player = nil
-	local winner: Player = nil
-	local playerList = tableClass.PlayersAssigned
-	tableClass.GameActive = false
-	GameModule:PlayAudioForTablePlayers(playerList, SoundManager.GetRandomMainSound(), false)
+function GameModule:ResetPlayerState(playerList)
 	for _, player in pairs(playerList) do
 		if not player then
 			continue
@@ -185,27 +153,35 @@ function GameModule:FinishGame(tableClass)
 		self.inputNetworker:fire(player, "SetGameCamera", false, nil)
 		GUIRemotes.networker:fire(player, "BombGUIDisconnect")
 	end
+end
 
-	-- AI mode
+function GameModule:FinishGame(tableClass)
+	local loser: Player = nil
+	local winner: Player = nil
+	local playerList = tableClass.PlayersAssigned
+
+	tableClass.GameActive = false
+	GameModule:PlayAudioForTablePlayers(playerList, SoundManager.GetRandomMainSound(), false)
+
+	self:ResetPlayerState(playerList)
+
+	-- if AI mode then call this
 	if tableClass.AIConfig.AIMode then
-		local playerID = tableClass.AIConfig.PlayerID
-		if tableClass.AIConfig.AITurn then
-			HandleWinner(tableClass.PlayersAssigned[playerID], true)
-		else
-			HandleLoser(tableClass.PlayersAssigned[playerID], true)
-		end
-		GameModule.RespawnTable(tableClass)
+		Signals.AIModeFinish:Fire(tableClass)
 		return
 	end
 
-	-- normal mode
+	-- else
+	-- player v player mode
+	-- determine winner/losers
 	local currentTurnID = tableClass.CurrentTurn
 	local currentTurnPlayer = playerList[currentTurnID]
+
 	loser = currentTurnPlayer
 	winner = playerList[3 - currentTurnID]
 
-	HandleLoser(loser, false)
-	HandleWinner(winner)
+	self.HandleLoser(loser, false)
+	self.HandleWinner(winner)
 	GameModule.RespawnTable(tableClass)
 end
 
@@ -229,16 +205,16 @@ end
 
 local function CanStillCountdownBar(tableClass, targetPlayerID: number)
 	local aiConfig = tableClass.AIConfig
-	if not aiConfig or not aiConfig.AIMode then
-		if tableClass.CurrentTurn ~= targetPlayerID then
-			print("Stop counting down for this client, turn switched")
-			return false
-		end
-	else
-		if tableClass.AIConfig.AITurn then
-			return false
-		end
+
+	if aiConfig and aiConfig.AIMode and aiConfig.AITurn then
+		return false
 	end
+
+	if tableClass.CurrentTurn ~= targetPlayerID then
+		print("Stop counting down for this client, turn switched")
+		return false
+	end
+
 	return true
 end
 
@@ -282,24 +258,11 @@ function GameModule.NextTurn(tableClass)
 
 	-- AI Mode
 	if tableClass.AIConfig.AIMode then
-		local config = tableClass.AIConfig
-		local playerID = tableClass.AIConfig.PlayerID
-		local player = playerList[playerID]
-		if config.AITurn then
-			config.AITurn = false
-			GUINetwork:fire(player, "SyncTurn", true)
-			GameModule.StartCountdown(tableClass, playerID)
-			warn("Player's turn")
-		else
-			config.AITurn = true
-			GUINetwork:fire(player, "SyncTurn", false)
-			Signals.AITurn:Fire(tableClass)
-			warn("AI's turn")
-		end
+		Signals.AIModeNextTurn:Fire(playerList, tableClass)
 		return
 	end
 
-	-- normal mode
+	-- Player vs Player mode
 	local whosTurnCurrently = tableClass.CurrentTurn
 	print(`current {whosTurnCurrently} `)
 	local nextTurn = 3 - whosTurnCurrently

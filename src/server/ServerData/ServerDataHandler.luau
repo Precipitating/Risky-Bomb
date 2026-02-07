@@ -1,8 +1,10 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage").Shared
 local Rarity = require(ReplicatedStorage.Config.Rarity)
 local DailyRewardsData = require(ReplicatedStorage.Config.DailyRewardsData)
+local VIPHandler = require(ReplicatedStorage.VIP.VIPHandler)
 local DataTemplate = require(script.Parent.DataTemplate)
 local OrderedDataStores = require(script.Parent.OrderedDataStores)
+local ServerConstants = require(script.Parent.ServerConstants)
 local DataService = require(ReplicatedStorage.Packages.DataService).server
 local ServerDataHandler = {}
 
@@ -37,6 +39,7 @@ end
 function ServerDataHandler.GetData(player: Player, path: {})
 	return DataService:get(player, path)
 end
+
 function ServerDataHandler.UpdateData(player: Player, path: {}, updateCallback: (currData: any) -> ())
 	return DataService:update(player, path, updateCallback)
 end
@@ -46,6 +49,26 @@ function ServerDataHandler:AwardDaily(data)
 	data.currency += consecutiveDay * DailyRewardsData.AwardPerDay
 	data.sessionJoinTime = os.time()
 end
+
+function ServerDataHandler.GetRewardAmount(abruptEnd: boolean?, isAI: boolean?)
+	if abruptEnd then
+		return ServerConstants.ABRUPT_REWARD
+	end
+
+	if isAI then
+		return ServerConstants.AI_REWARD
+	end
+
+	return ServerConstants.WIN_REWARD
+end
+
+function ServerDataHandler.AwardCurrency(winner: Player, baseReward: number)
+	DataService:update(winner, { "currency" }, function(currentCash)
+		return currentCash + VIPHandler.DoubleRewardsIfVIP(winner, baseReward)
+	end)
+end
+
+----------------------------------------------------------------------------------------|
 
 function DataService:onPlayerInit(player: Player, data): ()
 	print(player.Name .. " has initialized with data:", data)
@@ -92,4 +115,5 @@ end
 function ServerDataHandler.Initialize()
 	DataService:init(Options)
 end
+
 return ServerDataHandler

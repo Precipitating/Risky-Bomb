@@ -8,5 +8,9 @@ return {
 	SinglePlayerNetworkFire = Signal.new(),
 	AITurn = Signal.new(),
 	SetCardForPlayer = Signal.new(),
+
 	SetCardForAI = Signal.new(),
+	AIModeFinish = Signal.new(),
+	AIModeNextTurn = Signal.new(),
+	AISetInitialTurn = Signal.new(),
 }

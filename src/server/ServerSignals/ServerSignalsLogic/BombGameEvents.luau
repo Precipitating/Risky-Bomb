@@ -7,6 +7,7 @@ local SinglePlayerHandler = require(ServerScriptService.Singleplayer.SinglePlaye
 local ServerSignals = require(ServerScriptService.ServerSignals.Signals)
 local BombGameEvents = {}
 
+-- mostly used due to cyclic dependencies
 function BombGameEvents.Handle()
 	ServerSignals.GameFinished:Connect(function(tableClass)
 		GameModule:FinishGame(tableClass)
@@ -33,6 +34,17 @@ function BombGameEvents.Handle()
 	ServerSignals.SetCardForAI:Connect(function(tableClass)
 		local cardChosen = CardData[CardData.GetRandomCardAI()]
 		tableClass.AIConfig.AICard = cardChosen
+	end)
+
+	ServerSignals.AIModeFinish:Connect(function(tableClass)
+		SinglePlayerAI.AIGameFinish(tableClass)
+	end)
+
+	ServerSignals.AIModeNextTurn:Connect(function(playerList, tableClass)
+		SinglePlayerAI.AIModeNextTurn(playerList, tableClass)
+	end)
+	ServerSignals.AISetInitialTurn:Connect(function(playerList, tableClass)
+		SinglePlayerAI.AISetInitialTurn(playerList, tableClass)
 	end)
 end
 

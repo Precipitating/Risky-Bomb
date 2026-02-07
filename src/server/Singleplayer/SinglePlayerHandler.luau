@@ -5,9 +5,10 @@ local RandomModule = require(ReplicatedStorage.RandomModule)
 local AIDifficultyConfig = require(script.Parent.AIDifficultyConfig)
 local GameTableAssigner = require(ServerScriptService.BombGame.GameTableAssigner)
 local GameModule = require(ServerScriptService.BombGame.GameModule)
+local GUIRemotes = require(ServerScriptService.ServerRemotesLogic.GUIRemotes)
 local Networker = require(ReplicatedStorage.Packages.Networker).server
 local AIFolder = ServerStorage.Models.AI:GetChildren()
-
+local GUINetwork = GUIRemotes.networker
 local SinglePlayerHandler = {}
 
 function SinglePlayerHandler:CanSinglePlayer(_: Player, tableID: string)
